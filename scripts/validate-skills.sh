@@ -66,16 +66,17 @@ for dir in "$skills_dir"/*/; do
     fi
   done < <(grep -o '(references/[^)#]*\.md' "$file" 2>/dev/null | sed 's/^(//' | sort -u)
 
-  # Toda referencia del paquete debe estar enlazada desde su SKILL.md.
+  # Toda referencia del paquete debe estar enlazada desde su SKILL.md,
+  # incluidas las que viven en subcarpetas por área.
   if [[ -d "$dir/references" ]]; then
-    for ref in "$dir/references"/*.md; do
-      [[ -e "$ref" ]] || continue
-      base="$(basename "$ref")"
-      if ! grep -q "references/$base" "$file"; then
+    while IFS= read -r ref; do
+      [[ -n "$ref" ]] || continue
+      rel="${ref#$dir/}"
+      if ! grep -q "$rel" "$file"; then
         printf 'Orphaned reference (not linked from SKILL.md): %s\n' "$ref" >&2
         failures=$((failures + 1))
       fi
-    done
+    done < <(find "$dir/references" -type f -name '*.md' | sort)
   fi
 done
 
