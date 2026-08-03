@@ -261,8 +261,8 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 - Fase 2 completa.
 
 ### 9.4. Fase 3: integraciones y dispositivo
-- `xone-data-integration` (SQL, `$http`, OAuth2, TLS, réplica, seguridad).
-- `xone-device` (GPS, cámara, permisos, biometría, Bluetooth, NFC).
+- ✅ `xone-data-integration` (SQL, `$http`, OAuth2, TLS, réplica, mocks HTTP y seguridad) — implementada en v0.7.0, alineada con `mock/http.json` y el modo mock del `xone-simulator`.
+- `xone-device` (GPS, cámara, permisos, biometría, Bluetooth, NFC) — pendiente.
 
 ### 9.5. Fase 4: control de calidad
 - `xone-review` (revisión de código).

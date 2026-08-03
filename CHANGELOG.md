@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.7.0] - 2026-08-03
+
+### Añadido
+
+- Skill `xone-data-integration`: modelo de datos local (SQLite, `ROWID`, `##PREF##`, generador), SQL directo con SqlManager y prevención de SQL injection, HTTP con `$http` y TLS/pinning/mTLS, pruebas HTTP con `mock/http.json` y `xone-simulator`, OAuth2, réplica y flujo de provisionamiento `sys-message`, encriptación con `crypto`, manejo de credenciales y validación de entrada.
+
 ## [0.6.0] - 2026-08-03
 
 ### Añadido
