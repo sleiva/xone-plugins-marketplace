@@ -1,4 +1,5 @@
 ---
+name: xone-development
 description: Desarrollo experto de aplicaciones XOne. Usar al crear o revisar XML .xne, JavaScript XOne, CSS XOne, colecciones, pantallas, navegación, integraciones HTTP, permisos, GPS, cámara, sincronización o al depurar errores de runtime.
 ---
 

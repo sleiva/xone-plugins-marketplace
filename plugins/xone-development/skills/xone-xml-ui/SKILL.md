@@ -1,4 +1,5 @@
 ---
+name: xone-xml-ui
 description: Desarrollo de XML/UI en XOne. Usar al crear o modificar colecciones (.xne), props, groups, frames, contents, layouts, herencia, macros, permisos, o al diagnosticar errores estructurales y pantallas vacías.
 ---
 

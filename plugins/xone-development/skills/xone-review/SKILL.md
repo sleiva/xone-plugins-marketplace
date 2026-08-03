@@ -1,4 +1,5 @@
 ---
+name: xone-review
 description: "Revisión de código XOne. Usar para auditar un proyecto o un cambio antes de entregarlo: validación con xone-simulator, revisión por capas (XML/UI, JavaScript, CSS, datos/integración, device), anti-patrones, checklist de verificación y priorización de hallazgos."
 ---
 

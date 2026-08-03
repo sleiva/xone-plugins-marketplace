@@ -2,7 +2,7 @@
 
 Marketplace de plugins de [Claude Code](https://code.claude.com/docs/en/plugins) para desarrollo con XOne.
 
-También incluye una instalación nativa para [OpenCode](https://opencode.ai/), con las mismas skills disponibles en `.opencode/skills/`.
+También incluye una instalación nativa para [OpenCode](https://opencode.ai/), que descubre directamente la fuente canónica mediante `opencode.json`.
 
 ## Plugins
 
@@ -45,20 +45,22 @@ Después de instalarlo, Claude usará la skill automáticamente cuando la tarea 
 claude --plugin-dir ./plugins/xone-development
 ```
 
-En OpenCode, abre este repositorio como proyecto y las skills se descubrirán desde `.opencode/skills/`.
+En OpenCode, abre este repositorio como proyecto. Las skills se descubren desde `plugins/xone-development/skills/`, configurado mediante `skills.paths` en `opencode.json`.
 
 ## Desarrollo
 
-Las skills canónicas viven en `plugins/xone-development/skills/` y se sincronizan hacia `.opencode/skills/` con:
-
-```bash
-scripts/sync.sh
-```
+Las skills canónicas viven en `plugins/xone-development/skills/`; no se mantienen copias sincronizadas para OpenCode.
 
 Tras modificar el plugin, incrementa su versión en ambos manifiestos (`plugins/xone-development/.claude-plugin/plugin.json` y `.claude-plugin/marketplace.json`), registra el cambio en `CHANGELOG.md` y valida con:
 
 ```bash
 claude plugin validate ./plugins/xone-development
+```
+
+Para validar el frontmatter, el tamaño y el descubrimiento en OpenCode:
+
+```bash
+scripts/validate-skills.sh
 ```
 
 ## Documentación

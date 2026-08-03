@@ -1,4 +1,5 @@
 ---
+name: xone-verification
 description: Verificación y corrección de aplicaciones XOne con el linter xone-simulator. Usar al validar un proyecto XOne, al corregir errores de XML/JS/CSS, al hacer smoke de una app, al ejecutar eventos concretos, o al revisar si un cambio rompe la app.
 ---
 

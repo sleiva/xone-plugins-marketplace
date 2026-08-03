@@ -1,6 +1,6 @@
 # Arquitectura de Skills XOne
 
-**Estado:** implementación del plan de fases completa (v0.9.0). Pendiente: refactor de skills con `references/` (§13.1), frontmatter `name` (§13.2), pruebas de activación real (§13.3) y revisión experta de las fases finales.
+**Estado:** implementación técnica de skills y adaptación a OpenCode completada. Pendiente: pruebas de activación con tareas reales, versiones soportadas de XOne y revisión experta.
 
 **Versión:** 0.1
 
@@ -369,7 +369,7 @@ La arquitectura se considerará lista para implementación cuando:
 - Confirmar las versiones de XOne que se quieren soportar (condiciona el tono y las reglas de todas las skills).
 - Definir los proyectos de prueba representativos para XML/UI, datos, dispositivos y debugging.
 - Confirmar los expertos responsables de cada área y el canal de revisión.
-- Refactorizar las skills que superan ~200 líneas para extraer material extenso a `references/` (ver §13).
+- Completar pruebas de activación real con tareas ejecutadas por un agente.
 
 ### Resuelto
 
@@ -379,25 +379,25 @@ La arquitectura se considerará lista para implementación cuando:
 
 ## 13. Tareas pendientes
 
-### 13.1. Refactor de skills con `references/`
+### 13.1. Refactor de skills con `references/` (completado)
 
 Aplicar el patrón de supporting files (ver §10.1) a las skills que superan ~200 líneas. Para cada una, mantener en `SKILL.md` la guía esencial, reglas y anti-patrones, y mover a `references/` el material extenso.
 
-| Skill | Líneas actuales | Acción | Prioridad |
-|-------|-----------------|--------|-----------|
-| `xone-javascript` | 419 | Extraer API completa (`api.md`), snippets extensos (`examples.md`) y tabla de errores (`troubleshooting.md`) | Alta |
-| `xone-device` | 429 | Extraer API de hardware (`api.md`) y ejemplos (`examples.md`) | Alta |
-| `xone-data-integration` | 331 | Extraer API de SqlManager/$http/OAuth2 (`api.md`) y ejemplos (`examples.md`) | Media |
-| `xone-css` | 319 | Extraer atributos completos y tabla de errores (`reference.md`) | Media |
-| `xone-debugging` | 298 | Extraer tablas de errores por capa (`troubleshooting.md`) | Media |
-| `xone-xml-ui` | 157 | Revisar — borderline, podría quedarse tal cual | Baja |
+| Skill | Líneas actuales | Acción | Estado |
+|-------|-----------------|--------|--------|
+| `xone-javascript` | 71 | API, ejemplos y errores en `references/` | Completado |
+| `xone-device` | 48 | API, ejemplos y errores en `references/` | Completado |
+| `xone-data-integration` | 43 | API, ejemplos y errores en `references/` | Completado |
+| `xone-css` | 41 | Atributos y errores en `references/` | Completado |
+| `xone-debugging` | 48 | Errores por capa en `references/` | Completado |
+| `xone-xml-ui` | 158 | Mantener en `SKILL.md` por debajo de 200 líneas | Completado |
 
 Skills por debajo del umbral (`xone-development`, `xone-verification`, `xone-review`) no requieren refactor.
 
-### 13.2. Frontmatter `name`
+### 13.2. Frontmatter `name` (completado)
 
 Añadir `name: <skill-name>` al frontmatter de todos los `SKILL.md` para compatibilidad con OpenCode (ver §3.5). El valor debe coincidir con el nombre del directorio.
 
-### 13.3. Pruebas de activación real
+### 13.3. Pruebas de activación real (pendiente)
 
-Definir 1–2 proyectos XOne mínimos de prueba y un script que valide que, dada una tarea de prueba, el agente invoca la skill correcta. Cubre al menos `xone-xml-ui`, `xone-javascript` y `xone-verification`.
+Definir 1–2 proyectos XOne mínimos de prueba y ejecutar tareas en sesiones aisladas para confirmar que el agente invoca la skill correcta. El script `scripts/validate-skills.sh` ya valida el frontmatter, el tamaño y que OpenCode pueda enumerar las skills; aún falta validar la selección semántica con prompts reales para `xone-xml-ui`, `xone-javascript` y `xone-verification`.

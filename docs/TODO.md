@@ -4,16 +4,16 @@ Lista operativa de trabajo pendiente sobre `xone-plugins-market`. Detalle técni
 
 ## Estado
 
-- [ ] **1. Frontmatter `name` en todos los `SKILL.md`**
-- [ ] **2. Refactor de skills con `references/`**
-  - [ ] 2.1 `xone-javascript`
-  - [ ] 2.2 `xone-device`
-  - [ ] 2.3 `xone-data-integration`
-  - [ ] 2.4 `xone-css`
-  - [ ] 2.5 `xone-debugging`
-  - [ ] 2.6 `xone-xml-ui` (revisar si procede)
+- [x] **1. Frontmatter `name` en todos los `SKILL.md`**
+- [x] **2. Refactor de skills con `references/`**
+  - [x] 2.1 `xone-javascript`
+  - [x] 2.2 `xone-device`
+  - [x] 2.3 `xone-data-integration`
+  - [x] 2.4 `xone-css`
+  - [x] 2.5 `xone-debugging`
+  - [x] 2.6 `xone-xml-ui` (no procede: 157 líneas)
 - [ ] **3. Pruebas de activación real**
-- [ ] **4. Configurar `opencode.json` con `skills.paths`**
+- [x] **4. Configurar `opencode.json` con `skills.paths`**
 - [ ] **5. Versiones de XOne soportadas**
 - [ ] **6. Revisores expertos por área**
 
