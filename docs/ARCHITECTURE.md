@@ -1,6 +1,6 @@
 # Arquitectura de Skills XOne
 
-**Estado:** borrador para revisión
+**Estado:** implementación del plan de fases completa (v0.9.0). Pendiente: pruebas de activación real y revisión experta de las fases finales.
 
 **Versión:** 0.1
 
@@ -86,7 +86,7 @@ opencode.json
 
 La fuente canónica será `plugins/xone-development/skills/`. Las copias de OpenCode deben mantenerse sincronizadas y no deben introducir reglas diferentes.
 
-La sincronización se automatizará con un script `scripts/sync.sh` que copie la fuente canónica hacia `.opencode/skills/` y verifique cada fichero con `cmp`, para fail si divergen. Se ejecutará de forma local y, si se habilita CI, como paso de validación. Esto evita duplicación manual y cubre la aceptación "sincronizarse sin divergencias manuales".
+La sincronización se automatiza con `scripts/sync.sh`, que copia la fuente canónica hacia `.opencode/skills/` y verifica cada fichero con `cmp` para fallar si divergen. Se ejecuta de forma local y, si se habilita CI, como paso de validación. Esto evita duplicación manual y cubre la aceptación "sincronizarse sin divergencias manuales".
 
 ## 4. Taxonomía propuesta
 
@@ -323,6 +323,10 @@ La arquitectura se considerará lista para implementación cuando:
 
 - Confirmar las versiones de XOne que se quieren soportar (condiciona el tono y las reglas de todas las skills).
 - Decidir si las referencias completas se publicarán dentro del plugin o en un repositorio documental separado.
-- Elegir si la sincronización Claude Code/OpenCode será manual inicialmente o automatizada mediante `scripts/sync.sh`.
 - Definir los proyectos de prueba representativos para XML/UI, datos, dispositivos y debugging.
 - Confirmar los expertos responsables de cada área y el canal de revisión.
+
+### Resuelto
+
+- Sincronización Claude Code/OpenCode: automatizada mediante `scripts/sync.sh` (ver §3.4).
+- `CHANGELOG.md`: registra los cambios visibles desde v0.1.0 hasta v0.9.0.
