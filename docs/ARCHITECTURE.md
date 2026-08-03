@@ -252,7 +252,7 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 
 ### 9.2. Fase 1: núcleo de dominio
 - ✅ `xone-xml-ui` (colecciones, props, types válidos, combos, mapas, contents, layouts, visibilidad, ciclo de vida, progid, splash, encoding, macros, permisos y anti-patrones) — implementada en v0.3.0, alineada con las reglas del validador `xone-simulator`.
-- `xone-debugging` (diagnóstico sistemático de errores y rendimiento) — pendiente.
+- ✅ `xone-debugging` (diagnóstico sistemático de errores y rendimiento, apoyado en `xone-simulator` validate/run/render/smoke) — implementada en v0.4.0.
 - Son las de mayor retorno: cubren la mayoría de consultas y errores recurrentes.
 
 ### 9.3. Fase 2: runtime y estilo

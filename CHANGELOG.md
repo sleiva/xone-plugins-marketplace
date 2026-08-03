@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.4.0] - 2026-08-03
+
+### Añadido
+
+- Skill `xone-debugging`: diagnóstico sistemático de errores y rendimiento. Proceso de diagnóstico con `xone-simulator`, anti-patrones detectados, pantallas vacías, botones mudos, eventos que no disparan, `self` null, colecciones sin datos, lock/unlock, campos `MAP_`, estilos, imágenes, GPS, réplica, errores -8100 y -11888, y tabla de errores recurrentes por capa.
+
 ## [0.3.0] - 2026-08-03
 
 ### Añadido
