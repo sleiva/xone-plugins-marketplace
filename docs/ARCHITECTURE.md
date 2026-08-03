@@ -140,13 +140,27 @@ GPS, cámara, archivos, permisos de runtime, biometría, sensores, impresión, B
 
 Cada integración debe indicar requisitos de permisos, limitaciones de plataforma y manejo de errores.
 
-### 4.7. `xone-debugging`
+### 4.7. `xone-verification`
+
+Verificación automática de proyectos XOne con el CLI `xone-simulator` del paquete `xone-linter` (publicado en npm como `xone-linter`).
+
+Debe cubrir:
+
+- `validate`: verificación estática (XML, atributos, unicidad, tipos, `progid`, ficheros, JS, referencias cruzadas y anti-patrones).
+- `smoke`: ciclo de vida de toda la app con informe JSON y exit code encadenable.
+- `run`: ejecución de un evento concreto de una coll/prop para aislar fallos de runtime.
+- `render`: render de una coll a HTML para diagnóstico de UI.
+- Corrección iterativa: detectar errores, corregir, revalidar hasta que pase.
+
+Debe comprobar que `xone-simulator` exista en el entorno e indicar `npm install -g xone-linter` si no. Trabaja en entornos con el paquete publicado, no asume acceso al código fuente del simulador.
+
+### 4.8. `xone-debugging`
 
 Diagnóstico sistemático de errores de compilación, carga, UI, datos, red, rendimiento y diferencias Android/iOS.
 
-Debe producir hipótesis comprobables y no limitarse a sugerir cambios aleatorios.
+Debe producir hipótesis comprobables y no limitarse a sugerir cambios aleatorios. Puede apoyarse en `xone-verification` para confirmar hipótesis.
 
-### 4.8. `xone-review`
+### 4.9. `xone-review`
 
 Revisión de código orientada a bugs, seguridad, rendimiento, compatibilidad y cobertura de casos límite.
 
@@ -234,6 +248,7 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 - Crear `scripts/sync.sh` y validar la sincronización Claude Code/OpenCode.
 - Añadir `CHANGELOG.md`.
 - Declarar las versiones de XOne soportadas y registrar esa decisión.
+- ✅ `xone-verification` (validación y smoke con el paquete npm `xone-linter`) — implementada en v0.2.0, sobre el paquete publicado como `xone-linter` en npm y en GitHub `sleiva/xone-linter`.
 
 ### 9.2. Fase 1: núcleo de dominio
 - `xone-xml-ui` (colecciones, props, layouts, contents, herencia, eventos y errores de pantalla vacía).
@@ -281,6 +296,8 @@ Cada fase se revisa por expertos antes de iniciar la siguiente. Una fase solo se
 │           ├── xone-css/
 │           ├── xone-data-integration/
 │           ├── xone-device/
+│           ├── xone-verification/
+│           │   └── SKILL.md
 │           ├── xone-debugging/
 │           └── xone-review/
 ├── opencode.json

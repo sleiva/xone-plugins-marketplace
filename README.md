@@ -8,7 +8,7 @@ También incluye una instalación nativa para [OpenCode](https://opencode.ai/), 
 
 ### xone-development
 
-Skill experta para crear, revisar y depurar aplicaciones XOne con XML `.xne`, JavaScript y CSS XOne.
+Skill experta para crear, verificar, revisar y depurar aplicaciones XOne con XML `.xne`, JavaScript y CSS XOne. Incluye `xone-verification`, que usa el paquete npm [`xone-linter`](https://www.npmjs.com/package/xone-linter) (binario `xone-simulator`) para validar y hacer smoke de proyectos XOne.
 
 ## Instalación
 
@@ -17,6 +17,12 @@ Desde Claude Code:
 ```text
 /plugin marketplace add sleiva/xone-plugins-marketplace
 /plugin install xone-development@xone-plugins
+```
+
+La skill `xone-verification` requiere el CLI instalado en el entorno:
+
+```bash
+npm install -g xone-linter
 ```
 
 Después de instalarlo, Claude usará la skill automáticamente cuando la tarea esté relacionada con XOne. Para probar el plugin durante el desarrollo:

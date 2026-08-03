@@ -1,7 +1,7 @@
 {
   "name": "xone-development",
-  "description": "Skills para desarrollar, revisar y depurar aplicaciones móviles XOne",
-  "version": "0.1.0",
+  "description": "Skills para desarrollar, verificar, revisar y depurar aplicaciones móviles XOne",
+  "version": "0.2.0",
   "author": {
     "name": "Sergio Leiva Ortega",
     "url": "https://github.com/sleiva"

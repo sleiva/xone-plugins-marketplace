@@ -12,8 +12,8 @@
     {
       "name": "xone-development",
       "source": "./plugins/xone-development",
-      "description": "Asistente experto para crear, revisar y depurar aplicaciones XOne",
-      "version": "0.1.0",
+      "description": "Asistente experto para crear, verificar, revisar y depurar aplicaciones XOne",
+      "version": "0.2.0",
       "author": {
         "name": "Sergio Leiva Ortega",
         "url": "https://github.com/sleiva"
@@ -21,7 +21,7 @@
       "repository": "https://github.com/sleiva/xone-plugins-marketplace",
       "license": "MIT",
       "category": "development",
-      "keywords": ["xone", "xml", "javascript", "css", "mobile"]
+      "keywords": ["xone", "xml", "javascript", "css", "mobile", "linter", "verification"]
     }
   ]
 }
