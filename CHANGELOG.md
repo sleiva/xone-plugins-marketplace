@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.5.0] - 2026-08-03
+
+### Añadido
+
+- Skill `xone-javascript`: objetos globales (self, ui, appData, $http, console), eventos del ciclo de vida, contents, colecciones, SQL seguro con SqlManager, GPS, patrones críticos (lock/unlock, startBrowse/endBrowse, filter/restore, preservación de contexto, WaitDialog, cursor SQL), utilidades de functions.js, debugging, seguridad y rendimiento. Alineada con los métodos reales del runtime `xone-simulator`.
+
 ## [0.4.0] - 2026-08-03
 
 ### Añadido
