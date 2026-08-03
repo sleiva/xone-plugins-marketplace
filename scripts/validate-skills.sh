@@ -53,8 +53,36 @@ dup_overlap_threshold=0.65
 # sin él: 132.)
 dup_min_significant_tokens=3
 
+# Lista de excepciones del guardián de duplicados: pares concretos que el
+# heurístico marca pero que un reviewer humano ya determinó que NO son la
+# misma regla escrita dos veces (falso positivo) o que quedan fuera del
+# invariante "una regla, un sitio" (p. ej. un aviso operativo del CLI que no
+# vive en la puerta de conocimiento). Cada entrada se ata a un fragmento de
+# texto de cada línea, no a un número de línea, para no desincronizarse
+# cuando los ficheros cambien de tamaño. Formato por entrada, campos
+# separados por ` ||| `:
+#   skill_a ||| fragmento_a ||| skill_b ||| fragmento_b ||| razón
+# El orden de skill_a/skill_b no importa: se comprueba en ambos sentidos.
+#
+# Sé parco: esta lista es la única forma sancionada de silenciar el
+# guardián, y una lista larga es exactamente cómo un guardián se neutraliza
+# en silencio. Si hace falta una décima entrada, es señal de que falta
+# quitar duplicación real, no de que falta una excepción más.
+dup_allowlist_entries=(
+  'xone-debugging ||| Pantalla vacía ||| xone-development ||| Solo en el segundo y siguientes ||| Diagnóstico por síntoma (xone-debugging:29): enumera qué comprobar sin afirmar el valor correcto de ninguna regla; la fila del door es la regla en sí. Mismo vocabulario de dominio, dos roles distintos.'
+  'xone-debugging ||| --db-path` debe apuntar a una **copia** de la BD ||| xone-review ||| de la base de datos: el simulador puede mutarla ||| Aviso operativo de `--db-path` sobre el CLI xone-simulator: no es una regla de XOne que deba vivir en la puerta de conocimiento.'
+  'xone-debugging ||| Pantalla vacía ||| xone-review ||| Pantalla vacía → XML ||| Mismo diagnóstico rápido por síntoma repetido en debugging y review (cada skill lo necesita en su propio flujo); no afirma valores de las reglas subyacentes.'
+  'xone-development ||| mappings-y-colecciones-separadas.md ||| xone-project-generator ||| Archivos de configuración (`app.xml`, `app.ini`, `mappings.xne`) ||| Fila del índice de referencias del door vs. bullet de capacidades del generador: coincidencia de nombres de fichero, no regla duplicada.'
+  'xone-development ||| plantillas-y-funciones-utilitarias.md ||| xone-project-generator ||| Funciones JavaScript globales ||| Fila del índice de referencias del door vs. tabla de ficheros de configuración del generador: coincidencia de vocabulario, no regla duplicada.'
+  'xone-development ||| dinamicos-cascada-y-componentes.md ||| xone-project-generator ||| viewmodes de mapa y calendario ||| Dos filas de índice/TOC en ficheros distintos: coincidencia de vocabulario de dominio (mapas, calendario), no regla duplicada.'
+  'xone-development ||| Para crear un proyecto completo desde cero ||| xone-review ||| Para diagnosticar un fallo a partir de su síntoma, usa ||| Frase de cierre que enlaza unas skills con otras (puntero de navegación), no una regla de XOne.'
+)
+
 tmp_dir="$(mktemp -d)"
 trap 'rm -rf "$tmp_dir"' EXIT
+
+dup_allowlist_file="$tmp_dir/dup_allowlist.tsv"
+printf '%s\n' "${dup_allowlist_entries[@]}" > "$dup_allowlist_file"
 
 have_python3=0
 if command -v python3 >/dev/null 2>&1; then
@@ -111,8 +139,49 @@ min_line_len = int(sys.argv[2])
 min_token_len = int(sys.argv[3])
 threshold = float(sys.argv[4])
 min_significant_tokens = int(sys.argv[5])
+allowlist_path = Path(sys.argv[6]) if len(sys.argv) > 6 else None
 
 token_re = re.compile(r'[`\w]{%d,}' % min_token_len)
+
+
+def load_allowlist(path):
+    """Excepciones por contenido: skill_a ||| fragmento_a ||| skill_b ||| fragmento_b ||| razón."""
+    entries = []
+    if path is None or not path.exists():
+        return entries
+    for raw in path.read_text(encoding='utf-8').split('\n'):
+        raw = raw.strip()
+        if not raw:
+            continue
+        parts = [p.strip() for p in raw.split('|||')]
+        if len(parts) != 5:
+            print('Malformed dup_allowlist entry (expected 5 fields separated by |||): ' + raw, file=sys.stderr)
+            continue
+        skill_a, sub_a, skill_b, sub_b, reason = parts
+        entries.append({
+            'skill_a': skill_a, 'sub_a': sub_a,
+            'skill_b': skill_b, 'sub_b': sub_b,
+            'reason': reason, 'used': False,
+        })
+    return entries
+
+
+def match_allowlist(entries, skill1, text1, skill2, text2):
+    # Comparación insensible a mayúsculas: el fragmento de la excepción es
+    # texto libre copiado de la skill, no una expresión regular, y no debería
+    # dejar de coincidir solo porque una frase empieza con mayúscula en un
+    # sitio y en minúscula en otro.
+    text1_low, text2_low = text1.lower(), text2.lower()
+    for entry in entries:
+        sub_a_low, sub_b_low = entry['sub_a'].lower(), entry['sub_b'].lower()
+        forward = (skill1 == entry['skill_a'] and sub_a_low in text1_low
+                   and skill2 == entry['skill_b'] and sub_b_low in text2_low)
+        backward = (skill2 == entry['skill_a'] and sub_a_low in text2_low
+                    and skill1 == entry['skill_b'] and sub_b_low in text1_low)
+        if forward or backward:
+            entry['used'] = True
+            return entry
+    return None
 
 
 def content_lines(path):
@@ -151,6 +220,8 @@ def tokens(s):
     return set(token_re.findall(s.lower()))
 
 
+allow_entries = load_allowlist(allowlist_path)
+
 files = sorted(skills_dir.glob('*/SKILL.md'))
 lines_by_file = {f: content_lines(f) for f in files}
 tokens_by_file = {
@@ -169,10 +240,29 @@ for i, f1 in enumerate(files):
                 overlap = len(t1 & t2)
                 ratio = max(overlap / len(t1), overlap / len(t2))
                 if ratio > threshold:
+                    skill1, skill2 = f1.parent.name, f2.parent.name
+                    entry = match_allowlist(allow_entries, skill1, s1, skill2, s2)
+                    if entry is not None:
+                        print('Allowlisted duplicate (%.0f%% overlap) — %s' % (ratio * 100, entry['reason']))
+                        print('  %s:%d: %s' % (skill1, ln1, s1))
+                        print('  %s:%d: %s' % (skill2, ln2, s2))
+                        continue
                     found += 1
                     print('Duplicated canonical rule (%.0f%% token overlap):' % (ratio * 100))
-                    print('  %s:%d: %s' % (f1.parent.name, ln1, s1))
-                    print('  %s:%d: %s' % (f2.parent.name, ln2, s2))
+                    print('  %s:%d: %s' % (skill1, ln1, s1))
+                    print('  %s:%d: %s' % (skill2, ln2, s2))
+
+# Anti-rot: una excepción que ya no coincide con nada es una excepción que
+# alguien debería borrar (la duplicación que justificaba ya no existe, o el
+# texto cambió). No hacemos fallar el build por esto: es una señal para
+# limpiar la lista, no una regresión.
+for entry in allow_entries:
+    if not entry['used']:
+        print(
+            'Warning: dup_allowlist entry never matched (consider removing it): '
+            '%s ||| %s ||| %s ||| %s' % (entry['skill_a'], entry['sub_a'], entry['skill_b'], entry['sub_b']),
+            file=sys.stderr,
+        )
 
 sys.exit(1 if found else 0)
 PY
@@ -266,8 +356,19 @@ fi
 # sin UTF-8, como CI o cron) se iría por stderr sin capturar, dup_pairs
 # quedaría en 0 y el script saldría con éxito sin haber comprobado nada.
 if (( have_python3 )); then
-  if ! dup_output=$(PYTHONIOENCODING=utf-8 python3 "$tmp_dir/check_duplicates.py" "$skills_dir" "$dup_min_line_length" "$dup_min_token_length" "$dup_overlap_threshold" "$dup_min_significant_tokens" 2>&1); then
+  if dup_output=$(PYTHONIOENCODING=utf-8 python3 "$tmp_dir/check_duplicates.py" "$skills_dir" "$dup_min_line_length" "$dup_min_token_length" "$dup_overlap_threshold" "$dup_min_significant_tokens" "$dup_allowlist_file" 2>&1); then
+    dup_status=0
+  else
+    dup_status=$?
+  fi
+  # Se imprime siempre que haya algo que mostrar (pares permitidos, avisos de
+  # entradas de la allowlist que ya no coinciden con nada), no solo cuando el
+  # guardián falla: si no, esas señales quedan invisibles en una ejecución
+  # que pasa.
+  if [[ -n "$dup_output" ]]; then
     printf '%s\n' "$dup_output" >&2
+  fi
+  if (( dup_status != 0 )); then
     dup_pairs=$(printf '%s\n' "$dup_output" | grep -c '^Duplicated canonical rule' || true)
     # Salida no vacía y exit != 0 pero ningún par reconocido: el bloque python
     # falló de otra forma (traceback, error de invocación). No lo tratamos
