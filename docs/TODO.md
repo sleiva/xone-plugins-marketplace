@@ -29,15 +29,15 @@ Añadir `name: <skill-name>` al frontmatter de los 9 `SKILL.md`. El valor debe c
 
 **Skills afectadas (9):**
 
-- [ ] `xone-development/SKILL.md` → `name: xone-development`
-- [ ] `xone-xml-ui/SKILL.md` → `name: xone-xml-ui`
-- [ ] `xone-javascript/SKILL.md` → `name: xone-javascript`
-- [ ] `xone-css/SKILL.md` → `name: xone-css`
-- [ ] `xone-data-integration/SKILL.md` → `name: xone-data-integration`
-- [ ] `xone-device/SKILL.md` → `name: xone-device`
-- [ ] `xone-verification/SKILL.md` → `name: xone-verification`
-- [ ] `xone-debugging/SKILL.md` → `name: xone-debugging`
-- [ ] `xone-review/SKILL.md` → `name: xone-review`
+- [x] `xone-development/SKILL.md` → `name: xone-development`
+- [x] `xone-xml-ui/SKILL.md` → `name: xone-xml-ui`
+- [x] `xone-javascript/SKILL.md` → `name: xone-javascript`
+- [x] `xone-css/SKILL.md` → `name: xone-css`
+- [x] `xone-data-integration/SKILL.md` → `name: xone-data-integration`
+- [x] `xone-device/SKILL.md` → `name: xone-device`
+- [x] `xone-verification/SKILL.md` → `name: xone-verification`
+- [x] `xone-debugging/SKILL.md` → `name: xone-debugging`
+- [x] `xone-review/SKILL.md` → `name: xone-review`
 
 **Verificación:** `opencode` arranca y lista las 9 skills en el tool `skill`.
 
@@ -69,9 +69,9 @@ Aplicar el patrón estándar de Agent Skills: mantener `SKILL.md` por debajo de 
 - Para errores y soluciones, ver [references/troubleshooting.md](references/troubleshooting.md)
 ```
 
-### 2.1. `xone-javascript` — Alta
+### 2.1. `xone-javascript` — Completado
 
-**Líneas actuales:** 419 · **Objetivo:** ~250-300 en `SKILL.md`
+**Líneas actuales:** 71 · **Resultado:** API, ejemplos y troubleshooting en `references/`
 
 | Queda en `SKILL.md` | Va a `references/` |
 |---------------------|---------------------|
@@ -79,9 +79,9 @@ Aplicar el patrón estándar de Agent Skills: mantener `SKILL.md` por debajo de 
 | | `examples.md`: snippets extensos de `$http`, GPS, contents, cursor SQL, filter/restore |
 | | `troubleshooting.md`: tabla de errores comunes y soluciones |
 
-### 2.2. `xone-device` — Alta
+### 2.2. `xone-device` — Completado
 
-**Líneas actuales:** 429 · **Objetivo:** ~250-300 en `SKILL.md`
+**Líneas actuales:** 48 · **Resultado:** API, ejemplos y troubleshooting en `references/`
 
 | Queda en `SKILL.md` | Va a `references/` |
 |---------------------|---------------------|
@@ -89,9 +89,9 @@ Aplicar el patrón estándar de Agent Skills: mantener `SKILL.md` por debajo de 
 | | `examples.md`: snippets de Bluetooth, NFC/DNIe, WebSocket, selectores de fecha/hora, utilidades de `ui` |
 | | `troubleshooting.md`: tabla de errores y diagnóstico |
 
-### 2.3. `xone-data-integration` — Media
+### 2.3. `xone-data-integration` — Completado
 
-**Líneas actuales:** 331 · **Objetivo:** ~200 en `SKILL.md`
+**Líneas actuales:** 43 · **Resultado:** API, ejemplos y troubleshooting en `references/`
 
 | Queda en `SKILL.md` | Va a `references/` |
 |---------------------|---------------------|
@@ -99,28 +99,28 @@ Aplicar el patrón estándar de Agent Skills: mantener `SKILL.md` por debajo de 
 | | `examples.md`: snippets de `$http`, SqlManager, OAuth2, réplica, sys-message, encriptación |
 | | `troubleshooting.md`: tabla de errores y diagnóstico |
 
-### 2.4. `xone-css` — Media
+### 2.4. `xone-css` — Completado
 
-**Líneas actuales:** 319 · **Objetivo:** ~200 en `SKILL.md`
+**Líneas actuales:** 41 · **Resultado:** atributos y troubleshooting en `references/`
 
 | Queda en `SKILL.md` | Va a `references/` |
 |---------------------|---------------------|
 | Frontmatter + intro + selectores + unidades + colores + herencia + estilos dinámicos + buenas prácticas | `reference.md`: tabla completa de atributos (dimensiones, fuentes, texto, fondo, bordes, sombras, visibilidad, grupos/tabs), cascada de archivos, temas, animaciones |
 | | `troubleshooting.md`: tabla de errores CSS web vs XOne |
 
-### 2.5. `xone-debugging` — Media
+### 2.5. `xone-debugging` — Completado
 
-**Líneas actuales:** 298 · **Objetivo:** ~180 en `SKILL.md`
+**Líneas actuales:** 48 · **Resultado:** troubleshooting detallado en `references/`
 
 | Queda en `SKILL.md` | Va a `references/` |
 |---------------------|---------------------|
 | Frontmatter + intro + proceso de diagnóstico + herramientas + secciones de síntomas más frecuentes (pantalla vacía, botón mudo, self null) | `troubleshooting.md`: tabla de errores recurrentes por capa, secciones detalladas de onchange, refresh, lock/unlock, MAP_, estilos, imagen, GPS, réplica, errores -8100/-11888 |
 
-### 2.6. `xone-xml-ui` — Baja
+### 2.6. `xone-xml-ui` — No requiere refactor
 
-**Líneas actuales:** 157 · **Decisión:** borderline — revisar tras las anteriores.
+**Líneas actuales:** 158 · **Decisión:** mantener completo en `SKILL.md`; está por debajo del umbral.
 
-Si se decide refactorizar, el candidato a extraer es la lista de tipos válidos y los ejemplos de combo/mapa/contents a `references/examples.md`.
+No se extrae contenido por ahora: el archivo cabe en el límite recomendado y mantiene mejor su coherencia como guía única.
 
 ### Skills que no requieren refactor
 
@@ -128,7 +128,7 @@ Si se decide refactorizar, el candidato a extraer es la lista de tipos válidos 
 - `xone-verification` (111 líneas)
 - `xone-review` (168 líneas)
 
-**Verificación por skill:** `wc -l SKILL.md` < 500; `opencode` carga la skill y el agente puede `Read` los archivos de `references/`.
+**Verificación:** `scripts/validate-skills.sh` comprueba frontmatter, tamaño y enumeración de las 9 skills mediante OpenCode.
 
 ---
 
@@ -136,7 +136,7 @@ Si se decide refactorizar, el candidato a extraer es la lista de tipos válidos 
 
 **Prioridad:** Media · **Esfuerzo:** Alto · **Ref:** ARCHITECTURE.md §13.3
 
-Definir 1–2 proyectos XOne mínimos de prueba y un script que valide que, dada una tarea de prueba, el agente invoca la skill correcta sin intervención del usuario.
+Definir 1–2 proyectos XOne mínimos de prueba y ejecutar tareas en sesiones aisladas para confirmar que el agente invoca la skill correcta. El validador estático ya existe, pero no sustituye la prueba semántica con prompts reales.
 
 **Cobertura mínima:**
 
@@ -144,7 +144,8 @@ Definir 1–2 proyectos XOne mínimos de prueba y un script que valide que, dada
 - [ ] Tarea XML → debe invocar `xone-xml-ui`
 - [ ] Tarea JavaScript → debe invocar `xone-javascript`
 - [ ] Tarea de validación → debe invocar `xone-verification`
-- [ ] Script de smoke que ejecute las tareas y reporte qué skill se activó
+- [x] Script de validación estructural y descubrimiento: `scripts/validate-skills.sh`
+- [ ] Script de smoke que ejecute prompts reales y reporte qué skill se activó
 
 ---
 
@@ -191,10 +192,6 @@ Confirmar los expertos responsables de cada área y el canal de revisión:
 
 ## Orden sugerido de ejecución
 
-1. **Tarea 1** (frontmatter `name`) — desbloquea OpenCode, esfuerzo mínimo.
-2. **Tarea 4** (`opencode.json` `skills.paths`) — desbloquea OpenCode junto con la 1.
-3. **Tarea 2.1 y 2.2** (refactor de `xone-javascript` y `xone-device`) — mayor retorno.
-4. **Tarea 2.3–2.5** (resto de refactors) — en paralelo si procede.
-5. **Tarea 5** (versiones de XOne) — decisión que estabiliza todas las skills.
-6. **Tarea 3** (pruebas de activación) — una vez estabilizadas las skills.
-7. **Tarea 6** (revisores expertos) — en paralelo con el resto.
+1. **Tarea 5** (versiones de XOne) — decisión que estabiliza todas las skills.
+2. **Tarea 3** (pruebas de activación real) — requiere proveedor/modelo configurado.
+3. **Tarea 6** (revisores expertos) — en paralelo con la validación real.
