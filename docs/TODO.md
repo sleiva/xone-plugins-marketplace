@@ -66,7 +66,11 @@ Confirmar qué versiones de XOne se soportan y documentarlo en `ARCHITECTURE.md`
 
 Dos discrepancias concretas que necesitan que un experto zanje:
 
-1. **`progid` obligatorio u opcional.** El validador `xone-simulator` emite `COLL_MISSING_PROGID` como **error** cuando una coll tiene `objname` sin `progid`, mientras la documentación lo declara **opcional** (sin él la coll equivale a `ASData.CASBasicDataObj`; solo Empresas y Usuarios requieren el suyo). Hoy las skills declaran el conflicto en vez de resolverlo. Hay que decidir si el linter es demasiado estricto o si la documentación está desactualizada.
+1. **`progid`: decidido, pendiente de implementar en el linter.** El validador `xone-simulator` emite `COLL_MISSING_PROGID` como **error** cuando una coll tiene `objname` sin `progid`, mientras la documentación lo declara **opcional** (sin él la coll equivale a `ASData.CASBasicDataObj`; solo Empresas y Usuarios requieren el suyo). Nótese que el corpus nunca menciona `objname`: el linter añade una condición que la documentación no recoge.
+
+   **Resolución (2026-08-03):** el linter es demasiado estricto y se corregirá en la próxima versión de `xone-linter`. La documentación se queda como está.
+
+   Hasta que esa versión salga, el conflicto sigue siendo real para quien use el linter actual, así que las skills mantienen su aviso: declararlo y no resolverlo por cuenta propia. Cuando el linter se publique corregido, retirar esa frase de la regla de `progid` en `xone-development/SKILL.md` (línea 12).
 2. El corpus se contradice en los nombres de las variantes CSS (`default_night.css` con guion bajo en §1.2, `default.night.css` con punto en §9.1/§9.2). Las skills declaran la discrepancia; hace falta que un experto zanje cuál es la correcta.
 
 ---
