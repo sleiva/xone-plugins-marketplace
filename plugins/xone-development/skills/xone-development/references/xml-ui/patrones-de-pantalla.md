@@ -1,6 +1,6 @@
 # XOne XML — Patrones de pantalla completos
 
-> Fuente: `xone/xone-help-docs/topics/02c-xml-contents-patrones.md` §8. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/02c-xml-contents-patrones.md` §8. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §8 plantillas completas: login, menú con tarjetas, lista con filtros, formulario de detalle, tabs, mapa, chat, dashboard, maestro-detalle, edición en línea y multi-selección
 

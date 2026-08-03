@@ -1,6 +1,6 @@
 # XOne JavaScript — Objetos creables (FileManager a Animation)
 
-> Fuente: `xone/xone-help-docs/topics/06-javascript-runtime-objects.md` L301–821. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/06-javascript-runtime-objects.md` L301–821. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5.1 FileManager · §5.2 GpsTools · §5.3 SqlManager · §5.4 IniParser · §5.5 EncodingUtils · §5.6 AndroidIntent · §5.7 DeviceManager · §5.8 WifiManager · §5.9 BluetoothSerialPort · §5.10 OAuth2 · §5.11 Worker · §5.12 Animation
 

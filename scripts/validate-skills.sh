@@ -7,7 +7,8 @@
 #   - tamaño del SKILL.md (límite recomendado de Agent Skills)
 #   - techo propio, más estricto, para el SKILL.md de la puerta de conocimiento
 #   - que ninguna regla de contenido esté parafraseada en más de un SKILL.md (guardián de duplicados)
-#   - que todo enlace a references/ resuelva
+#   - que todo enlace a references/ resuelva, tanto desde el SKILL.md como los enlaces
+#     relativos que hay dentro de los propios ficheros de references/
 #   - que toda referencia esté enlazada desde su SKILL.md (nada huérfano en el paquete)
 #   - que OpenCode pueda enumerar las skills
 #
@@ -340,6 +341,37 @@ for dir in "$skills_dir"/*/; do
       fi
     done < <(find "$dir/references" -type f -name '*.md' | sort)
   fi
+
+  # Todo enlace relativo dentro de un fichero de references/ debe resolver,
+  # no solo los enlaces que SKILL.md hace hacia references/ (arriba). Esto
+  # cubre el caso real que lo motivó: al mover las 54 referencias de
+  # xone-development un nivel más profundo (subcarpetas por área), sus
+  # cabeceras `[../SKILL.md](../SKILL.md)` dejaron de resolver y ningún check
+  # existente lo detectaba, porque ninguno mira dentro de los propios
+  # ficheros de referencia.
+  if [[ -d "$dir/references" ]]; then
+    while IFS= read -r ref; do
+      [[ -n "$ref" ]] || continue
+      ref_dir="$(dirname "$ref")"
+      while read -r link; do
+        [[ -z "$link" ]] && continue
+        case "$link" in
+          http://*|https://*|mailto:*|\#*|/*) continue ;;
+        esac
+        link_path="${link%%#*}"
+        [[ -z "$link_path" ]] && continue
+        # Solo rutas relativas a un fichero .md: descarta placeholders de
+        # sintaxis Markdown citados como ejemplo (p. ej. `[texto](url)` en
+        # una tabla que documenta el propio formato Markdown), que no son
+        # enlaces reales y no deben tratarse como ruta rota.
+        [[ "$link_path" == *.md ]] || continue
+        if [[ ! -f "$ref_dir/$link_path" ]]; then
+          printf 'Broken relative link inside reference file %s: %s\n' "$ref" "$link" >&2
+          failures=$((failures + 1))
+        fi
+      done < <(grep -o '\]([^)]*)' "$ref" 2>/dev/null | sed -E 's/^\]\(//; s/\)$//' | sort -u)
+    done < <(find "$dir/references" -type f -name '*.md' | sort)
+  fi
 done
 
 if (( skills == 0 )); then
@@ -405,7 +437,7 @@ fi
 if (( have_python3 )); then
   ran="$ran, duplicate-rule guard"
 fi
-ran="$ran, reference links"
+ran="$ran, reference links (incl. links inside references)"
 if command -v opencode >/dev/null 2>&1; then
   ran="$ran, OpenCode discovery"
 fi

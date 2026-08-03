@@ -1,6 +1,6 @@
 # XOne XML — mappings.xne y colecciones en archivos separados
 
-> Fuente: `xone/xone-project-generator/references/xone-xml-ui-d-patrones-mappings.md` §12–§13. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-project-generator/references/xone-xml-ui-d-patrones-mappings.md` §12–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §12 estructura obligatoria de mappings.xne (Empresas y Usuarios) · §13 colecciones adicionales en archivos separados
 

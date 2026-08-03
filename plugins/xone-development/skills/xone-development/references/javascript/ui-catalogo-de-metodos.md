@@ -1,6 +1,6 @@
 # XOne JavaScript — ui: métodos adicionales y catálogo completo
 
-> Fuente: `xone/xone-help-docs/topics/03b-js-ui.md` §3.10–§3.11. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/03b-js-ui.md` §3.10–§3.11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §3.10 métodos adicionales (executeActionAfterDelay, startChronometer, API de controles Stepper y OTP, speak/recognizeSpeech, startAudioRecord) · §3.11 catálogo completo de métodos de ui
 

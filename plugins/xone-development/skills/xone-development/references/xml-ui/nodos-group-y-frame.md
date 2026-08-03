@@ -1,6 +1,6 @@
 # XOne XML — Nodos group y frame
 
-> Fuente: `xone/xone-help-docs/topics/02a-xml-estructura.md` §3–§4. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/02a-xml-estructura.md` §3–§4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §3 group: grupos fijos header/footer, drawer lateral, tabs · §4 frame: contenedores, frames flotantes, bottom sheet, flujo de layout y newline
 

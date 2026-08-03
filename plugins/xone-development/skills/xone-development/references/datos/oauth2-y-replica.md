@@ -1,6 +1,6 @@
 # XOne — OAuth2 y réplica
 
-> Fuente: `xone/xone-help-docs/topics/03c-js-appdata-http.md` §6–§7. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/03c-js-appdata-http.md` §6–§7. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §6 OAuth2: autenticación completa · §7 objeto replica: sincronización
 

@@ -1,6 +1,6 @@
 # XOne CSS — Estilos dinámicos, cascada y componentes
 
-> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §7–§13. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §7–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §7 estilos por estado/valor · §8 referencias ##FLD_CAMPO## · §9 cascada de condiciones de dispositivo y strict-mode · §10 animaciones · §11 gráficos · §12 calendario · §13 mapa
 

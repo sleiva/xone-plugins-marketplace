@@ -1,6 +1,6 @@
 # XOne XML — Props por tipo: combos, web y controles especiales
 
-> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` L1123–1778. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` L1123–1778. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5.9.13-14 combo con mapcol/mapfld y con mapcol-values · §5.9.15 web · §5.9.17 slider y progress · §5.9.17b stepper · §5.9.17c OTP · §5.9.17d markdown · §5.9.17e navbar · §5.9.18 password X · §5.9.20 adjunto AT · §5.9.21 THTML · §5.9.22 firma DR · §5.9.23 enlace a colección · §5.9.24 búsqueda contextual · §5.9.25 onchange y refresco · §5.9.26 updates y formula
 

@@ -1,6 +1,6 @@
 # XOne — Archivos de configuración: app.xml, app.ini y mappings.xne
 
-> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §4. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §4 configuración completa: atributos de app.xml (incluido compatibility-mode), app.ini y mappings.xne
 

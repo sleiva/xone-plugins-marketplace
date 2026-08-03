@@ -1,6 +1,6 @@
 # XOne XML — Nodo prop: atributos, visibilidad y condiciones
 
-> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` §5.1–§5.8, §5.10–§5.11. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` §5.1–§5.8, §5.10–§5.11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5.1 tabla completa de tipos · §5.2 atributos comunes · §5.3 sistema de visibilidad · §5.4 dimensiones y márgenes · §5.5 estilos inline · §5.6 comportamiento · §5.7 bordes · §5.8 disablevisible y disableedit · §5.10 buenas prácticas · §5.11 errores comunes
 

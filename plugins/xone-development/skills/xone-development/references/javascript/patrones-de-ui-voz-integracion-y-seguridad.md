@@ -1,6 +1,6 @@
 # XOne — Patrones de UI, voz, integración y seguridad
 
-> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §11–§13. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §11–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §11 patrones de UI · §11A control por voz (TTS + STT) · §12 patrones de integración · §13 patrones de seguridad
 

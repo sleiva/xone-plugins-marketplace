@@ -1,6 +1,6 @@
 # XOne JavaScript — Singletons globales
 
-> Fuente: `xone/xone-help-docs/topics/06-javascript-runtime-objects.md` §6. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/06-javascript-runtime-objects.md` §6. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §6 catálogo completo y API de los singletons: crypto, clipboard, deviceInfo, systemSettings, packageManager, biometricsManager/fingerprintManager, bleManager, bleSerial, sensorManager, paymentManager, pushMessage, appBroadcastManager, replica, live, smsService, serial/bluetoothSerial, ml y ai
 

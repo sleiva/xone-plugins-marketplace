@@ -1,6 +1,6 @@
 # XOne XML — Referencia de atributos: prop
 
-> Fuente: `xone/xone-help-docs/topics/07-xml-attributes-reference.md` §4. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/07-xml-attributes-reference.md` §4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §4 todos los atributos de prop: colores por estado, bordes individuales, entrada, multimedia, ML/cámara, classid, sliders, stepper, OTP, kanban, coverflow, chips y markdown
 

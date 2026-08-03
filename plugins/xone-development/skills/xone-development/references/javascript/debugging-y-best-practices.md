@@ -1,6 +1,6 @@
 # XOne JavaScript — Debugging y top 20 de buenas prácticas
 
-> Fuente: `xone/xone-help-docs/topics/03e-js-patrones-buenas-practicas.md` §14–§15. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/03e-js-patrones-buenas-practicas.md` §14–§15. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §14 debugging y troubleshooting de JavaScript · §15 top 20 de buenas prácticas
 

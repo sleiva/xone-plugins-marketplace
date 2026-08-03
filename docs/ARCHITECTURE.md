@@ -1,8 +1,8 @@
 # Arquitectura de Skills XOne
 
-**Estado:** skills implementadas, capa de referencias reconstruida sobre el corpus original (v0.10.0) y adaptación a OpenCode completada. Pendiente: pruebas de activación con tareas reales, consolidación de fronteras entre skills a la luz de esas pruebas, versiones soportadas de XOne y revisión experta.
+**Estado:** skills implementadas, capa de referencias reconstruida sobre el corpus original (v0.10.0), adaptación a OpenCode completada y consolidación de nueve skills a cuatro completada (v0.11.0, ver §13.4). Pendiente: pruebas de activación con tareas reales, versiones soportadas de XOne y revisión experta.
 
-**Versión:** 0.2
+**Versión:** 0.3
 
 **Ámbito:** marketplace `xone-plugins-marketplace`, plugin `xone-development` y skills compatibles con Claude Code y OpenCode.
 
@@ -94,16 +94,16 @@ OpenCode exige `name` en el frontmatter (debe coincidir con el nombre del direct
 
 ```yaml
 ---
-name: xone-css
+name: xone-debugging
 description: ...
 ---
 ```
 
-## 4. Taxonomía propuesta
+## 4. Taxonomía
 
 ### 4.1. `xone-development`
 
-Fundamentos y estructura de proyecto, más las reglas transversales.
+Puerta de conocimiento: todas las reglas duras de XOne y el índice maestro de referencias, organizado en subcarpetas por área.
 
 Responsabilidades:
 
@@ -111,54 +111,25 @@ Responsabilidades:
 - Conceptos base: colecciones, DataObject, props, `##PREF##`, macros del sistema, códigos de error.
 - Qué sintaxis JavaScript soporta el motor.
 - Reglas transversales: la fuente son los `.xne`, unicidad y case-sensitivity de nombres, encoding, `progid` opcional, evento correcto de inicialización.
+- XML `.xne`, `app.xml`, colecciones, grupos, frames, props, contents, layouts, herencia, macros, permisos y validación estructural (subcarpeta `references/xml-ui/`).
+- JavaScript del runtime, objetos globales, ciclo de vida, navegación, controles, callbacks, Futures y patrones de datos (subcarpeta `references/javascript/`).
+- Selectores CSS, unidades, colores, temas, herencia y animaciones (subcarpeta `references/css/`).
+- Colecciones, SQL, `$http`, OAuth2, TLS, réplica y tratamiento de credenciales (subcarpeta `references/datos/`).
+- GPS, cámara, archivos, permisos de runtime, biometría, Bluetooth, NFC y capacidades del dispositivo (subcarpeta `references/device/`).
 
-No debe contener la referencia completa de todas las APIs XOne.
+No debe contener la referencia completa de todas las APIs XOne en el propio `SKILL.md`: eso vive en `references/`.
 
 **Nota de diseño (v0.10.0).** Hasta la v0.9.0 esta skill se describió como «coordinadora y punto de entrada». No es implementable: la selección de skill se hace por coincidencia con la `description`, y no existe mecanismo de routing entre skills — una descripción que cubría todos los dominios capturaba casi cualquier consulta y su cuerpo no derivaba a ningún sitio. La skill pasó a tener un dominio propio y no solapable.
 
-### 4.2. `xone-xml-ui`
+**Nota de diseño (v0.11.0).** Las cinco skills de conocimiento que existían por separado (`xone-xml-ui`, `xone-javascript`, `xone-css`, `xone-data-integration`, `xone-device`) se fusionaron en esta. Las tareas de XOne llegan cruzadas — una pantalla es `.xne` más evento JavaScript más clase CSS — y con activación automática el caso a cubrir era que el agente abriera una sola puerta y escribiera el resto de memoria. Sus 54 ficheros de referencia pasaron a ser subcarpetas de `xone-development/references/` sin cambiar contenido. Ver §10.1 (invariante «una regla, un sitio») y §13.4 (decisión y alternativas descartadas).
 
-XML `.xne`, `app.xml`, colecciones, grupos, frames, props, contents, layouts, herencia, macros, permisos y validación estructural.
-
-Debe cubrir especialmente:
-
-- Tipos válidos de propiedades.
-- Navegación y composición de pantallas.
-- Unicidad de nombres.
-- `before-edit`, `create` y eventos XML.
-- Errores que producen pantallas vacías.
-
-### 4.3. `xone-javascript`
-
-JavaScript del runtime XOne, objetos globales, ciclo de vida, navegación, controles, callbacks, Futures y patrones de datos.
-
-Debe separar APIs confirmadas de APIs dependientes de versión.
-
-### 4.4. `xone-css`
-
-Selectores, unidades, colores, temas, herencia, animaciones y layouts visuales XOne.
-
-Debe advertir de las diferencias frente a CSS web, especialmente unidades no soportadas y `compatibility-mode`.
-
-### 4.5. `xone-data-integration`
-
-Colecciones, SQL, filtros, REST, `$http`, OAuth2, TLS, réplica, serialización y tratamiento de credenciales.
-
-Debe priorizar seguridad y evitar ejemplos que interpolen entradas no validadas.
-
-### 4.6. `xone-device`
-
-GPS, cámara, archivos, permisos de runtime, biometría, sensores, impresión, Bluetooth, NFC y capacidades del dispositivo.
-
-Cada integración debe indicar requisitos de permisos, limitaciones de plataforma y manejo de errores.
-
-### 4.7. `xone-debugging`
+### 4.2. `xone-debugging`
 
 Diagnóstico sistemático de errores de compilación, carga, UI, datos, red, rendimiento y diferencias Android/iOS.
 
-Debe producir hipótesis comprobables y no limitarse a sugerir cambios aleatorios. Puede apoyarse en `xone-review` para confirmar hipótesis.
+Debe producir hipótesis comprobables y no limitarse a sugerir cambios aleatorios. Puede apoyarse en `xone-review` para confirmar hipótesis. No repite las reglas de `load`, `lock`/`unlock` ni `MAP_`: las referencia desde `xone-development`.
 
-### 4.8. `xone-review`
+### 4.3. `xone-review`
 
 Verificación y revisión en una sola skill: validación automatizada con el CLI `xone-simulator` del paquete `xone-linter` y revisión manual por capas.
 
@@ -175,15 +146,17 @@ Debe comprobar que `xone-simulator` exista e indicar `npm install -g xone-linter
 
 **Nota de diseño (v0.10.0).** Antes eran dos skills, `xone-verification` y `xone-review`. Se fusionaron: envolvían el mismo CLI con el mismo bloque de comandos, describían el mismo bucle (validar → corregir → smoke) y sus descripciones disparaban con lo mismo («revisar si un cambio rompe la app» frente a «auditar un cambio antes de entregarlo»). No eran dos procedimientos, sino dos fases de uno. La duplicación ya había divergido: ambas repetían las reglas de sintaxis JavaScript y ambas estaban mal del mismo modo.
 
-### 4.10. `xone-project-generator`
+**Nota de diseño (v0.11.0).** Pierde la lista de anti-patrones y las reglas por capa que antes repetía: viven una sola vez en `xone-development` (§10.1) y esta skill las referencia.
+
+### 4.4. `xone-project-generator`
 
 Generación de un proyecto XOne completo a partir de una descripción en lenguaje natural: flujo de 12 fases, plantillas de pantalla obligatorias, tamaños canónicos y prohibiciones explícitas.
 
-Es una skill de **procedimiento**, no de conocimiento: impone un orden de trabajo. Durante la generación deriva a las skills de dominio para el detalle de cada área.
+Es una skill de **procedimiento**, no de conocimiento: impone un orden de trabajo. Durante la generación deriva a `xone-development` para el detalle de cada área. Sus «Prohibiciones explícitas» que coincidían con reglas del corpus pasaron a ser un puntero a la puerta de conocimiento (§10.1).
 
-### 4.11. Objeto `ai`
+### 4.5. Objeto `ai`
 
-El objeto `ai` (LLM local en el dispositivo) no tiene skill propia: vive como referencia de `xone-javascript`, porque es una superficie de API del runtime y no un dominio separado.
+El objeto `ai` (LLM local en el dispositivo) no tiene skill propia: vive como referencia de `xone-development` (subcarpeta `references/javascript/`), porque es una superficie de API del runtime y no un dominio separado.
 
 ## 5. Flujo de selección de skills
 
@@ -270,18 +243,18 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 - ✅ `xone-verification` (validación y smoke con el paquete npm `xone-linter`) — implementada en v0.2.0 y fusionada en `xone-review` en v0.10.0, sobre el paquete publicado como `xone-linter` en npm y en GitHub `sleiva/xone-linter`.
 
 ### 9.2. Fase 1: núcleo de dominio
-- ✅ `xone-xml-ui` (colecciones, props, types válidos, combos, mapas, contents, layouts, visibilidad, ciclo de vida, progid, splash, encoding, macros, permisos y anti-patrones) — implementada en v0.3.0, alineada con las reglas del validador `xone-simulator`.
+- ✅ `xone-xml-ui` (colecciones, props, types válidos, combos, mapas, contents, layouts, visibilidad, ciclo de vida, progid, splash, encoding, macros, permisos y anti-patrones) — implementada en v0.3.0, alineada con las reglas del validador `xone-simulator`; fusionada en `xone-development` en v0.11.0 (§4.1, §13.4).
 - ✅ `xone-debugging` (diagnóstico sistemático de errores y rendimiento, apoyado en `xone-simulator` validate/run/render/smoke) — implementada en v0.4.0.
 - Son las de mayor retorno: cubren la mayoría de consultas y errores recurrentes.
 
 ### 9.3. Fase 2: runtime y estilo
-- ✅ `xone-javascript` (objetos globales, ciclo de vida, callbacks, Futures, SQL seguro y patrones críticos) — implementada en v0.5.0, alineada con los métodos del runtime `xone-simulator`.
-- ✅ `xone-css` (selectores, unidades, colores ARGB, atributos, herencia `extends`, estilos dinámicos, temas y animaciones) — implementada en v0.6.0.
+- ✅ `xone-javascript` (objetos globales, ciclo de vida, callbacks, Futures, SQL seguro y patrones críticos) — implementada en v0.5.0, alineada con los métodos del runtime `xone-simulator`; fusionada en `xone-development` en v0.11.0 (§4.1, §13.4).
+- ✅ `xone-css` (selectores, unidades, colores ARGB, atributos, herencia `extends`, estilos dinámicos, temas y animaciones) — implementada en v0.6.0; fusionada en `xone-development` en v0.11.0 (§4.1, §13.4).
 - Fase 2 completa.
 
 ### 9.4. Fase 3: integraciones y dispositivo
-- ✅ `xone-data-integration` (SQL, `$http`, OAuth2, TLS, réplica, mocks HTTP y seguridad) — implementada en v0.7.0, alineada con `mock/http.json` y el modo mock del `xone-simulator`.
-- ✅ `xone-device` (GPS, cámara, permisos, biometría, Bluetooth, NFC, WebSocket, archivos y simulación `mock/device.json`) — implementada en v0.8.0.
+- ✅ `xone-data-integration` (SQL, `$http`, OAuth2, TLS, réplica, mocks HTTP y seguridad) — implementada en v0.7.0, alineada con `mock/http.json` y el modo mock del `xone-simulator`; fusionada en `xone-development` en v0.11.0 (§4.1, §13.4).
+- ✅ `xone-device` (GPS, cámara, permisos, biometría, Bluetooth, NFC, WebSocket, archivos y simulación `mock/device.json`) — implementada en v0.8.0; fusionada en `xone-development` en v0.11.0 (§4.1, §13.4).
 - Fase 3 completa.
 
 ### 9.5. Fase 4: control de calidad
@@ -305,18 +278,21 @@ Cada fase se revisa por expertos antes de iniciar la siguiente. Una fase solo se
 │       ├── commands/
 │       │   └── xone-validate.md
 │       └── skills/
-│           ├── xone-development/     (SKILL.md + 5 referencias)
-│           ├── xone-xml-ui/          (SKILL.md + 18 referencias)
-│           ├── xone-javascript/      (SKILL.md + 16 referencias)
-│           ├── xone-css/             (SKILL.md + 6 referencias)
-│           ├── xone-data-integration/(SKILL.md + 5 referencias)
-│           ├── xone-device/          (SKILL.md + 4 referencias)
+│           ├── xone-development/     (SKILL.md, <400 líneas, + 54 referencias en subcarpetas por área)
+│           │   └── references/
+│           │       ├── fundamentos/  (5 referencias)
+│           │       ├── xml-ui/       (18 referencias)
+│           │       ├── javascript/   (16 referencias)
+│           │       ├── css/          (6 referencias)
+│           │       ├── datos/        (5 referencias)
+│           │       └── device/       (4 referencias)
 │           ├── xone-project-generator/(SKILL.md + 14 referencias)
 │           ├── xone-debugging/       (SKILL.md + 2 referencias)
 │           └── xone-review/          (SKILL.md)
 ├── scripts/validate-skills.sh
 ├── xone/                             # fuente canónica, versionada
 ├── opencode.json
+├── AGENTS.md                         # descubrimiento de skills desde Codex
 └── README.md
 ```
 
@@ -343,7 +319,9 @@ Cada skill se organiza siguiendo el patrón estándar de Agent Skills (compatibl
 
 **Sin pipeline de sincronización.** Los chunks se generaron una sola vez desde `xone/` y se versionan ya troceados. No hay script de build que regenere en cada cambio: un mecanismo así vuelve a introducir el problema de la copia que se desincroniza en silencio (fue la razón de retirar `scripts/sync.sh`). La trazabilidad la dan la cabecera de procedencia y que `xone/` esté en git.
 
-**Reglas duplicadas a propósito.** Algunas reglas aparecen en más de un `SKILL.md` porque son necesarias en varios contextos: tipos de prop válidos (`xone-development`, `xone-xml-ui`, `xone-review`), bitmask de visibilidad (los mismos tres), opcionalidad de `progid` (`xone-development`, `xone-xml-ui`, `xone-review`), encoding de los `.xne` (`xone-development`, `xone-xml-ui`), sintaxis JavaScript soportada (`xone-development`, `xone-javascript`, `xone-review`) y patrones lock/unlock y browse (`xone-javascript`, `xone-review`). **Una corrección en cualquiera de ellas debe aplicarse en todas.** El caso del bit `8` de visibilidad ya mostró el modo de fallo: se corrigió en un sitio y quedó desalineado en otro hasta que se revisó el conjunto. Ningún check automático detecta dos skills afirmando reglas opuestas.
+**Una regla, un sitio (v0.11.0).** Antes de la consolidación, la misma regla vivía en tres o cuatro `SKILL.md` a la vez — tipos de prop válidos, bitmask de visibilidad, opcionalidad de `progid`, sintaxis JavaScript soportada — y ya había divergido dos veces en una sola sesión de trabajo (el bit `8` de visibilidad se corrigió en un sitio y no en otro). Con una sola puerta de conocimiento, el invariante pasa a ser explícito: **una regla se escribe una vez, en `xone-development`; las skills de procedimiento (`xone-project-generator`, `xone-review`, `xone-debugging`) la referencian, no la repiten.** `xone-review` perdió su lista de anti-patrones y sus reglas por capa; `xone-debugging` dejó de repetir las reglas de `load`, `lock`/`unlock` y `MAP_`; `xone-project-generator` convirtió sus «Prohibiciones explícitas» que coincidían con reglas del corpus en un puntero a la puerta.
+
+El invariante lo hace cumplir `scripts/validate-skills.sh` con un guardián de duplicados: compara, línea a línea de contenido (sin frontmatter, encabezados ni bloques de código) entre cada par de `SKILL.md`, el solape de tokens significativos (≥3 tokens de ≥5 caracteres). Por encima del 65% de solape se trata como la misma regla escrita dos veces y falla el build. Es una heurística de paráfrasis, no una prueba exacta — un marcador literal no habría servido: tras la fusión no queda duplicación byte-idéntica, solo reformulación. Una allowlist corta y documentada (8 entradas, cada una atada a un fragmento de texto y con su razón) cubre los falsos positivos verificados a mano: citas del mismo código de error en dos tablas distintas, avisos operativos que no son reglas de XOne, punteros de navegación entre skills y coincidencias de vocabulario de dominio sin ser la misma regla.
 
 **El índice hace el enrutado.** Con las referencias troceadas y un índice que dice qué fichero responde a qué pregunta, la frontera entre skills pesa mucho menos de lo que pesaba cuando el conocimiento vivía en el `SKILL.md`. Eso abre la puerta a consolidar skills (ver §13.4).
 
@@ -376,8 +354,9 @@ La arquitectura se considerará lista para implementación cuando:
 - Ubicación de las referencias completas: dentro del plugin, en `skills/<name>/references/`, con carga perezosa (ver §10.1).
 - Contenido de las referencias: material original troceado, no resúmenes (v0.10.0, ver §10.1 y `ANALISIS.md`).
 - Fuente canónica: `xone/` se versiona en git, lo que hace cierto el §2.5 y los niveles de evidencia del §7.1.
-- Hogar del objeto `ai`: referencia de `xone-javascript` (§4.11).
+- Hogar del objeto `ai`: referencia de `xone-development` (§4.5).
 - Rol de `xone-development`: dominio propio de fundamentos, no coordinadora (§4.1).
+- Consolidación de fronteras entre skills: cuatro puertas (§13.4, v0.11.0).
 
 ## 13. Tareas pendientes
 
@@ -389,37 +368,39 @@ Aplicado a las diez skills. El refactor de la v0.9.0 se había registrado como c
 
 Todos los `SKILL.md` declaran `name` coincidente con su directorio. Lo verifica `scripts/validate-skills.sh`.
 
-### 13.3. Pruebas de activación real (pendiente — bloquea §13.4)
+### 13.3. Pruebas de activación real (pendiente)
 
-**Prioridad: alta.** Es la única tarea que queda del plan original y de la que dependen las decisiones de taxonomía.
+**Prioridad: alta.** Es la única tarea que queda del plan original.
 
-Definir 1-2 proyectos XOne mínimos y ejecutar tareas en sesiones aisladas para confirmar que se invoca la skill correcta. El validador estático no sustituye la prueba semántica.
+Definir 1-2 proyectos XOne mínimos y ejecutar tareas en sesiones aisladas para confirmar que se invoca la skill correcta y que el agente abre las referencias, no que improvisa. El validador estático no sustituye la prueba semántica.
+
+**Simplificada por la consolidación a cuatro puertas (§13.4, v0.11.0).** Con seis skills de conocimiento solapadas, la pregunta era «¿elige el agente la puerta correcta entre seis?». Con una sola puerta de conocimiento, esa pregunta casi desaparece: ya no hay elección que hacer entre puertas de conocimiento. Queda la pregunta que de verdad importaba: **invocada `xone-development`, ¿el agente lee la referencia del índice, o contesta solo con las reglas del `SKILL.md`?**
 
 Cobertura mínima:
 
 - [ ] Proyecto XOne de prueba con XML, JS y CSS mínimos.
-- [ ] Tarea XML → debe invocar `xone-xml-ui`.
-- [ ] Tarea JavaScript → debe invocar `xone-javascript`.
+- [ ] Tarea XML, JavaScript o CSS → debe invocar `xone-development` y abrir la referencia indicada por su índice, no responder solo con las reglas de cabecera.
 - [ ] Tarea de validación → debe invocar `xone-review`.
-- [ ] **Tarea que cruza áreas** (p. ej. añadir un filtro a una pantalla de listado: `.xne` + evento JS + clase CSS) → medir si el agente abre más de una skill o improvisa el resto. De esto depende §13.4.
+- [ ] **Tarea que cruza áreas** (p. ej. añadir un filtro a una pantalla de listado: `.xne` + evento JS + clase CSS) → con una sola puerta de conocimiento ya no hay que medir cuántas skills abre; medir si dentro de esa puerta lee las referencias de las áreas relevantes o improvisa alguna.
 - [x] Script de validación estructural y descubrimiento: `scripts/validate-skills.sh`.
 
-### 13.4. Consolidación de fronteras entre skills (pendiente, depende de §13.3)
+### 13.4. Consolidación de fronteras entre skills (resuelto en v0.11.0, 2026-08-03)
 
-La taxonomía divide el conocimiento por área temática, pero las tareas de XOne llegan cruzadas: una pantalla es `.xne` + evento JavaScript + clase CSS. Además, `xone-data-integration` y `xone-device` no son dominios independientes, sino superficies de API que se invocan desde JavaScript.
+La taxonomía dividía el conocimiento por área temática, pero las tareas de XOne llegan cruzadas: una pantalla es `.xne` + evento JavaScript + clase CSS. Además, `xone-data-integration` y `xone-device` no eran dominios independientes, sino superficies de API que se invocan desde JavaScript.
 
-Con las referencias troceadas y un índice que enruta (§10.1), el número de puertas importa menos que antes. La asimetría de coste es clara: cargar reglas de un área que no hacía falta cuesta unos miles de tokens; abrir la skill equivocada hace que el agente escriba de memoria, es decir, invente.
+Con las referencias troceadas y un índice que enruta (§10.1), el número de puertas pesaba menos que antes. La asimetría de coste era clara: cargar reglas de un área que no hacía falta cuesta unos miles de tokens; abrir la skill equivocada hace que el agente escriba de memoria, es decir, invente.
 
-La fusión de `xone-verification` en `xone-review` ya está hecha (§4.8): no necesitaba medición previa porque el problema era contenido duplicado que ya había divergido, no una duda empírica sobre activación. Las opciones que quedan, a decidir **con los datos de §13.3**, no por intuición:
+La fusión de `xone-verification` en `xone-review` ya estaba hecha (§4.3): no necesitó medición previa porque el problema era contenido duplicado que ya había divergido, no una duda empírica sobre activación. La decisión sobre las skills de conocimiento se tomó sin esperar a §13.3 (las pruebas de activación seguían pendientes): el peor caso — el agente abre una sola puerta y escribe el resto de memoria — era seguro de evitar solo con una puerta única, y la asimetría de coste (context innecesario vs. invención) hacía que esperar no compensara.
 
-1. **Siete puertas.** `data-integration` y `device` pasan a ser grupos de referencias de `xone-javascript`; se mantienen `xml-ui`, `css`, `development` y las tres de procedimiento.
-2. **Cuatro puertas.** Una sola de conocimiento (`xone-development` con el índice maestro) más las de procedimiento: `project-generator`, `review` y `debugging`.
-3. **Nueve, como ahora.**
+**Opción elegida: cuatro puertas.** Una sola de conocimiento (`xone-development`, con las 54 referencias de las cinco skills absorbidas como subcarpetas por área) más las tres de procedimiento: `xone-project-generator`, `xone-review` y `xone-debugging`.
 
-Criterio propuesto para decidir: *el conocimiento va a referencias bajo una puerta; el procedimiento merece puerta propia, porque cambia cómo trabaja el agente.*
+Opciones descartadas:
 
-Reubicar chunks es barato (cambiar una ruta y reescribir índices de ~20 líneas); el corpus es idéntico en las tres opciones.
+1. **Siete puertas.** `data-integration` y `device` como grupos de referencias de `xone-javascript`, manteniendo `xml-ui`, `css`, `development` y las tres de procedimiento separadas. Conservaba intacto el defecto de fondo: una tarea que toca pantalla y evento seguía necesitando dos puertas de conocimiento.
+2. **Nueve, como estaba.** No resolvía nada.
+
+Criterio aplicado: *el conocimiento va a referencias bajo una puerta; el procedimiento merece puerta propia, porque cambia cómo trabaja el agente.* El invariante resultante, «una regla, un sitio», y el guardián que lo hace cumplir están en §10.1.
 
 ### 13.5. Consolidación editorial de las dos redacciones (pendiente, prioridad baja)
 
-`xone/` contiene dos redacciones del mismo conocimiento con cortes temáticos distintos (`xone-help-docs/topics/` y `xone-project-generator/references/`), cada una con material único. Donde la cobertura difería se importaron ambas, con el índice indicando qué aporta cada una. Unificarlas es trabajo editorial sobre miles de líneas y no bloquea nada; hacerlo eliminaría las referencias marcadas como «referencia ampliada» en `xone-data-integration` y `xone-device`.
+`xone/` contiene dos redacciones del mismo conocimiento con cortes temáticos distintos (`xone-help-docs/topics/` y `xone-project-generator/references/`), cada una con material único. Donde la cobertura difería se importaron ambas, con el índice indicando qué aporta cada una. Unificarlas es trabajo editorial sobre miles de líneas y no bloquea nada; hacerlo eliminaría las referencias marcadas como «referencia ampliada» en `xone-development/references/datos/` y `xone-development/references/device/`.

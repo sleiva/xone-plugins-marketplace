@@ -1,6 +1,6 @@
 # XOne — Patrones de navegación, datos y código
 
-> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §9–§10A. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §9–§10A. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §9 patrones de navegación · §10 patrones de datos · §10A patrones críticos de código
 

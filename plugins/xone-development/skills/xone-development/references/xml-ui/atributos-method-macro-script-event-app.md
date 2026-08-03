@@ -1,6 +1,6 @@
 # XOne XML — Referencia de atributos: method, macro, script, event, platform, tipos y app
 
-> Fuente: `xone/xone-help-docs/topics/07-xml-attributes-reference.md` §5–§11. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/07-xml-attributes-reference.md` §5–§11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5 method · §6 macro · §7 script · §8 eventos disponibles · §9 platform (override por plataforma) · §10 tipos de propiedad · §11 atributos globales de la app
 

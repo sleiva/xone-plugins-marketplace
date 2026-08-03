@@ -1,6 +1,6 @@
 # XOne — systemSettings: referencia ampliada
 
-> Fuente: `xone/xone-project-generator/references/xone-javascript-patterns-d-createobject.md` §2.12.16b. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-project-generator/references/xone-javascript-patterns-d-createobject.md` §2.12.16b. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: segunda redacción del corpus para systemSettings, más extensa que la anterior
 

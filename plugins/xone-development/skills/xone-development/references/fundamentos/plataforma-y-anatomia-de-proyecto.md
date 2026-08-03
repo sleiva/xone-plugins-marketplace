@@ -1,6 +1,6 @@
 # XOne — Plataforma y anatomía de un proyecto
 
-> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §1–§3, §5. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §1–§3, §5. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 qué es XOne · §2 arquitectura: modelo declarativo + imperativo, ciclo de vida colección/objeto/propiedad, flujo de datos, sincronización con servidor · §3 anatomía del proyecto: archivos y carpetas obligatorias y opcionales, diagrama de estructura · §5 tipos de archivo
 

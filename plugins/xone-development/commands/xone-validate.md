@@ -10,7 +10,7 @@ Procedimiento:
 
 1. Comprueba que el CLI esté disponible con `xone-simulator --version`. Si no lo está, indica al usuario que lo instale con `npm install -g xone-linter` y detente.
 2. Ejecuta `xone-simulator validate <ruta>`.
-3. Si hay errores, agrúpalos por fichero y por código. Antes de tocar nada, lee el fichero afectado y consulta la referencia correspondiente de las skills de XOne (`xone-xml-ui`, `xone-javascript`, `xone-css`, `xone-data-integration`, `xone-device`) para confirmar la forma correcta. **No corrijas por intuición**: si un atributo o API no aparece en las referencias, dilo en vez de inventar un arreglo.
+3. Si hay errores, agrúpalos por fichero y por código. Antes de tocar nada, lee el fichero afectado y consulta la referencia correspondiente del índice de `xone-development` (XML `.xne`, JavaScript, CSS, datos e integración, dispositivo) para confirmar la forma correcta. **No corrijas por intuición**: si un atributo o API no aparece en las referencias, dilo en vez de inventar un arreglo.
 4. Aplica el cambio mínimo que resuelva cada error, sin refactorizar de paso.
 5. Vuelve a ejecutar `validate` y repite hasta que pase o hasta que quede un error que no puedas resolver con evidencia.
 6. Cuando la validación esté limpia, ejecuta `xone-simulator smoke <ruta> --json` y resume el resultado.

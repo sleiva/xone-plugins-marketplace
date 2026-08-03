@@ -2,6 +2,26 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.11.0] - 2026-08-03
+
+De nueve skills a cuatro: una puerta de conocimiento (`xone-development`) más tres de procedimiento (`xone-project-generator`, `xone-review`, `xone-debugging`).
+
+### Cambiado
+
+- `xone-xml-ui`, `xone-javascript`, `xone-css`, `xone-data-integration` y `xone-device` se fusionan en `xone-development`, cuya carpeta `references/` pasa a estar organizada en subcarpetas por área (`fundamentos/`, `xml-ui/`, `javascript/`, `css/`, `datos/`, `device/`; 54 ficheros en total). Las tareas de XOne llegan cruzadas —una pantalla es `.xne` más evento más CSS— y con activación automática el caso a cubrir era que el agente abriese una sola puerta y escribiera el resto de memoria.
+- Invariante nuevo: una regla se escribe una vez, en la puerta de conocimiento; las skills de procedimiento la referencian, no la repiten. `xone-review` pierde su lista de anti-patrones y sus reglas por capa; `xone-debugging` deja de repetir las reglas de `load`, `lock`/`unlock` y `MAP_`; las «Prohibiciones explícitas» de `xone-project-generator` que coincidían con reglas del corpus pasan a ser un puntero a la puerta. El conflicto conocido `progid`/`COLL_MISSING_PROGID` (documentación vs. validador `xone-simulator`) pasa a vivir solo en `xone-development`, no en `xone-review`.
+- La consolidación de fronteras entre skills (`docs/ARCHITECTURE.md` §13.4, `docs/TODO.md` tarea 7) queda cerrada con la opción de cuatro puertas, decidida sin esperar a las pruebas de activación real (tarea 6): el peor caso de la taxonomía por área solo se evita con una puerta única de conocimiento.
+
+### Añadido
+
+- `AGENTS.md` en la raíz para el descubrimiento de skills desde Codex. Comprobado empíricamente con `codex-cli 0.146.0`: enumera las cuatro skills exactas con el fichero presente, y una ejecución de control sin él devuelve una respuesta contaminada de cinco skills.
+- Cuatro comprobaciones nuevas en `scripts/validate-skills.sh`: descubrimiento recursivo de referencias en subcarpetas por área; techo propio de 400 líneas para el `SKILL.md` de la puerta de conocimiento; un parseo YAML real del frontmatter (se añadió tras detectar que un `SKILL.md` fusionado se publicó con un frontmatter sintácticamente inválido, que hace que la skill cargue sin `name` ni `description`); y un guardián de duplicados por solape de tokens (no por marcador literal — tras la fusión no queda duplicación byte-idéntica, solo paráfrasis) con una allowlist corta de 8 excepciones documentadas.
+- Una quinta comprobación: enlaces relativos dentro de los propios ficheros de `references/`, no solo los que `SKILL.md` hace hacia ellos. Motivada por una regresión real (ver «Corregido»).
+
+### Corregido
+
+- Los 54 ficheros de referencia movidos a subcarpetas por área en la fusión llevaban el enlace de cabecera `[../SKILL.md](../SKILL.md)`, que dejó de resolver al añadirse un nivel de profundidad. Corregidos a `../../SKILL.md`. Ningún check existente lo detectaba porque ninguno miraba enlaces dentro de los propios ficheros de referencia (ver «Añadido»).
+
 ## [0.10.0] - 2026-08-03
 
 Reconstrucción de la capa de referencias. Hasta 0.9.0 las skills resumían el corpus de XOne en prosa; a partir de esta versión las referencias contienen el material original troceado, con su procedencia declarada. Ver [`docs/ANALISIS.md`](docs/ANALISIS.md) para el diagnóstico completo.

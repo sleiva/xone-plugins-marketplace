@@ -1,6 +1,6 @@
 # XOne XML — Nodo contents y macros
 
-> Fuente: `xone/xone-help-docs/topics/02c-xml-contents-patrones.md` §6–§7. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/02c-xml-contents-patrones.md` §6–§7. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §6 contents: vinculación con type=Z, filtros dinámicos ##FLD_CAMPO##, asfilter · §7 macros: macros del sistema, setMacro/getMacro y declaración del nodo macro
 

@@ -1,6 +1,6 @@
 # XOne — $http, SqlManager y crypto: referencia ampliada
 
-> Fuente: `xone/xone-project-generator/references/xone-javascript-patterns-c-appdata-http.md` §2.6–§2.9. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-project-generator/references/xone-javascript-patterns-c-appdata-http.md` §2.6–§2.9. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: segunda redacción del corpus para $http, más SqlManager y la API crypto
 

@@ -1,6 +1,6 @@
 # XOne XML — Props por tipo: texto, número, label, botón, fecha, imagen
 
-> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` §5.9.1–§5.9.10. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` §5.9.1–§5.9.10. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5.9.1 texto T · §5.9.2 label L/TL · §5.9.3 numérico N y TN · §5.9.4 botón B · §5.9.5 checkbox NC · §5.9.6 fecha y hora D/DT/TT · §5.9.8 imagen IMG · §5.9.9 foto PH · §5.9.10 vídeo VD y escáner QR
 

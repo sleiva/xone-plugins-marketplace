@@ -1,6 +1,6 @@
 # XOne CSS — Selectores, unidades y colores
 
-> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §1–§4. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §1–§4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 qué es y qué no es · §2 selectores coll/prop/prop:TYPE/.clase/group/frame · §3 unidades p, % y sin unidad · §4 colores #RRGGBB y #AARRGGBB con paletas
 

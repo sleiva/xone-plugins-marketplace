@@ -1,6 +1,6 @@
 # XOne JavaScript — self y el DataObject
 
-> Fuente: `xone/xone-help-docs/topics/03a-js-self.md` §2. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/03a-js-self.md` §2. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §2 acceso a campos, getOldValue, getOwnerCollection, getContents, setFieldPropertyValue, executeNode, save, JSON, métodos adicionales del DataObject, selfDataColl y métodos de DataCollection
 

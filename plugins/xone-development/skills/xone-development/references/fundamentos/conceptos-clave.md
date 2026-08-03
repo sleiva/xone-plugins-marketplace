@@ -1,6 +1,6 @@
 # XOne — Conceptos clave
 
-> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §6. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §6. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §6 colecciones, DataObject, props, prefijo ##PREF##, macros del sistema, códigos de error y sintaxis JavaScript soportada por el motor
 
