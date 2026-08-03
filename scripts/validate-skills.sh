@@ -10,7 +10,8 @@
 #   - que todo enlace a references/ resuelva, tanto desde el SKILL.md como los enlaces
 #     relativos que hay dentro de los propios ficheros de references/
 #   - que toda referencia esté enlazada desde su SKILL.md (nada huérfano en el paquete)
-#   - que OpenCode pueda enumerar las skills
+#   - que OpenCode enumere cada skill por nombre con su `location` bajo este repo
+#     (no solo por nombre: un homónimo global no basta)
 #
 # Las skills se descubren desde el sistema de ficheros: añadir una skill nueva no
 # requiere tocar este script, y una skill sin documentar no pasa desapercibida.
@@ -64,6 +65,13 @@ dup_min_significant_tokens=3
 # separados por ` ||| `:
 #   skill_a ||| fragmento_a ||| skill_b ||| fragmento_b ||| razón
 # El orden de skill_a/skill_b no importa: se comprueba en ambos sentidos.
+#
+# El emparejamiento es por subcadena (`fragmento in línea`, insensible a
+# mayúsculas), no por igualdad de línea completa: una entrada queda atada a
+# lo que ese fragmento corto significaba cuando se dio de alta, no a la
+# línea entera. Si en el futuro aparece otra línea, en cualquiera de las dos
+# skills, que contenga ese mismo fragmento por casualidad, esta entrada la
+# silenciará también, sin que nadie la haya revisado para ese caso nuevo.
 #
 # Sé parco: esta lista es la única forma sancionada de silenciar el
 # guardián, y una lista larga es exactamente cómo un guardián se neutraliza
@@ -268,6 +276,71 @@ for entry in allow_entries:
 
 sys.exit(1 if found else 0)
 PY
+
+  cat > "$tmp_dir/check_opencode_skills.py" <<'PY'
+# `opencode debug skill` exits 0 whenever it can enumerate *any* skills, built-in
+# or global ones included: it does not exit non-zero just because this repo's
+# skills.paths is wrong or empty. An exit-code-only check therefore passes even
+# when OpenCode never saw a single one of this repo's skills. To actually
+# verify discovery we parse its JSON output (a list of objects with `name`,
+# `description`, `location`, `content`) and require, for every skill this
+# script found on disk, an entry whose `location` resolves under this repo's
+# canonical skills_dir — not just a name match, because a same-named skill
+# installed globally (e.g. under ~/.agents/skills/) would satisfy a
+# name-only check without this repo's skills being discovered at all.
+import json
+import sys
+from pathlib import Path
+
+skills_dir = Path(sys.argv[1]).resolve()
+json_path = Path(sys.argv[2])
+
+try:
+    data = json.loads(json_path.read_text(encoding='utf-8'))
+except Exception as exc:
+    print('OpenCode output is not valid JSON: ' + str(exc))
+    sys.exit(1)
+
+if not isinstance(data, list):
+    print('OpenCode output is not a JSON array of skills')
+    sys.exit(1)
+
+expected = sorted(p.parent.name for p in skills_dir.glob('*/SKILL.md'))
+
+by_name = {}
+for entry in data:
+    if isinstance(entry, dict) and entry.get('name'):
+        by_name.setdefault(entry['name'], []).append(entry)
+
+missing = []
+wrong_location = []
+skills_dir_str = str(skills_dir)
+for name in expected:
+    entries = by_name.get(name)
+    if not entries:
+        missing.append(name)
+        continue
+    found_here = False
+    for e in entries:
+        location = e.get('location')
+        if not location or location == '<built-in>':
+            continue
+        resolved = str(Path(location).resolve())
+        if resolved == skills_dir_str or resolved.startswith(skills_dir_str + '/'):
+            found_here = True
+            break
+    if not found_here:
+        wrong_location.append(name)
+
+if missing:
+    print('OpenCode did not enumerate: ' + ', '.join(missing))
+if wrong_location:
+    print(
+        'OpenCode enumerated but not from ' + skills_dir_str + ': '
+        + ', '.join(wrong_location)
+    )
+sys.exit(1 if (missing or wrong_location) else 0)
+PY
 fi
 
 for dir in "$skills_dir"/*/; do
@@ -336,7 +409,7 @@ for dir in "$skills_dir"/*/; do
       [[ -n "$ref" ]] || continue
       rel="${ref#$dir/}"
       if ! grep -qF -- "($rel" "$file"; then
-        printf 'Orphaned reference (not linked from SKILL.md): %s\n' "$ref" >&2
+        printf 'Orphaned reference (no literal "(%s" link found in SKILL.md): %s\n' "$rel" "$ref" >&2
         failures=$((failures + 1))
       fi
     done < <(find "$dir/references" -type f -name '*.md' | sort)
@@ -414,9 +487,30 @@ if (( have_python3 )); then
 fi
 
 if command -v opencode >/dev/null 2>&1; then
-  if ! (cd "$root" && opencode debug skill >/dev/null 2>&1); then
-    printf 'OpenCode could not enumerate skills.\n' >&2
-    failures=$((failures + 1))
+  if (( have_python3 )); then
+    # stdout va directo a fichero, no a una variable de shell: el JSON de
+    # `opencode debug skill` puede superar varios cientos de KB (incluye el
+    # contenido íntegro de cada skill, no solo nombre y ruta), y capturarlo
+    # con `$(...)` lo trunca en algunos shells/entornos en vez de fallar
+    # con un error visible. stderr se captura aparte para no mezclar avisos
+    # de opencode con el JSON.
+    if (cd "$root" && opencode debug skill >"$tmp_dir/opencode.json" 2>"$tmp_dir/opencode.err"); then
+      if ! opencode_check_output=$(PYTHONIOENCODING=utf-8 python3 "$tmp_dir/check_opencode_skills.py" "$skills_dir" "$tmp_dir/opencode.json" 2>&1); then
+        printf '%s\n' "$opencode_check_output" >&2
+        failures=$((failures + 1))
+      fi
+    else
+      opencode_status=$?
+      printf 'OpenCode could not enumerate skills (exit %d): %s\n' "$opencode_status" "$(cat "$tmp_dir/opencode.err")" >&2
+      failures=$((failures + 1))
+    fi
+  else
+    # Sin python3 no podemos parsear el JSON de `opencode debug skill`, y
+    # comprobar solo el exit code no sirve: ese comando sale 0 en cuanto
+    # enumera cualquier skill (built-in, global...), aunque no vea ninguna
+    # de las de este repo. Sin poder parsear, nos lo saltamos en vez de
+    # fingir que comprobamos algo.
+    printf 'Warning: python3 is not installed; skipped OpenCode discovery check.\n' >&2
   fi
 else
   printf 'Warning: opencode is not installed; skipped discovery check.\n' >&2
@@ -438,7 +532,7 @@ if (( have_python3 )); then
   ran="$ran, duplicate-rule guard"
 fi
 ran="$ran, reference links (incl. links inside references)"
-if command -v opencode >/dev/null 2>&1; then
-  ran="$ran, OpenCode discovery"
+if command -v opencode >/dev/null 2>&1 && (( have_python3 )); then
+  ran="$ran, OpenCode discovery (name + location under $skills_dir)"
 fi
 printf 'Validated %d skills: %s.\n' "$skills" "$ran"

@@ -140,7 +140,7 @@ Debe cubrir:
 - `run`: ejecución de un evento concreto para aislar fallos de runtime.
 - `render`: render de una coll a HTML para diagnóstico de UI.
 - Corrección iterativa hasta que la validación pase.
-- Revisión por capas, anti-patrones, checklist de entrega y priorización por severidad, con archivo, línea, impacto y corrección propuesta.
+- Checklist de entrega y priorización por severidad, con archivo, línea, impacto y corrección propuesta. Anti-patrones y reglas por capa se referencian desde `xone-development` (§10.1), no se repiten aquí.
 
 Debe comprobar que `xone-simulator` exista e indicar `npm install -g xone-linter` si no. Trabaja sobre el paquete publicado, no asume acceso al código fuente del simulador.
 
@@ -323,7 +323,7 @@ Cada skill se organiza siguiendo el patrón estándar de Agent Skills (compatibl
 
 El invariante lo hace cumplir `scripts/validate-skills.sh` con un guardián de duplicados, y su cobertura real es más estrecha que «línea a línea»: de cada par de `SKILL.md` compara solo las líneas de contenido (sin frontmatter, encabezados ni bloques de código) de **más de 35 caracteres** (`dup_min_line_length`) que tengan al menos **3 tokens significativos** (`dup_min_significant_tokens`) de **5 o más caracteres** (`dup_min_token_length`); dos líneas que superan el **65% de solape** de esos tokens (`dup_overlap_threshold`) se tratan como la misma regla escrita dos veces. Una allowlist corta y documentada (8 entradas, cada una atada a un fragmento de texto y con su razón) cubre los falsos positivos verificados a mano: citas del mismo código de error en dos tablas distintas, avisos operativos que no son reglas de XOne, punteros de navegación entre skills y coincidencias de vocabulario de dominio sin ser la misma regla.
 
-**Lo que el guardián no ve.** El filtro de 35 caracteres descarta la mayoría de filas de tabla y viñetas cortas — justo donde vive buena parte de las reglas duplicadas de una sola línea (tipos de prop, bitmask de visibilidad) — así que una duplicación de línea corta puede colarse sin que el guardián la vea. Y por diseño solo detecta paráfrasis con vocabulario compartido: dos formulaciones de la misma regla que no comparten suficientes tokens (por debajo del 65%, o con muy pocos tokens significativos) tampoco se detectan. Es una red con una malla de un tamaño conocido, no una prueba de ausencia de duplicación.
+**Lo que el guardián no ve.** El filtro de 35 caracteres descarta solo una minoría de las líneas de contenido candidatas (~14% en las cuatro `SKILL.md` actuales) — pero es justo ahí, en filas de tabla y viñetas cortas, donde vive buena parte de las reglas duplicadas de una sola línea (tipos de prop, bitmask de visibilidad), así que esa duplicación de línea corta puede colarse sin que el guardián la vea. Y por diseño solo detecta paráfrasis con vocabulario compartido: dos formulaciones de la misma regla que no comparten suficientes tokens (por debajo del 65%, o con muy pocos tokens significativos) tampoco se detectan. Es una red con una malla de un tamaño conocido, no una prueba de ausencia de duplicación.
 
 **El índice hace el enrutado.** Con las referencias troceadas y un índice que dice qué fichero responde a qué pregunta, la frontera entre skills pesa mucho menos de lo que pesaba cuando el conocimiento vivía en el `SKILL.md`. Eso abre la puerta a consolidar skills (ver §13.4).
 
