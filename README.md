@@ -73,6 +73,8 @@ claude --plugin-dir ./plugins/xone-development
 
 En OpenCode, abre este repositorio como proyecto. Las skills se descubren desde `plugins/xone-development/skills/`, configurado mediante `skills.paths` en `opencode.json`. Los comandos son específicos de Claude Code.
 
+En Codex, abre este repositorio como proyecto: `AGENTS.md` en la raíz apunta a `plugins/xone-development/skills/` y lista las cuatro skills. No se mantienen copias para Codex, igual que con OpenCode. Comprobado el 2026-08-03 con `codex-cli 0.146.0` (`codex exec "Lista las skills de XOne disponibles en este repositorio, por su nombre exacto."`), enumerando exactamente las cuatro skills.
+
 ## Desarrollo
 
 Las skills canónicas viven en `plugins/xone-development/skills/`; no se mantienen copias sincronizadas para OpenCode.
