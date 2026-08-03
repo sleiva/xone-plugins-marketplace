@@ -1,6 +1,5 @@
+# entorno de desarrollo de plugins OpenCode (node_modules, package.json)
 .opencode/
+
 # macOS
 .DS_Store
-
-# fuente original de skills
-/xone/

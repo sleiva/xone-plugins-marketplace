@@ -1,61 +1,115 @@
 ---
 name: xone-development
-description: Desarrollo experto de aplicaciones XOne. Usar al crear o revisar XML .xne, JavaScript XOne, CSS XOne, colecciones, pantallas, navegación, integraciones HTTP, permisos, GPS, cámara, sincronización o al depurar errores de runtime.
+description: Fundamentos y estructura de un proyecto XOne. Usar al crear un proyecto desde cero, al entender o modificar app.xml, app.ini, mappings.xne, la anatomía de carpetas (bd, icons, files, fonts), el prefijo ##PREF##, las macros del sistema, los códigos de error, el flujo Splash→Login→EntradaApp→Menu, las convenciones de nombres, o al preguntar qué sintaxis JavaScript soporta el motor.
 ---
 
-# XOne Development
+# XOne — Fundamentos y reglas transversales
 
-Ayuda a desarrollar aplicaciones móviles con la plataforma XOne. Antes de proponer código, inspecciona la estructura y los archivos existentes del proyecto. Respeta siempre las convenciones que ya use el proyecto salvo que estén causando un error.
+Estas son las reglas que aplican a cualquier trabajo sobre un proyecto XOne, sea XML, JavaScript o CSS. **No afirmes nada que no esté en las referencias de esta skill o de las especializadas.** Si una API, atributo o comportamiento no aparece, dilo y pide el dato; no lo deduzcas por analogía con la web ni con otros frameworks.
 
-## Método de trabajo
+## Siempre
 
-1. Identifica si el problema afecta a XML, JavaScript, CSS, datos, navegación o configuración.
-2. Busca definiciones y usos relacionados antes de editar.
-3. Propón el cambio mínimo que resuelva el problema.
-4. Mantén separados layout, lógica y estilos cuando el proyecto lo permita.
-5. Comprueba sintaxis XML, nombres únicos de nodos y referencias entre colecciones.
-6. Resume qué cambió, qué se verificó y cualquier limitación del runtime.
+1. **Consulta la referencia antes de responder.** Cada área tiene su fichero; están indexados abajo y en las skills especializadas.
+2. **La fuente es el `.xne`.** Los ficheros `.xml` de colecciones y pantallas son artefactos generados automáticamente por XOneStudio a partir de los `.xne`: no se leen, no se editan, no se consultan. La única excepción es `app.xml`, que sí es fuente. Si conviven `.xne` y `.xml`, trabaja solo sobre los `.xne`.
+3. **`progid` es opcional.** Sin él, la coll es un objeto de datos genérico (equivalente a `ASData.CASBasicDataObj`). Solo **Empresas** (`ASGestion.CASEmpresa`) y **Usuarios** (`ASGestion.CASUser`) requieren el suyo para activar su lógica de negocio. No inventes progids.
+4. **Encoding coherente en los `.xne`.** El motor respeta el `encoding` declarado en el prólogo y asume UTF-8 si falta. UTF-8 e iso-8859-15 son válidos; lo que corrompe tildes y eñes es declarar uno y guardar en otro.
+5. **`ID` y `ROWID` los gestiona la plataforma.** No hace falta declararlos como `<prop>` (es válido pero redundante). En el `sql=` de la coll, `ID` sí se rescata en el SELECT; `ROWID` no es necesario.
+6. **Inicializa con el evento correcto:** `<before-edit>` al abrir para editar, `<create>` la primera vez. `<load>` se dispara **por cada DataObject** al cargar desde la BD (startBrowse, loadAll, `<contents>`) y no se recomienda por rendimiento.
+7. **Los nombres son únicos y case-sensitive.** Ver la sección de unicidad más abajo.
 
-## Reglas XOne críticas
+## Nunca
 
-- Las colecciones se declaran con `<coll>` y los controles con `<prop>` dentro de `<group>` o `<frame>`.
-- Los tipos habituales son `T`, `TN`, `N`, `D`, `DT`, `TT`, `B`, `L`, `THTML`, `WEB`, `IMG`, `PH`, `VD`, `DR`, `NC`, `X`, `Z`, `AT` y `O`. No inventes tipos.
-- Un combo usa `type="T"` con `mapcol`, `mapfld` y, cuando corresponda, `linkedfield`; no uses `type="C"`.
-- Un mapa usa `type="Z" viewmode="mapview"`; no uses un tipo de mapa inventado.
-- El primer elemento de una fila no debe llevar `newline="false"`; ese atributo se aplica a los siguientes elementos de la fila.
-- Los nombres de props, groups, frames y contents deben ser únicos dentro de su ámbito.
-- `before-edit` inicializa una pantalla al abrirse. `create` se usa para inicialización de objetos nuevos. No uses `load` para inicializar una pantalla: se ejecuta por cada objeto cargado y puede degradar el rendimiento.
-- El splash es un fichero estático en la raíz del proyecto; no lo confundas con `EntradaApp` ni con `load-imgbk`.
-- En CSS XOne usa unidades `p` y `%`, no `px`, `em` o `rem`. Los colores con alpha usan formato `#AARRGGBB`.
-- Si `compatibility-mode="true"` está activo en `app.xml`, el CSS se ignora.
+1. **No inventes** atributos XML, funciones JavaScript ni propiedades CSS que no estén en las referencias. XOne ignora silenciosamente los atributos desconocidos, así que un invento no da error: da un bug silencioso.
+2. **No uses APIs del DOM.** No existen: `document`, `window`, `localStorage`, `sessionStorage`, `XMLHttpRequest`, `navigator`, `history`.
+3. **No uses VBScript.** Está descontinuado en XOne aunque alguna referencia histórica lo mencione. La única opción válida es `<script language="javascript">`; si encuentras un ejemplo en VBScript, tradúcelo antes de proponerlo.
+4. **No mezcles patrones de React, Angular, Vue** ni de ningún framework web.
+5. **No repitas nombres de nodos dentro de la misma colección.**
+6. **No uses `<load>`** para inicializar una pantalla: produce bugs silenciosos.
 
-## JavaScript XOne
+## Sintaxis JavaScript que soporta el motor
 
-- Usa `self` para el objeto actual, `selfDataColl` para su colección, `appData` para datos de aplicación y `ui` para navegación e interfaz.
-- Para abrir una pantalla usa normalmente `ui.openEditView(...)`; `ui.openMenu(...)` abre la lista de una colección.
-- Para refrescar usa `ui.refresh()` o `window.refreshValue()` solo cuando sea necesario. Evita refrescos repetidos dentro de bucles.
-- Los singletons se usan directamente: `$http`, `crypto`, `deviceInfo` y `systemSettings`. No los instancies con `new`.
-- Para objetos XOne creables usa el constructor documentado, por ejemplo `new FileManager()` o `new Animation()`.
-- Preserva el contexto de `self` en callbacks asíncronos guardándolo en una variable local.
-- El runtime soporta un subconjunto de ES6+. Evita template literals, `async`/`await`, spread/rest, optional chaining y parámetros por defecto salvo que el proyecto confirme soporte.
-- Escapa JavaScript embebido en XML o usa CDATA correctamente.
-- Valida y escapa entradas antes de construir SQL o URLs. Nunca interpolas credenciales ni secretos en código enviado al dispositivo.
+**Sí:** `let`, `const`, arrow functions, destructuring, `class` (con `extends`, `super`, `static`, getters/setters, computed keys, field declarations y generator methods con `*`), `Promise` (ES2024 completo: `all`, `allSettled`, `race`, `any`, `withResolvers`, `.then`, `.catch`, `.finally`), generadores con `yield` (runtime estilo SpiderMonkey legacy: `.next()` devuelve el valor directo y `StopIteration`; no `for...of` sobre generadores), `for...of` sobre arrays y strings, `Symbol`, typed arrays.
 
-## Respuesta y revisión
+**No, a nivel de sintaxis:** template literals `` `${x}` ``, `async`/`await`, spread/rest, parámetros por defecto, optional chaining `?.`, nullish coalescing `??`, computed keys en object literals (sí en cuerpo de clase), campos privados `#name`, bloques `static`.
 
-Cuando generes una solución:
+**Sí existen con implementación custom de XOne** (semántica compatible con WHATWG): `fetch(input, init?)` con limitaciones (no admite `Request` como primer argumento, ni body `FormData`/`Blob`/`ReadableStream`, ni cancelación real en vuelo), `setTimeout`/`clearTimeout`/`setInterval`/`clearInterval`/`queueMicrotask`, `URL`/`URLSearchParams`, `Headers`, `AbortController`/`AbortSignal`, `Response`, `EventTarget`, `TextEncoder`/`TextDecoder`, `console` completo (`log`, `info`, `debug`, `warn`, `error`, `trace`, `assert`, `group`, `time`, `table`… con formato `%s`/`%d`/`%j`), `performance.now()`, `atob`/`btoa`, `structuredClone`, `DOMParser`/`XMLSerializer`, `globalThis`.
 
-- Incluye nombres de archivo y fragmentos directamente aplicables.
-- Explica supuestos si falta información del proyecto.
-- Señala APIs o atributos no confirmados en vez de inventarlos.
-- En una revisión, prioriza errores funcionales, regresiones, seguridad y rendimiento sobre estilo.
-- Si el cambio es XML, revisa también que el prólogo y el encoding declarado coincidan con el fichero.
-- Si el cambio requiere permisos, indica el nodo `<permissions>` y el permiso de runtime correspondiente.
+Aun existiendo, lo idiomático en XOne es `$http` en vez de `fetch`, y `ui.executeActionAfterDelay` en vez de `setTimeout`.
 
-## Diagnóstico rápido
+## Unicidad y nombres
 
-- Si una pantalla aparece vacía, revisa primero el XML, el primer `newline`, los nombres duplicados, `visible`, `disablevisible` y `compatibility-mode`.
-- Si la inicialización no ocurre, mueve la lógica de `load` a `before-edit` o `create` según corresponda.
-- Si un control no responde, confirma el nombre exacto usado por `getControl("NOMBRE")` y que la ventana destino esté visible.
-- Si una lista es lenta, evita trabajo pesado en `load`, limita refreshes y usa browse/contents de forma controlada.
-- Si una petición falla, revisa método, URL, autenticación, certificado TLS, permisos y el tratamiento del Future/callback.
+- El ámbito de unicidad es la **`<coll>` entera**, no el `<group>` ni el `<frame>`: no puede haber dos `<prop>`, dos `<group>`, dos `<frame>` ni dos eventos con el mismo `name` en ninguna parte de la misma coll, aunque estén en grupos distintos. El `name` se publica a nivel de coll (los `collprops`) y se volvería ambiguo.
+- Dos `<coll>` distintas **sí** pueden tener contenido idéntico, siempre que su propio `name` sea distinto. Dos colls con el mismo `name` en el proyecto no son válidas.
+- El atributo `name` es **case-sensitive**, y eso aplica a todas las referencias cruzadas: `self.MiNombre`, `mapcol`, `linkedto`, `inherits`, `<field name="...">`, `getControl("...")`, `ui.openEditView("...")`, `appData.getCollection("...")`.
+- En cada `<group>`, `id` es obligatorio y único dentro de la coll. Convención habitual: `1`, `2`, `3`… para grupos normales, `999` para HEADER fijo y `0` para FOOTER fijo.
+- Prefijo `MAP_`: solo para campos **no persistidos** (UI temporal, JOIN, `linkedto`). El framework excluye `MAP_*` de INSERT y UPDATE. Los campos de BD van sin prefijo.
+
+## Tipos de prop válidos
+
+| Tipo | Descripción |
+|---|---|
+| `T` | Texto editable |
+| `TN` / `TN2`…`TN6` | Texto numérico; el sufijo son los decimales visibles |
+| `L` | Etiqueta de solo lectura. Sin `title`, muestra el valor del campo |
+| `TL` | Alias legacy de `L` |
+| `THTML` | Texto con formato HTML |
+| `N` / `N2`…`N6` | Número; el sufijo son los decimales visibles |
+| `D` / `DT` / `TT` | Fecha / fecha y hora / solo hora |
+| `B` | Botón |
+| `NC` | Checkbox, toggle, radio o switch |
+| `X` | Password enmascarado |
+| `IMG` / `PH` | Imagen referenciada / foto capturable |
+| `VD` | Vídeo o escáner QR/barcode |
+| `DR` | Dibujo o firma digital |
+| `Z` | Contenedor de lista embebida |
+| `WEB` | WebView |
+| `AT` | Adjunto |
+| `O` | Sub-objeto JavaScript, no persiste |
+
+Los combos **no tienen tipo propio**: se hacen con `type="T"` (o `type="N"`) más `mapcol` y `mapfld`. No existen `type="C"`, `"M"`, `"A"`, `"F"`, `"S"`, `"P"`, `"E"`, `"R"`, `"H"`, `"W"`, `"CAM"`, `"ARRAY"`, `"STRING"`, `"N1"` ni `"BT"`.
+
+## Visibilidad
+
+Bitmask de 4 bits: `1` edición · `2` lista · `4` content · `8` combo. Cualquier combinación es válida.
+
+| Valor | Contextos |
+|---|---|
+| `0` | Ninguno: campo interno, solo para lógica |
+| `1` | Solo formulario de edición |
+| `2` | Solo lista |
+| `3` | Edición + lista |
+| `4` | Solo content (lista embebida) |
+| `7` | Edición + lista + content — **el más habitual** |
+| `8` | Solo combo |
+| `15` | Todos |
+
+`visible` es **estático**: no se cambia en runtime, ni por script ni por eventos. Para visibilidad condicional se usa `disablevisible="CAMPO=valor"`, que sí es dinámico.
+
+## Ciclo de vida
+
+| Necesito | Evento |
+|---|---|
+| Inicializar la primera vez | `<create>` |
+| Inicializar al abrir para editar | `<before-edit>` |
+| Ejecutar tras entrar en edición | `<after-edit>` |
+| Reaccionar a cada ítem al cargar una colección (no recomendado) | `<load>` |
+| Cambio de campo | `<onchange>` + `<field name="CAMPO">` |
+| Botón atrás | `<onback>` |
+
+No existen `<unload>`, `<ondelete>`, `<beforedelete>` ni `<afterdelete>`. Para borrado hay `<delete>` con hijos `<rule>`, que es un bloque de reglas, no un evento antes/después. Solo puede haber un `<before-edit>` por coll.
+
+## JavaScript embebido en `.xne`
+
+Para JS no trivial, la forma preferida es declarar la función en un `.js` externo (`functions.js` u otro incluido) y llamarla desde el XML con `miFuncion();`, escribiendo el JS normal, sin entidades ni CDATA. Para snippets cortos inline: dentro de un nodo `<script>` valen tanto entidades XML (`&lt;`, `&gt;`, `&amp;`) como `<![CDATA[…]]>`; dentro de un atributo (`onclick=`, `disablevisible=`) **solo entidades**, porque CDATA no es válido en atributos XML.
+
+## Referencias
+
+| Para… | Lee |
+|---|---|
+| Qué es XOne, arquitectura, ciclo de vida colección/objeto/propiedad, sincronización, anatomía de carpetas y tipos de fichero | [references/plataforma-y-anatomia-de-proyecto.md](references/plataforma-y-anatomia-de-proyecto.md) |
+| `app.xml` atributo por atributo, `app.ini` y `mappings.xne` | [references/configuracion-app-xml-ini-mappings.md](references/configuracion-app-xml-ini-mappings.md) |
+| Colecciones, DataObject, props, `##PREF##`, macros del sistema, códigos de error y detalle de la sintaxis JS soportada | [references/conceptos-clave.md](references/conceptos-clave.md) |
+| Flujo Splash→Login→EntradaApp→Menu, convenciones de nombres y creación de un proyecto básico paso a paso | [references/navegacion-convenciones-y-primer-proyecto.md](references/navegacion-convenciones-y-primer-proyecto.md) |
+| Errores frecuentes al empezar y su corrección | [references/errores-comunes.md](references/errores-comunes.md) |
+
+Para el detalle de cada área, usa la skill correspondiente: `xone-xml-ui`, `xone-javascript`, `xone-css`, `xone-data-integration`, `xone-device`. Para crear un proyecto completo desde cero, `xone-project-generator`. Para validar y auditar, `xone-review`; para diagnosticar un fallo a partir de su síntoma, `xone-debugging`.

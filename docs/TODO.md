@@ -1,197 +1,86 @@
 # Tareas pendientes
 
-Lista operativa de trabajo pendiente sobre `xone-plugins-market`. Detalle técnico y contexto en [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) (§13).
+Lista operativa de trabajo pendiente sobre `xone-plugins-market`. Detalle técnico y contexto en [`ARCHITECTURE.md`](ARCHITECTURE.md) §13. Diagnóstico del diseño previo a la v0.10.0 en [`ANALISIS.md`](ANALISIS.md).
 
 ## Estado
 
 - [x] **1. Frontmatter `name` en todos los `SKILL.md`**
-- [x] **2. Refactor de skills con `references/`**
-  - [x] 2.1 `xone-javascript`
-  - [x] 2.2 `xone-device`
-  - [x] 2.3 `xone-data-integration`
-  - [x] 2.4 `xone-css`
-  - [x] 2.5 `xone-debugging`
-  - [x] 2.6 `xone-xml-ui` (no procede: 157 líneas)
-- [ ] **3. Pruebas de activación real**
-- [x] **4. Configurar `opencode.json` con `skills.paths`**
-- [ ] **5. Versiones de XOne soportadas**
-- [ ] **6. Revisores expertos por área**
+- [x] **2. Capa de referencias sobre el corpus original** (v0.10.0 — el «refactor» de la v0.9.0 había producido resúmenes, no partición)
+- [x] **3. Configurar `opencode.json` con `skills.paths`**
+- [x] **4. Versionar la fuente canónica `xone/` en git**
+- [x] **5. Validador que compruebe enlaces y huérfanos**
+- [ ] **6. Pruebas de activación real** ← siguiente, y bloquea la 7
+- [ ] **7. Consolidación de fronteras entre skills**
+- [ ] **8. Versiones de XOne soportadas**
+- [ ] **9. Revisores expertos por área**
+- [ ] **10. Consolidación editorial de las dos redacciones del corpus** (prioridad baja)
 
 ---
 
-## 1. Frontmatter `name` en todos los `SKILL.md`
+## 6. Pruebas de activación real
 
-**Prioridad:** Alta · **Esfuerzo:** Bajo · **Ref:** ARCHITECTURE.md §3.5
+**Prioridad:** alta · **Esfuerzo:** medio · **Ref:** ARCHITECTURE.md §13.3
 
-Añadir `name: <skill-name>` al frontmatter de los 9 `SKILL.md`. El valor debe coincidir exactamente con el nombre del directorio y seguir el patrón `^[a-z0-9]+(-[a-z0-9]+)*$`.
+Es la única tarea que sigue pendiente desde el plan original, y de ella dependen las decisiones de taxonomía. El validador estático comprueba estructura y enlaces, pero no si el agente elige la skill correcta.
 
-**Rationale:** OpenCode exige `name` obligatorio; Claude Code lo trata como opcional. Sin él, OpenCode no carga las skills.
+- [ ] Proyecto XOne mínimo de prueba con XML, JS y CSS.
+- [ ] Tarea XML → debe invocar `xone-xml-ui`.
+- [ ] Tarea JavaScript → debe invocar `xone-javascript`.
+- [ ] Tarea de validación → debe invocar `xone-review`.
+- [ ] Tarea que cruza áreas (añadir un filtro a una pantalla de listado toca `.xne`, evento JS y clase CSS): medir si el agente abre varias skills o improvisa el resto.
+- [ ] Comprobar que, invocada una skill, el agente **lee la referencia** del índice en vez de responder solo con las reglas del `SKILL.md`.
+- [ ] Script de smoke que ejecute prompts reales y reporte qué skill se activó y qué ficheros leyó.
 
-**Skills afectadas (9):**
-
-- [x] `xone-development/SKILL.md` → `name: xone-development`
-- [x] `xone-xml-ui/SKILL.md` → `name: xone-xml-ui`
-- [x] `xone-javascript/SKILL.md` → `name: xone-javascript`
-- [x] `xone-css/SKILL.md` → `name: xone-css`
-- [x] `xone-data-integration/SKILL.md` → `name: xone-data-integration`
-- [x] `xone-device/SKILL.md` → `name: xone-device`
-- [x] `xone-verification/SKILL.md` → `name: xone-verification`
-- [x] `xone-debugging/SKILL.md` → `name: xone-debugging`
-- [x] `xone-review/SKILL.md` → `name: xone-review`
-
-**Verificación:** `opencode` arranca y lista las 9 skills en el tool `skill`.
+La última comprobación es la que valida el rediseño de la v0.10.0: si el agente no abre las referencias, el problema no era la falta de detalle sino el índice.
 
 ---
 
-## 2. Refactor de skills con `references/`
+## 7. Consolidación de fronteras entre skills
 
-**Prioridad:** Alta/Media · **Esfuerzo:** Medio · **Ref:** ARCHITECTURE.md §10.1
+**Prioridad:** media · **Esfuerzo:** bajo · **Ref:** ARCHITECTURE.md §13.4 · **Depende de:** tarea 6
 
-Aplicar el patrón estándar de Agent Skills: mantener `SKILL.md` por debajo de 500 líneas con la guía esencial, reglas y anti-patrones, y mover el material extenso a `references/` con carga perezosa.
+`xone-verification` ya se fusionó en `xone-review` (hecho en la v0.10.0: era contenido duplicado, no una duda empírica). Queda decidir entre nueve puertas (actual), siete (`data-integration` y `device` como referencias de `xone-javascript`) o cuatro (una sola de conocimiento más las tres de procedimiento). Criterio propuesto: el conocimiento va a referencias bajo una puerta; el procedimiento merece puerta propia.
 
-**Patrón objetivo por skill:**
-
-```text
-<skill-name>/
-├── SKILL.md              # <500 líneas — overview, reglas, anti-patrones
-└── references/
-    ├── api.md            # API detallada
-    ├── examples.md       # Snippets extensos
-    └── troubleshooting.md # Errores y soluciones
-```
-
-**Referenciar desde `SKILL.md`:**
-
-```markdown
-## Recursos adicionales
-- Para la API completa, ver [references/api.md](references/api.md)
-- Para ejemplos extensos, ver [references/examples.md](references/examples.md)
-- Para errores y soluciones, ver [references/troubleshooting.md](references/troubleshooting.md)
-```
-
-### 2.1. `xone-javascript` — Completado
-
-**Líneas actuales:** 71 · **Resultado:** API, ejemplos y troubleshooting en `references/`
-
-| Queda en `SKILL.md` | Va a `references/` |
-|---------------------|---------------------|
-| Frontmatter + intro + tabla de objetos globales + eventos del ciclo de vida + acceso básico a `self` + patrones críticos (lock/unlock, startBrowse, contexto `self`, WaitDialog) + reglas de seguridad y rendimiento | `api.md`: listas exhaustivas de métodos de `DataCollection`, `UserInterface`, `AppData`, `SqlManager` |
-| | `examples.md`: snippets extensos de `$http`, GPS, contents, cursor SQL, filter/restore |
-| | `troubleshooting.md`: tabla de errores comunes y soluciones |
-
-### 2.2. `xone-device` — Completado
-
-**Líneas actuales:** 48 · **Resultado:** API, ejemplos y troubleshooting en `references/`
-
-| Queda en `SKILL.md` | Va a `references/` |
-|---------------------|---------------------|
-| Frontmatter + intro + permisos + GPS (inicio y lectura) + cámara + firma + buenas prácticas | `api.md`: API completa de `biometricsManager`, `fingerprintManager`, `bluetoothSerial`, `XOnePrinter`, `XOneNFC`, `WebSocket`, `DeviceInfo`, `WifiManager`, `systemSettings`, `GpsTools`, `BarcodeGenerator`, `codeScanner` |
-| | `examples.md`: snippets de Bluetooth, NFC/DNIe, WebSocket, selectores de fecha/hora, utilidades de `ui` |
-| | `troubleshooting.md`: tabla de errores y diagnóstico |
-
-### 2.3. `xone-data-integration` — Completado
-
-**Líneas actuales:** 43 · **Resultado:** API, ejemplos y troubleshooting en `references/`
-
-| Queda en `SKILL.md` | Va a `references/` |
-|---------------------|---------------------|
-| Frontmatter + intro + modelo de datos local (`##PREF##`, ROWID) + reglas de SQL seguro + TLS + buenas prácticas | `api.md`: API completa de `SqlManager`, `$http` (verbos, parámetros, future), `OAuth2`, `replica`, `crypto` |
-| | `examples.md`: snippets de `$http`, SqlManager, OAuth2, réplica, sys-message, encriptación |
-| | `troubleshooting.md`: tabla de errores y diagnóstico |
-
-### 2.4. `xone-css` — Completado
-
-**Líneas actuales:** 41 · **Resultado:** atributos y troubleshooting en `references/`
-
-| Queda en `SKILL.md` | Va a `references/` |
-|---------------------|---------------------|
-| Frontmatter + intro + selectores + unidades + colores + herencia + estilos dinámicos + buenas prácticas | `reference.md`: tabla completa de atributos (dimensiones, fuentes, texto, fondo, bordes, sombras, visibilidad, grupos/tabs), cascada de archivos, temas, animaciones |
-| | `troubleshooting.md`: tabla de errores CSS web vs XOne |
-
-### 2.5. `xone-debugging` — Completado
-
-**Líneas actuales:** 48 · **Resultado:** troubleshooting detallado en `references/`
-
-| Queda en `SKILL.md` | Va a `references/` |
-|---------------------|---------------------|
-| Frontmatter + intro + proceso de diagnóstico + herramientas + secciones de síntomas más frecuentes (pantalla vacía, botón mudo, self null) | `troubleshooting.md`: tabla de errores recurrentes por capa, secciones detalladas de onchange, refresh, lock/unlock, MAP_, estilos, imagen, GPS, réplica, errores -8100/-11888 |
-
-### 2.6. `xone-xml-ui` — No requiere refactor
-
-**Líneas actuales:** 158 · **Decisión:** mantener completo en `SKILL.md`; está por debajo del umbral.
-
-No se extrae contenido por ahora: el archivo cabe en el límite recomendado y mantiene mejor su coherencia como guía única.
-
-### Skills que no requieren refactor
-
-- `xone-development` (60 líneas)
-- `xone-verification` (111 líneas)
-- `xone-review` (168 líneas)
-
-**Verificación:** `scripts/validate-skills.sh` comprueba frontmatter, tamaño y enumeración de las 9 skills mediante OpenCode.
+Decidir con los datos de la tarea 6. Reubicar chunks es barato; el corpus no cambia.
 
 ---
 
-## 3. Pruebas de activación real
+## 8. Versiones de XOne soportadas
 
-**Prioridad:** Media · **Esfuerzo:** Alto · **Ref:** ARCHITECTURE.md §13.3
+**Prioridad:** media · **Esfuerzo:** bajo (decisión) · **Ref:** ARCHITECTURE.md §12
 
-Definir 1–2 proyectos XOne mínimos de prueba y ejecutar tareas en sesiones aisladas para confirmar que el agente invoca la skill correcta. El validador estático ya existe, pero no sustituye la prueba semántica con prompts reales.
-
-**Cobertura mínima:**
-
-- [ ] Proyecto XOne de prueba con XML, JS y CSS mínimos
-- [ ] Tarea XML → debe invocar `xone-xml-ui`
-- [ ] Tarea JavaScript → debe invocar `xone-javascript`
-- [ ] Tarea de validación → debe invocar `xone-verification`
-- [x] Script de validación estructural y descubrimiento: `scripts/validate-skills.sh`
-- [ ] Script de smoke que ejecute prompts reales y reporte qué skill se activó
+Confirmar qué versiones de XOne se soportan y documentarlo en `ARCHITECTURE.md` y `README.md`. Condiciona el tono de las reglas: hoy las skills no distinguen entre API estable y API dependiente de versión.
 
 ---
 
-## 4. Configurar `opencode.json` con `skills.paths`
+## 9. Revisores expertos por área
 
-**Prioridad:** Alta · **Esfuerzo:** Bajo · **Ref:** ARCHITECTURE.md §3.4
+**Prioridad:** media · **Esfuerzo:** bajo (coordinación) · **Ref:** ARCHITECTURE.md §7.2
 
-Actualizar `opencode.json` para apuntar a la fuente canónica sin duplicación:
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "skills": {
-    "paths": ["./plugins/xone-development/skills"]
-  }
-}
-```
-
-**Verificación:** `opencode` arranca en el repo y lista las 9 skills en el tool `skill`.
-
----
-
-## 5. Versiones de XOne soportadas
-
-**Prioridad:** Media · **Esfuerzo:** Bajo (decisión) · **Ref:** ARCHITECTURE.md §12
-
-Confirmar las versiones de XOne que se quieren soportar. Condiciona el tono y las reglas de todas las skills. Documentar la decisión en `ARCHITECTURE.md` y `README.md`.
-
----
-
-## 6. Revisores expertos por área
-
-**Prioridad:** Media · **Esfuerzo:** Bajo (coordinación) · **Ref:** ARCHITECTURE.md §7.2, §12
-
-Confirmar los expertos responsables de cada área y el canal de revisión:
-
-- [ ] Experto de XML/UI XOne
-- [ ] Experto de JavaScript y runtime XOne
-- [ ] Experto de CSS y diseño responsive XOne
+- [ ] Experto de XML/UI
+- [ ] Experto de JavaScript y runtime
+- [ ] Experto de CSS y diseño responsive
 - [ ] Experto de integraciones, seguridad y sincronización
-- [ ] Desarrollador que valide la experiencia real con Claude Code y OpenCode
+- [ ] Desarrollador que valide la experiencia real en Claude Code y OpenCode
+
+Dos discrepancias concretas que necesitan que un experto zanje:
+
+1. **`progid` obligatorio u opcional.** El validador `xone-simulator` emite `COLL_MISSING_PROGID` como **error** cuando una coll tiene `objname` sin `progid`, mientras la documentación lo declara **opcional** (sin él la coll equivale a `ASData.CASBasicDataObj`; solo Empresas y Usuarios requieren el suyo). Hoy las skills declaran el conflicto en vez de resolverlo. Hay que decidir si el linter es demasiado estricto o si la documentación está desactualizada.
+2. El corpus se contradice en los nombres de las variantes CSS (`default_night.css` con guion bajo en §1.2, `default.night.css` con punto en §9.1/§9.2). Las skills declaran la discrepancia; hace falta que un experto zanje cuál es la correcta.
 
 ---
 
-## Orden sugerido de ejecución
+## 10. Consolidación editorial de las dos redacciones
 
-1. **Tarea 5** (versiones de XOne) — decisión que estabiliza todas las skills.
-2. **Tarea 3** (pruebas de activación real) — requiere proveedor/modelo configurado.
-3. **Tarea 6** (revisores expertos) — en paralelo con la validación real.
+**Prioridad:** baja · **Esfuerzo:** alto · **Ref:** ARCHITECTURE.md §13.5
+
+`xone/` tiene dos redacciones del mismo conocimiento con cortes distintos y material único en cada una. Unificarlas permitiría retirar las referencias marcadas como «referencia ampliada» en `xone-data-integration` y `xone-device`. No bloquea nada.
+
+---
+
+## Orden sugerido
+
+1. **Tarea 6** (activación real) — desbloquea la 7 y valida el rediseño.
+2. **Tarea 7** (fronteras) — con los datos de la 6.
+3. **Tarea 8** (versiones) — estabiliza el tono de las reglas.
+4. **Tarea 9** (revisores) — en paralelo.

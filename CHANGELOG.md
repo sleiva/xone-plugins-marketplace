@@ -2,6 +2,44 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.10.0] - 2026-08-03
+
+Reconstrucción de la capa de referencias. Hasta 0.9.0 las skills resumían el corpus de XOne en prosa; a partir de esta versión las referencias contienen el material original troceado, con su procedencia declarada. Ver [`docs/ANALISIS.md`](docs/ANALISIS.md) para el diagnóstico completo.
+
+### Añadido
+
+- 70 ficheros de referencia (1,3 MB) extraídos del corpus de `xone/`, troceados por secciones completas en piezas de 5-33 KB para que cada lectura sea asequible en contexto. Cada chunk declara su origen en la cabecera (`Fuente: xone/<ruta> §N`).
+- La fuente canónica `xone/` pasa a estar versionada en git: las reglas de las skills son ahora trazables a su origen (niveles de evidencia de `ARCHITECTURE.md` §7.1).
+- Comando `/xone-validate`: valida un proyecto con `xone-simulator` y corrige iterativamente, sin inventar arreglos.
+- Objeto `ai` (LLM local en el dispositivo) documentado como referencia de `xone-javascript`; antes no tenía sitio en la taxonomía.
+- Reglas críticas del corpus que las skills no recogían: la fuente son los `.xne` y los `.xml` de colecciones son artefactos generados por XOneStudio; `progid` es opcional; unicidad de nombres en el ámbito de la coll entera; `name` case-sensitive en todas las referencias cruzadas; `id` de `group` obligatorio y único; prohibición de VBScript; `ID`/`ROWID` los gestiona la plataforma; declaración del nodo `<macro>` antes de `setMacro`; `executeActionAfterDelay` en segundos.
+
+### Corregido
+
+- `xone-css` afirmaba que XOne no soporta variables CSS ni `calc`. El parser **sí** soporta `:root`/`var()` con fallback y anidamiento, `calc()`, `@import`, `@extend`, `!important` y `!default`.
+- `xone-css` daba `extends:` y `@extend` como equivalentes: solo `@extend` detecta ciclos en tiempo de parseo y admite referencias adelantadas.
+- `xone-development` describía el subconjunto de JavaScript de forma vaga y hedged. Ahora distingue lo soportado a nivel de sintaxis (`let`, `const`, arrow functions, `class`, `Promise` ES2024, generadores, `for...of`, `Symbol`) de lo no soportado (template literals, `async`/`await`, spread/rest, parámetros por defecto, optional chaining, `??`, campos privados) y de lo que existe con implementación custom (`fetch`, `setTimeout`, `console` completo, `URL`, `AbortController`).
+- La tabla de visibilidad omitía el bit `8` (combo) y el valor `15`. Son 4 bits.
+- `xone-device` documentaba la firma con `type="IMG"`, que el corpus marca como obsoleta: es `type="DR"`.
+- `xone-javascript` afirmaba que `console` solo ofrece `console.log()`; la API `console` es completa.
+- `xone-project-generator` tenía 4 enlaces a referencias que nunca existieron (`contextual-index.md`, `anti-patterns.md`, `tech-reference.md`) y uno a `workflow.md`, ahora troceado.
+- `scripts/validate-skills.sh` enumeraba una lista fija de 9 skills sobre un plugin que distribuía 10, y no comprobaba enlaces. Ahora descubre las skills desde el sistema de ficheros y valida que todo enlace resuelva y que ninguna referencia quede huérfana.
+
+### Eliminado
+
+- Los ficheros de resumen deducidos (`api.md`, `examples.md`, `troubleshooting.md`, `reference.md`) de `xone-javascript`, `xone-device`, `xone-data-integration`, `xone-css` y `xone-debugging`. Eran listas de nombres de API sin firmas ni valores: permitían saber que un método existe pero no cómo se llama, lo que aumenta la confianza del modelo sin aumentar su exactitud.
+- `xone-development/references/fundamentals.md`: 108 KB que se distribuían en el plugin sin que ningún `SKILL.md` los enlazara.
+- `xone-project-generator/references/workflow.md`: 267 KB en un solo fichero, imposible de leer sin agotar el contexto. Sustituido por 13 chunks.
+
+### Cambiado
+
+- La `description` de `xone-development` era la unión literal de las otras ocho skills, así que capturaba casi cualquier consulta de XOne sin derivar a la especializada. Ahora cubre solo fundamentos y estructura de proyecto.
+- Cada `SKILL.md` pasa a ser reglas ancladas al corpus más un índice de navegación «para responder X, lee Y».
+- Las skills instruyen explícitamente a no afirmar nada que no esté en las referencias y a declarar la incertidumbre en vez de deducir.
+- Donde el corpus se contradice (nombres de las variantes CSS con guion bajo o con punto), las skills declaran la discrepancia en lugar de elegir por su cuenta.
+- **`xone-verification` se fusiona en `xone-review`** (de 10 skills a 9). Envolvían el mismo CLI con el mismo bloque de comandos y describían el mismo bucle validar → corregir → smoke; sus descripciones disparaban con lo mismo. La duplicación ya había divergido: las dos repetían las reglas de sintaxis JavaScript y las dos estaban mal igual. La skill resultante cubre precondiciones del CLI, los cuatro comandos, los códigos del validador, la revisión por capas, la checklist y las severidades.
+- `xone-review` contradecía el corpus en cinco puntos, ya corregidos: daba `progid` por obligatorio (ahora declara el conflicto entre el linter y la documentación), limitaba `visible` a `0-7`, pedía «sintaxis ES5, preferir `var`» cuando el motor soporta `let`/`const`/`class`/`Promise`, listaba `Promise` entre las APIs inexistentes y marcaba `setTimeout` y `fetch` como errores.
+
 ## [0.9.0] - 2026-08-03
 
 ### Añadido

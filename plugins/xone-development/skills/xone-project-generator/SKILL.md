@@ -36,13 +36,22 @@ Respondes preguntas, depuras problemas y guías el desarrollo en XOne:
 
 Consulta SIEMPRE estos archivos antes de responder. Están incluidos en la carpeta `references/` de este skill:
 
-| Archivo | Contenido |
-|---------|-----------|
-| **[references/workflow.md](references/workflow.md)** | Flujo completo para generar proyectos XOne, paso a paso (fases 0-12), checklist de validación, ejemplos por sector y prohibiciones |
-| **[references/canonical-sizes.md](references/canonical-sizes.md)** | Tabla de tamaños canónicos (`width`/`height`/`fontsize`) por tipo de elemento: frames, botones, inputs, listas, avatares, iconos. **Consultar antes de poner cualquier `width`/`height`** |
-| **[references/contextual-index.md](references/contextual-index.md)** | Índice contextual: necesito implementar X → dónde mirar |
-| **[references/anti-patterns.md](references/anti-patterns.md)** | Anti-patrones side-by-side: errores comunes de XML, JavaScript y CSS y su corrección |
-| **[references/tech-reference.md](references/tech-reference.md)** | Referencia rápida de tecnologías XOne: nodos XML, eventos, `onclick`, API JavaScript y CSS |
+| Fase / tema | Archivo |
+|---|---|
+| **Tamaños canónicos.** Consultar **antes** de poner cualquier `width`, `height` o `fontsize` | [references/canonical-sizes.md](references/canonical-sizes.md) |
+| Fases 0-2: diagrama de flujo, análisis de requisitos, diseño del modelo de datos | [references/fases-0-2-analisis-y-modelo-de-datos.md](references/fases-0-2-analisis-y-modelo-de-datos.md) |
+| Fase 3: estilos CSS, plantillas `default.css` y `colors.css`, transparencias alpha | [references/fase-3-estilos-css.md](references/fase-3-estilos-css.md) |
+| Fases 4-5: estructura de carpetas, ficheros raíz, splash, `app.xml`, escalado y resoluciones, `app.ini`, `license.ini`, `mappings.xne` | [references/fases-4-5-estructura-y-configuracion.md](references/fases-4-5-estructura-y-configuracion.md) |
+| Fase 6: generación de colecciones, prefijo `MAP_`, atributos de `coll` y `prop`, `inherits`, `include-layout`, relaciones y modos de edición | [references/fase-6-colecciones.md](references/fase-6-colecciones.md) |
+| Fase 7: plantillas de pantalla base (`EntradaApp`, `MenuPrincipal`, `Login`) | [references/fase-7-plantillas-de-pantalla.md](references/fase-7-plantillas-de-pantalla.md) |
+| Fase 7: plantilla `Consola.xne` completa | [references/fase-7-plantilla-consola.md](references/fase-7-plantilla-consola.md) |
+| Fase 7: pantallas de entidad (lista, detalle, mapa, configuración) y estructura con `group` y `frame` | [references/fase-7-entidades-y-estructura-de-pantalla.md](references/fase-7-entidades-y-estructura-de-pantalla.md) |
+| Fase 7: viewmodes de mapa y calendario | [references/fase-7-viewmodes-mapa-y-calendario.md](references/fase-7-viewmodes-mapa-y-calendario.md) |
+| Fase 7: viewmodes de gráficos, picturemap, slideview, expanview, gridview y `contentselitem` | [references/fase-7-viewmodes-graficos-y-listas.md](references/fase-7-viewmodes-graficos-y-listas.md) |
+| Fase 7: `asfilter` y objetos complementarios de integración | [references/fase-7-asfilter-e-integraciones.md](references/fase-7-asfilter-e-integraciones.md) |
+| Fases 8-9: eventos, permisos Android, `functions.js` | [references/fases-8-9-eventos-y-javascript.md](references/fases-8-9-eventos-y-javascript.md) |
+| Fases 10-12: READMEs, base de datos, datos iniciales, iconos y checklist de validación | [references/fases-10-12-readmes-y-validacion.md](references/fases-10-12-readmes-y-validacion.md) |
+| Ejemplos por sector y prohibiciones explícitas | [references/ejemplos-por-sector-y-prohibiciones.md](references/ejemplos-por-sector-y-prohibiciones.md) |
 
 ---
 
@@ -107,7 +116,7 @@ Prohibiciones:
 - **NO** usar encoding `iso-8859-15` en ficheros de `<include-layout>` — usar `utf-8`. (Los `.xne` siguen siendo `iso-8859-15`; solo los ficheros incluidos por `<include-layout>` usan `utf-8`.)
 - **NO** poner `<coll>` como raiz del fichero incluido — la raiz debe ser `<xml>`.
 
-Referencia completa: sección 6.5b de [references/workflow.md](references/workflow.md).
+Referencia completa: [references/fase-6-colecciones.md](references/fase-6-colecciones.md) §6.5b.
 
 ### Campos Mínimos Obligatorios en Colecciones Base
 
@@ -133,7 +142,7 @@ Referencia completa: sección 6.5b de [references/workflow.md](references/workfl
 
 ### Fase 2: Estructura del Proyecto
 
-Consulta [references/workflow.md](references/workflow.md) para el flujo completo.
+Consulta [references/fases-0-2-analisis-y-modelo-de-datos.md](references/fases-0-2-analisis-y-modelo-de-datos.md) para el flujo completo.
 
 ```
 NombreProyecto/
@@ -331,8 +340,6 @@ Antes de fijar cualquier `width` o `height`, consulta **[references/canonical-si
 
 ## Recursos adicionales
 
-- [references/workflow.md](references/workflow.md) — Flujo completo de generación de proyectos XOne (fases 0-12, checklist de validación, ejemplos por sector, prohibiciones).
-- [references/canonical-sizes.md](references/canonical-sizes.md) — Tamaños canónicos por tipo de elemento para `resolution-width="1080"` / `resolution-height="1920"`.
-- [references/contextual-index.md](references/contextual-index.md) — Índice contextual: necesito implementar X → dónde mirar.
-- [references/anti-patterns.md](references/anti-patterns.md) — Anti-patrones side-by-side: errores comunes y su corrección.
-- [references/tech-reference.md](references/tech-reference.md) — Referencia rápida de tecnologías XOne: nodos XML, eventos, `onclick`, API JavaScript y CSS.
+El índice completo de referencias está en la sección «Archivos de Referencia» de este mismo fichero.
+
+Para el detalle de cada área durante la generación, usa las skills especializadas: `xone-xml-ui` (nodos y atributos), `xone-javascript` (API del runtime), `xone-css` (estilos), `xone-data-integration` (SQL, `$http`, réplica), `xone-device` (hardware) y `xone-development` (fundamentos y reglas transversales). Al terminar, valida y audita con `xone-review`.
