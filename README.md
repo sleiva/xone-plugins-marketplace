@@ -36,9 +36,9 @@ xone-development/
     ├── fundamentos/       (5 ficheros)
     ├── xml-ui/            (18 ficheros)
     ├── javascript/        (16 ficheros)
-    ├── css/                (6 ficheros)
-    ├── datos/              (5 ficheros)
-    └── device/             (4 ficheros)
+    ├── css/               (6 ficheros)
+    ├── datos/             (5 ficheros)
+    └── device/            (4 ficheros)
 ```
 
 Las tres skills de procedimiento (`xone-project-generator`, `xone-review`, `xone-debugging`) siguen el patrón simple:
@@ -95,7 +95,7 @@ claude plugin validate ./plugins/xone-development
 scripts/validate-skills.sh
 ```
 
-`scripts/validate-skills.sh` descubre las skills desde el sistema de ficheros y comprueba: el frontmatter (`name`/`description` presentes, más un parseo YAML real que detecta un frontmatter sintácticamente inválido); el tamaño del `SKILL.md` (techo general de 500 líneas, y uno propio de 400 para la puerta de conocimiento `xone-development`); que todo enlace a `references/` resuelva, tanto desde el `SKILL.md` como los enlaces relativos dentro de los propios ficheros de referencia; que ninguna referencia quede huérfana; un guardián por solape de tokens que falla si una regla canónica aparece parafraseada en más de un `SKILL.md` (con una allowlist corta de excepciones documentadas); y que OpenCode pueda enumerarlas.
+`scripts/validate-skills.sh` descubre las skills desde el sistema de ficheros y comprueba: el frontmatter (`name`/`description` presentes, más un parseo YAML real que detecta un frontmatter sintácticamente inválido); el tamaño del `SKILL.md` (techo general de 500 líneas, y uno propio de 400 para la puerta de conocimiento `xone-development`); que todo enlace a `references/` resuelva, tanto desde el `SKILL.md` como los enlaces relativos dentro de los propios ficheros de referencia; que ninguna referencia quede huérfana; un guardián de duplicados que falla si dos líneas largas (>35 caracteres) de `SKILL.md` distintos superan el 65% de solape de tokens — una heurística con malla conocida, no una prueba exhaustiva: ver `docs/ARCHITECTURE.md` §10.1 — con una allowlist corta de excepciones documentadas; y que OpenCode pueda enumerarlas.
 
 ## Documentación
 
