@@ -266,8 +266,8 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 - Fase 3 completa.
 
 ### 9.5. Fase 4: control de calidad
-- `xone-review` (revisión de código).
-- Pruebas de activación real en proyectos XOne de ejemplo.
+- ✅ `xone-review` (revisión de código: validación automatizada, revisión por capas, anti-patrones, checklist de entrega y severidades) — implementada en v0.9.0, alineada con los códigos reales del validador `xone-simulator`.
+- Pruebas de activación real en proyectos XOne de ejemplo — pendiente.
 
 Cada fase se revisa por expertos antes de iniciar la siguiente. Una fase solo se cierra cuando sus skills superan los criterios de aceptación aplicables a su área.
 

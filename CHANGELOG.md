@@ -2,6 +2,13 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.9.0] - 2026-08-03
+
+### Añadido
+
+- Skill `xone-review`: proceso de revisión de código XOne. Flujo validación automatizada + smoke + revisión por capas (XML/UI, JavaScript, CSS, datos/integración, device), tabla de códigos del validador `xone-simulator` (errores y warnings), 14 anti-patrones a buscar, checklist de entrega y priorización de hallazgos por severidad.
+- Completa la Fase 4 del plan.
+
 ## [0.8.0] - 2026-08-03
 
 ### Añadido
