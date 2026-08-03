@@ -28,7 +28,7 @@
     {
       "id": 3,
       "subject": "Task 4: Comprobar que no se perdió ninguna regla",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         2
       ],
@@ -71,5 +71,5 @@
       "description": "**Goal:** Dejar README, arquitectura, changelog y TODO coherentes con las cuatro skills, y subir la versión a `0.11.0` en los dos manifiestos.\n\n**Files:**\n- Modify: `README.md`, `docs/ARCHITECTURE.md`, `CHANGELOG.md`, `docs/TODO.md`\n- Modify: `plugins/xone-development/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`\n- Modify: `plugins/xone-development/commands/xone-validate.md`\n\n**Acceptance Criteria:**\n- [ ] Sin menciones obsoletas a las cinco skills absorbidas.\n- [ ] README con cuatro skills y subcarpetas por área.\n- [ ] `ARCHITECTURE.md` §4, §10, §10.1 y §13.4 actualizadas.\n- [ ] Entrada `0.11.0` en `CHANGELOG.md`.\n- [ ] `TODO.md` con la tarea 7 cerrada.\n- [ ] Ambos manifiestos en `0.11.0`.\n\n**Verify:** `scripts/validate-skills.sh && claude plugin validate ./plugins/xone-development` → ambos en verde\n\nTexto del CHANGELOG y grep de menciones obsoletas en `docs/superpowers/plans/2026-08-03-consolidacion-de-skills.md`, Task 8.\n\n```json:metadata\n{\"files\": [\"README.md\", \"docs/ARCHITECTURE.md\", \"CHANGELOG.md\", \"docs/TODO.md\", \"plugins/xone-development/.claude-plugin/plugin.json\", \".claude-plugin/marketplace.json\", \"plugins/xone-development/commands/xone-validate.md\"], \"verifyCommand\": \"scripts/validate-skills.sh && claude plugin validate ./plugins/xone-development\", \"acceptanceCriteria\": [\"sin menciones obsoletas\", \"README con cuatro skills\", \"ARCHITECTURE actualizada\", \"entrada 0.11.0 en CHANGELOG\", \"TODO con tarea 7 cerrada\", \"ambos manifiestos en 0.11.0\"], \"modelTier\": \"standard\"}\n```"
     }
   ],
-  "lastUpdated": "2026-08-03T17:34:28+00:00"
+  "lastUpdated": "2026-08-03T17:48:54+00:00"
 }
