@@ -72,7 +72,7 @@ for dir in "$skills_dir"/*/; do
     while IFS= read -r ref; do
       [[ -n "$ref" ]] || continue
       rel="${ref#$dir/}"
-      if ! grep -q "$rel" "$file"; then
+      if ! grep -qF -- "$rel" "$file"; then
         printf 'Orphaned reference (not linked from SKILL.md): %s\n' "$ref" >&2
         failures=$((failures + 1))
       fi
