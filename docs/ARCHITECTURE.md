@@ -1,0 +1,275 @@
+# Arquitectura de Skills XOne
+
+**Estado:** borrador para revisión
+
+**Versión:** 0.1
+
+**Ámbito:** marketplace `xone-plugins-marketplace`, plugin `xone-development` y skills compatibles con Claude Code y OpenCode.
+
+## 1. Objetivo
+
+Construir un conjunto de skills que ayude a desarrollar, revisar y depurar aplicaciones XOne con respuestas técnicamente fiables y cambios mínimos.
+
+La arquitectura debe:
+
+- Separar el conocimiento por áreas para reducir instrucciones irrelevantes.
+- Activar la skill adecuada según la tarea, sin obligar al usuario a conocer la taxonomía.
+- Mantener las restricciones reales del runtime XOne visibles y verificables.
+- Funcionar en Claude Code y OpenCode sin crear comportamientos incompatibles.
+- Permitir revisión por expertos de XOne antes de publicar conocimiento sensible o dudoso.
+- Evolucionar sin romper instalaciones existentes del plugin.
+
+## 2. Principios
+
+### 2.1. Exactitud antes que cobertura
+
+Una skill debe declarar una API o atributo solo cuando existe evidencia en la documentación de XOne o en un proyecto validado. Si hay incertidumbre, debe indicarla y pedir el contexto que falta.
+
+### 2.2. Divulgación progresiva
+
+Las instrucciones comunes deben ser breves. El detalle específico debe vivir en skills o referencias especializadas y cargarse solo cuando sea relevante.
+
+### 2.3. Mínimo cambio seguro
+
+La skill debe inspeccionar el proyecto antes de editar, respetar sus convenciones y evitar refactorizaciones no solicitadas.
+
+### 2.4. Compatibilidad explícita
+
+Claude Code y OpenCode comparten el formato `SKILL.md`, pero no comparten el sistema de marketplace ni todos los mecanismos de instalación. La documentación y las pruebas deben distinguir ambos canales.
+
+### 2.5. Conocimiento versionado
+
+Las reglas del runtime, los ejemplos y las decisiones de compatibilidad se versionan junto con el plugin. Cada cambio relevante debe poder rastrearse a una fuente o revisión.
+
+## 3. Capas de la solución
+
+### 3.1. Marketplace
+
+Responsable de descubrir y distribuir plugins para Claude Code.
+
+```text
+.claude-plugin/marketplace.json
+```
+
+El marketplace actual publica el plugin local `./plugins/xone-development`.
+
+### 3.2. Plugin
+
+Responsable de empaquetar la identidad, versión y componentes de XOne para Claude Code.
+
+```text
+plugins/xone-development/
+├── .claude-plugin/plugin.json
+└── skills/
+```
+
+El plugin no debe depender de archivos fuera de su propia carpeta, porque Claude Code lo copia a una caché al instalarlo.
+
+### 3.3. Skills
+
+Responsables de un área concreta del trabajo XOne. Cada skill tiene un `SKILL.md` y, si lo necesita, referencias locales.
+
+```text
+plugins/xone-development/skills/<skill-name>/
+├── SKILL.md
+└── references/
+```
+
+### 3.4. Adaptador OpenCode
+
+OpenCode descubre skills desde `.opencode/skills/<name>/SKILL.md`. Durante la primera fase se mantiene una copia compatible de las skills:
+
+```text
+.opencode/skills/<skill-name>/SKILL.md
+opencode.json
+```
+
+La fuente canónica será `plugins/xone-development/skills/`. Las copias de OpenCode deben mantenerse sincronizadas y no introducir reglas diferentes.
+
+## 4. Taxonomía propuesta
+
+### 4.1. `xone-development`
+
+Skill coordinadora y punto de entrada. Debe detectar el área principal, aplicar el método de trabajo común y derivar mentalmente al conocimiento especializado.
+
+Responsabilidades:
+
+- Inspección inicial del proyecto.
+- Clasificación de la tarea.
+- Reglas transversales de seguridad, rendimiento y cambios mínimos.
+- Formato de respuesta y reporte de verificación.
+- Identificación de incertidumbres y necesidad de consultar a un experto.
+
+No debe contener la referencia completa de todas las APIs XOne.
+
+### 4.2. `xone-xml-ui`
+
+XML `.xne`, `app.xml`, colecciones, grupos, frames, props, contents, layouts, herencia, macros, permisos y validación estructural.
+
+Debe cubrir especialmente:
+
+- Tipos válidos de propiedades.
+- Navegación y composición de pantallas.
+- Unicidad de nombres.
+- `before-edit`, `create` y eventos XML.
+- Errores que producen pantallas vacías.
+
+### 4.3. `xone-javascript`
+
+JavaScript del runtime XOne, objetos globales, ciclo de vida, navegación, controles, callbacks, Futures y patrones de datos.
+
+Debe separar APIs confirmadas de APIs dependientes de versión.
+
+### 4.4. `xone-css`
+
+Selectores, unidades, colores, temas, herencia, animaciones y layouts visuales XOne.
+
+Debe advertir de las diferencias frente a CSS web, especialmente unidades no soportadas y `compatibility-mode`.
+
+### 4.5. `xone-data-integration`
+
+Colecciones, SQL, filtros, REST, `$http`, OAuth2, TLS, réplica, serialización y tratamiento de credenciales.
+
+Debe priorizar seguridad y evitar ejemplos que interpolen entradas no validadas.
+
+### 4.6. `xone-device`
+
+GPS, cámara, archivos, permisos de runtime, biometría, sensores, impresión, Bluetooth, NFC y capacidades del dispositivo.
+
+Cada integración debe indicar requisitos de permisos, limitaciones de plataforma y manejo de errores.
+
+### 4.7. `xone-debugging`
+
+Diagnóstico sistemático de errores de compilación, carga, UI, datos, red, rendimiento y diferencias Android/iOS.
+
+Debe producir hipótesis comprobables y no limitarse a sugerir cambios aleatorios.
+
+### 4.8. `xone-review`
+
+Revisión de código orientada a bugs, seguridad, rendimiento, compatibilidad y cobertura de casos límite.
+
+Los hallazgos deben ordenarse por severidad e incluir archivo, línea, impacto y corrección propuesta.
+
+## 5. Flujo de selección de skills
+
+1. Inspeccionar archivos y estructura del proyecto.
+2. Clasificar la petición por uno o más dominios.
+3. Aplicar primero las reglas transversales de `xone-development`.
+4. Consultar la skill especializada principal.
+5. Consultar una segunda skill solo si existe una dependencia real, por ejemplo XML + JavaScript o datos + permisos.
+6. Generar la respuesta o el cambio con supuestos explícitos.
+7. Ejecutar validaciones disponibles y reportar lo que no pueda verificarse.
+
+La clasificación no debe depender únicamente de palabras clave. También debe considerar la extensión del archivo, los símbolos usados y el flujo funcional descrito por el usuario.
+
+## 6. Contrato de cada skill
+
+Cada skill debe incluir:
+
+- Frontmatter con una descripción activable y concreta.
+- Objetivo y límites del área.
+- Método de inspección antes de editar.
+- Reglas confirmadas y anti-patrones.
+- Ejemplos mínimos, válidos y coherentes con el runtime.
+- Checklist de validación.
+- Referencias locales cuando el contenido supere el tamaño razonable del `SKILL.md`.
+- Indicaciones para declarar incertidumbre o dependencia de versión.
+
+Una skill no debe:
+
+- Inventar atributos XML, tipos o APIs.
+- Asumir que JavaScript moderno del navegador funciona en XOne.
+- Ocultar permisos, credenciales, riesgos TLS o efectos sobre datos.
+- Modificar archivos no relacionados con la tarea.
+- Duplicar reglas contradictorias con otra skill.
+
+## 7. Fuentes y revisión experta
+
+### 7.1. Niveles de evidencia
+
+Cada regla importante debe clasificarse internamente como:
+
+- **A: documentación oficial:** descrita por la documentación de XOne o del framework.
+- **B: código validado:** confirmada en un proyecto funcional y reproducible.
+- **C: experiencia operativa:** patrón observado, pendiente de confirmación formal.
+- **D: hipótesis:** no debe presentarse como solución confirmada.
+
+Las reglas de nivel C deben incluir una nota de cautela. Las de nivel D no deben entrar en la skill publicada.
+
+### 7.2. Revisores recomendados
+
+- Experto de XML/UI XOne.
+- Experto de JavaScript y runtime XOne.
+- Experto de CSS y diseño responsive XOne.
+- Experto de integraciones, seguridad y sincronización.
+- Desarrollador que valide la experiencia real con Claude Code y OpenCode.
+
+### 7.3. Proceso de revisión
+
+1. Abrir una propuesta o issue con el cambio de conocimiento.
+2. Identificar fuente, versión de XOne y alcance.
+3. Revisar ejemplos y anti-patrones.
+4. Probar el ejemplo en un proyecto XOne cuando sea posible.
+5. Revisar activación y ausencia de contradicciones.
+6. Registrar decisión, revisor y fecha.
+7. Publicar solo después de resolver dudas críticas.
+
+## 8. Versionado y compatibilidad
+
+- El marketplace y el plugin usan versiones explícitas.
+- Un cambio de reglas o comportamiento requiere incrementar la versión del plugin.
+- Las correcciones de redacción sin cambio de comportamiento pueden usar una versión patch.
+- Las nuevas skills o APIs compatibles incrementan minor.
+- Cambios que retiren, contradigan o modifiquen reglas existentes incrementan major.
+- Toda skill debe declarar si una API depende de una versión concreta del runtime XOne.
+
+## 9. Estructura objetivo
+
+```text
+.
+├── .claude-plugin/
+│   └── marketplace.json
+├── .opencode/
+│   └── skills/
+│       └── xone-development/
+│           └── SKILL.md
+├── docs/
+│   └── ARCHITECTURE.md
+├── plugins/
+│   └── xone-development/
+│       ├── .claude-plugin/plugin.json
+│       └── skills/
+│           ├── xone-development/
+│           │   └── SKILL.md
+│           ├── xone-xml-ui/
+│           │   ├── SKILL.md
+│           │   └── references/
+│           ├── xone-javascript/
+│           ├── xone-css/
+│           ├── xone-data-integration/
+│           ├── xone-device/
+│           ├── xone-debugging/
+│           └── xone-review/
+├── opencode.json
+└── README.md
+```
+
+## 10. Criterios de aceptación
+
+La arquitectura se considerará lista para implementación cuando:
+
+- Cada skill tenga un objetivo que no se solape de forma ambigua con otra.
+- Exista una fuente o responsable para cada regla crítica.
+- El flujo de selección funcione con tareas XML, JavaScript, CSS y debugging.
+- Las skills puedan instalarse en Claude Code y descubrirse en OpenCode.
+- Existan ejemplos mínimos verificables para cada dominio.
+- La copia de OpenCode pueda sincronizarse sin divergencias manuales.
+- Dos revisores expertos hayan aprobado las reglas críticas de su área.
+
+## 11. Decisiones pendientes
+
+- Confirmar las versiones de XOne que se quieren soportar.
+- Decidir si las referencias completas se publicarán dentro del plugin o en un repositorio documental separado.
+- Elegir si la sincronización Claude Code/OpenCode será manual inicialmente o automatizada mediante un script de validación.
+- Definir los proyectos de prueba representativos para XML/UI, datos, dispositivos y debugging.
+- Confirmar los expertos responsables de cada área y el canal de revisión.
