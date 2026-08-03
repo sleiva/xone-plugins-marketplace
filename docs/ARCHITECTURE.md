@@ -1,6 +1,6 @@
 # Arquitectura de Skills XOne
 
-**Estado:** implementación del plan de fases completa (v0.9.0). Pendiente: pruebas de activación real y revisión experta de las fases finales.
+**Estado:** implementación del plan de fases completa (v0.9.0). Pendiente: refactor de skills con `references/` (§13.1), frontmatter `name` (§13.2), pruebas de activación real (§13.3) y revisión experta de las fases finales.
 
 **Versión:** 0.1
 
@@ -77,16 +77,27 @@ plugins/xone-development/skills/<skill-name>/
 
 ### 3.4. Adaptador OpenCode
 
-OpenCode descubre skills desde `.opencode/skills/<name>/SKILL.md`. Durante la primera fase se mantiene una copia compatible de las skills:
+OpenCode descubre skills desde varias rutas (`.opencode/skills/`, `.claude/skills/`, `.agents/skills/`) y, además, permite apuntar a carpetas arbitrarias mediante el campo `skills.paths` de `opencode.json`. No se mantiene copia duplicada: la fuente canónica `plugins/xone-development/skills/` se referencia directamente.
 
-```text
-.opencode/skills/<skill-name>/SKILL.md
-opencode.json
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": { "paths": ["./plugins/xone-development/skills"] }
+}
 ```
 
-La fuente canónica será `plugins/xone-development/skills/`. Las copias de OpenCode deben mantenerse sincronizadas y no deben introducir reglas diferentes.
+La carpeta `.opencode/` queda reservada para el entorno de desarrollo de plugins OpenCode (`node_modules`, `package.json` con `@opencode-ai/plugin`) y se ignora en git.
 
-La sincronización se automatiza con `scripts/sync.sh`, que copia la fuente canónica hacia `.opencode/skills/` y verifica cada fichero con `cmp` para fallar si divergen. Se ejecuta de forma local y, si se habilita CI, como paso de validación. Esto evita duplicación manual y cubre la aceptación "sincronizarse sin divergencias manuales".
+### 3.5. Frontmatter compatible
+
+OpenCode exige `name` en el frontmatter (debe coincidir con el nombre del directorio y seguir `^[a-z0-9]+(-[a-z0-9]+)*$`). Claude Code lo trata como opcional. Para compatibilidad cruzada, todo `SKILL.md` debe incluir:
+
+```yaml
+---
+name: xone-css
+description: ...
+---
+```
 
 ## 4. Taxonomía propuesta
 
@@ -277,14 +288,9 @@ Cada fase se revisa por expertos antes de iniciar la siguiente. Una fase solo se
 .
 ├── .claude-plugin/
 │   └── marketplace.json
-├── .opencode/
-│   └── skills/
-│       └── xone-development/
-│           └── SKILL.md
+├── .gitignore
 ├── docs/
 │   └── ARCHITECTURE.md
-├── scripts/
-│   └── sync.sh
 ├── plugins/
 │   └── xone-development/
 │       ├── .claude-plugin/plugin.json
@@ -292,19 +298,56 @@ Cada fase se revisa por expertos antes de iniciar la siguiente. Una fase solo se
 │           ├── xone-development/
 │           │   └── SKILL.md
 │           ├── xone-xml-ui/
+│           │   └── SKILL.md
+│           ├── xone-javascript/
 │           │   ├── SKILL.md
 │           │   └── references/
-│           ├── xone-javascript/
+│           │       ├── api.md
+│           │       ├── examples.md
+│           │       └── troubleshooting.md
 │           ├── xone-css/
+│           │   └── SKILL.md
 │           ├── xone-data-integration/
+│           │   ├── SKILL.md
+│           │   └── references/
 │           ├── xone-device/
+│           │   ├── SKILL.md
+│           │   └── references/
 │           ├── xone-verification/
 │           │   └── SKILL.md
 │           ├── xone-debugging/
+│           │   └── SKILL.md
 │           └── xone-review/
+│               └── SKILL.md
 ├── opencode.json
 └── README.md
 ```
+
+### 10.1 Patrón de supporting files
+
+Cada skill se organiza siguiendo el patrón estándar de Agent Skills (compatible con Claude Code y OpenCode):
+
+```text
+<skill-name>/
+├── SKILL.md              # requerido — overview + navegación (<500 líneas)
+└── references/           # opcional — material de referencia, carga perezosa
+    ├── api.md            # API detallada
+    ├── examples.md       # Snippets extensos
+    └── troubleshooting.md # Errores y soluciones
+```
+
+- **`SKILL.md`** es el punto de entrada: se carga siempre al invocar la skill. Debe mantenerse por debajo de 500 líneas y contener la guía esencial, reglas y anti-patrones.
+- **`references/`** aloja el material extenso (listas exhaustivas de APIs, snippets largos, tablas de errores). El agente lo carga bajo demanda con la herramienta `Read`, solo cuando lo necesita.
+- Se referencia desde `SKILL.md` para que el agente sepa qué contiene cada archivo:
+
+```markdown
+## Recursos adicionales
+- Para la API completa, ver [references/api.md](references/api.md)
+- Para ejemplos extensos, ver [references/examples.md](references/examples.md)
+```
+
+- Las skills por debajo de ~200 líneas no necesitan `references/`; su contenido cabe holgadamente en `SKILL.md`.
+- OpenCode descubre skills desde `skills/<name>/SKILL.md` y permite al agente leer archivos adicionales de la misma carpeta con `Read`, por lo que el patrón es compatible sin adaptaciones.
 
 ## 11. Criterios de aceptación
 
@@ -315,18 +358,46 @@ La arquitectura se considerará lista para implementación cuando:
 - El flujo de selección funcione con tareas XML, JavaScript, CSS y debugging.
 - Las skills puedan instalarse en Claude Code y descubrirse en OpenCode.
 - Existan ejemplos mínimos verificables para cada dominio.
-- La copia de OpenCode pueda sincronizarse sin divergencias manuales mediante `scripts/sync.sh`.
+- Las skills se descubran en OpenCode vía `skills.paths` sin copia duplicada.
+- Cada `SKILL.md` incluya `name` en el frontmatter y se mantenga por debajo de 500 líneas.
+- El material extenso (API, snippets, tablas de errores) viva en `references/` y se cargue perezosamente.
 - La activación real esté validada: una tarea de prueba invoca la skill adecuada sin intervención del usuario.
 - Dos revisores expertos hayan aprobado las reglas críticas de su área.
 
 ## 12. Decisiones pendientes
 
 - Confirmar las versiones de XOne que se quieren soportar (condiciona el tono y las reglas de todas las skills).
-- Decidir si las referencias completas se publicarán dentro del plugin o en un repositorio documental separado.
 - Definir los proyectos de prueba representativos para XML/UI, datos, dispositivos y debugging.
 - Confirmar los expertos responsables de cada área y el canal de revisión.
+- Refactorizar las skills que superan ~200 líneas para extraer material extenso a `references/` (ver §13).
 
 ### Resuelto
 
-- Sincronización Claude Code/OpenCode: automatizada mediante `scripts/sync.sh` (ver §3.4).
+- Sincronización Claude Code/OpenCode: resuelta sin duplicación mediante `skills.paths` en `opencode.json` (ver §3.4). Se eliminó `.opencode/skills/` y `scripts/sync.sh`.
 - `CHANGELOG.md`: registra los cambios visibles desde v0.1.0 hasta v0.9.0.
+- Ubicación de las referencias completas: dentro del plugin, en `skills/<name>/references/`, con carga perezosa (ver §10.1).
+
+## 13. Tareas pendientes
+
+### 13.1. Refactor de skills con `references/`
+
+Aplicar el patrón de supporting files (ver §10.1) a las skills que superan ~200 líneas. Para cada una, mantener en `SKILL.md` la guía esencial, reglas y anti-patrones, y mover a `references/` el material extenso.
+
+| Skill | Líneas actuales | Acción | Prioridad |
+|-------|-----------------|--------|-----------|
+| `xone-javascript` | 419 | Extraer API completa (`api.md`), snippets extensos (`examples.md`) y tabla de errores (`troubleshooting.md`) | Alta |
+| `xone-device` | 429 | Extraer API de hardware (`api.md`) y ejemplos (`examples.md`) | Alta |
+| `xone-data-integration` | 331 | Extraer API de SqlManager/$http/OAuth2 (`api.md`) y ejemplos (`examples.md`) | Media |
+| `xone-css` | 319 | Extraer atributos completos y tabla de errores (`reference.md`) | Media |
+| `xone-debugging` | 298 | Extraer tablas de errores por capa (`troubleshooting.md`) | Media |
+| `xone-xml-ui` | 157 | Revisar — borderline, podría quedarse tal cual | Baja |
+
+Skills por debajo del umbral (`xone-development`, `xone-verification`, `xone-review`) no requieren refactor.
+
+### 13.2. Frontmatter `name`
+
+Añadir `name: <skill-name>` al frontmatter de todos los `SKILL.md` para compatibilidad con OpenCode (ver §3.5). El valor debe coincidir con el nombre del directorio.
+
+### 13.3. Pruebas de activación real
+
+Definir 1–2 proyectos XOne mínimos de prueba y un script que valide que, dada una tarea de prueba, el agente invoca la skill correcta. Cubre al menos `xone-xml-ui`, `xone-javascript` y `xone-verification`.
