@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.8.0] - 2026-08-03
+
+### Añadido
+
+- Skill `xone-device`: permisos con `systemSettings`, GPS y `GPSColl`/`GpsTools`, cámara y captura de foto/video, firma digital, escaneo QR/códigos y `BarcodeGenerator`, biometría (`biometricsManager` y `fingerprintManager`), Bluetooth/impresión, NFC y DNIe, WebSocket, `FileManager`, `DeviceInfo`, `WifiManager` y utilidades de `ui`, además de simulación de hardware con `mock/device.json` en `xone-simulator`.
+
 ## [0.7.0] - 2026-08-03
 
 ### Añadido
