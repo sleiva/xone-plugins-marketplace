@@ -18,7 +18,7 @@
         "name": "Sergio Leiva Ortega",
         "url": "https://github.com/sleiva"
       },
-      "repository": "https://github.com/sleiva/xone-plugins-market",
+      "repository": "https://github.com/sleiva/xone-plugins-marketplace",
       "license": "MIT",
       "category": "development",
       "keywords": ["xone", "xml", "javascript", "css", "mobile"]

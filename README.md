@@ -15,7 +15,7 @@ Skill experta para crear, revisar y depurar aplicaciones XOne con XML `.xne`, Ja
 Desde Claude Code:
 
 ```text
-/plugin marketplace add sleiva/xone-plugins-market
+/plugin marketplace add sleiva/xone-plugins-marketplace
 /plugin install xone-development@xone-plugins
 ```
 
