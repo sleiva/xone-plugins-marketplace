@@ -44,6 +44,14 @@ knowledge_max_lines=400
 dup_min_line_length=35
 dup_min_token_length=5
 dup_overlap_threshold=0.65
+# Piso de tokens significativos por línea: sin él, una línea con un único
+# token largo (p. ej. una fila de checklist que solo menciona "colección")
+# empata al 100% con cualquier otra línea que contenga esa misma palabra,
+# por puro azar de vocabulario compartido, no por repetir una regla. Tres
+# tokens es el piso más bajo que sigue distinguiendo coincidencia real de
+# coincidencia de una sola palabra de dominio. (Con este piso: 111 pares;
+# sin él: 132.)
+dup_min_significant_tokens=3
 
 tmp_dir="$(mktemp -d)"
 trap 'rm -rf "$tmp_dir"' EXIT
@@ -102,14 +110,7 @@ skills_dir = Path(sys.argv[1])
 min_line_len = int(sys.argv[2])
 min_token_len = int(sys.argv[3])
 threshold = float(sys.argv[4])
-
-# Piso de tokens significativos por línea. Sin este piso, una línea con un
-# único token largo (p. ej. una fila de checklist que solo menciona
-# "colección") empata al 100% con cualquier otra línea que contenga esa
-# misma palabra, por puro azar de vocabulario compartido, no por repetir
-# una regla. Tres tokens es el piso más bajo que sigue distinguiendo
-# coincidencia real de coincidencia de una sola palabra de dominio.
-min_significant_tokens = 3
+min_significant_tokens = int(sys.argv[5])
 
 token_re = re.compile(r'[`\w]{%d,}' % min_token_len)
 
@@ -210,7 +211,7 @@ for dir in "$skills_dir"/*/; do
   # un frontmatter que no es YAML válido (p. ej. un `description:` sin
   # comillas que contenga ": "), y ese fallo hace que la skill no cargue.
   if (( have_pyyaml )); then
-    if yaml_error=$(printf '%s\n' "$frontmatter" | python3 "$tmp_dir/check_frontmatter.py" 2>&1); then
+    if yaml_error=$(printf '%s\n' "$frontmatter" | PYTHONIOENCODING=utf-8 python3 "$tmp_dir/check_frontmatter.py" 2>&1); then
       :
     else
       printf 'Frontmatter is not valid YAML in %s: %s\n' "$file" "$yaml_error" >&2
@@ -259,10 +260,21 @@ fi
 # marcadores literales, esto detecta paráfrasis: tras el merge no queda
 # duplicación byte-idéntica entre la puerta de conocimiento y las skills de
 # procedimiento, solo reformulación de la misma regla.
+#
+# 2>&1 y PYTHONIOENCODING=utf-8 no son opcionales: sin ellos, un traceback
+# (p. ej. un UnicodeEncodeError al imprimir texto en español bajo un locale
+# sin UTF-8, como CI o cron) se iría por stderr sin capturar, dup_pairs
+# quedaría en 0 y el script saldría con éxito sin haber comprobado nada.
 if (( have_python3 )); then
-  if ! dup_output=$(python3 "$tmp_dir/check_duplicates.py" "$skills_dir" "$dup_min_line_length" "$dup_min_token_length" "$dup_overlap_threshold"); then
+  if ! dup_output=$(PYTHONIOENCODING=utf-8 python3 "$tmp_dir/check_duplicates.py" "$skills_dir" "$dup_min_line_length" "$dup_min_token_length" "$dup_overlap_threshold" "$dup_min_significant_tokens" 2>&1); then
     printf '%s\n' "$dup_output" >&2
     dup_pairs=$(printf '%s\n' "$dup_output" | grep -c '^Duplicated canonical rule' || true)
+    # Salida no vacía y exit != 0 pero ningún par reconocido: el bloque python
+    # falló de otra forma (traceback, error de invocación). No lo tratamos
+    # como éxito: cuenta como al menos un fallo.
+    if (( dup_pairs == 0 )); then
+      dup_pairs=1
+    fi
     failures=$((failures + dup_pairs))
   fi
 fi
@@ -281,4 +293,18 @@ if (( failures > 0 )); then
   exit 1
 fi
 
-printf 'Validated %d skills: frontmatter (incl. YAML parse), size (incl. knowledge-skill ceiling), duplicate-rule guard, reference links and OpenCode discovery.\n' "$skills"
+# El mensaje de éxito solo puede nombrar lo que realmente se ejecutó: si
+# python3/pyyaml/opencode faltan, esas comprobaciones se saltaron con un
+# warning más arriba, no pasaron.
+ran='frontmatter (name/description), size (incl. knowledge-skill ceiling)'
+if (( have_pyyaml )); then
+  ran="$ran, frontmatter YAML parse"
+fi
+if (( have_python3 )); then
+  ran="$ran, duplicate-rule guard"
+fi
+ran="$ran, reference links"
+if command -v opencode >/dev/null 2>&1; then
+  ran="$ran, OpenCode discovery"
+fi
+printf 'Validated %d skills: %s.\n' "$skills" "$ran"
