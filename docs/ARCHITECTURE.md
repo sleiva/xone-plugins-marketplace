@@ -251,8 +251,8 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 - ✅ `xone-verification` (validación y smoke con el paquete npm `xone-linter`) — implementada en v0.2.0, sobre el paquete publicado como `xone-linter` en npm y en GitHub `sleiva/xone-linter`.
 
 ### 9.2. Fase 1: núcleo de dominio
-- `xone-xml-ui` (colecciones, props, layouts, contents, herencia, eventos y errores de pantalla vacía).
-- `xone-debugging` (diagnóstico sistemático de errores y rendimiento).
+- ✅ `xone-xml-ui` (colecciones, props, types válidos, combos, mapas, contents, layouts, visibilidad, ciclo de vida, progid, splash, encoding, macros, permisos y anti-patrones) — implementada en v0.3.0, alineada con las reglas del validador `xone-simulator`.
+- `xone-debugging` (diagnóstico sistemático de errores y rendimiento) — pendiente.
 - Son las de mayor retorno: cubren la mayoría de consultas y errores recurrentes.
 
 ### 9.3. Fase 2: runtime y estilo
