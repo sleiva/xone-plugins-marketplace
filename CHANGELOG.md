@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [0.6.0] - 2026-08-03
+
+### Añadido
+
+- Skill `xone-css`: selectores (coll, prop, prop:TYPE, .clase, group, frame), unidades `p`/`%` y unidades prohibidas, colores `#RRGGBB` y `#AARRGGBB`, atributos (dimensiones, márgenes, padding, fuentes, texto, fondo, bordes, sombras, visibilidad bitmask), herencia `extends:`, estilos dinámicos `##FLD_CAMPO##` y cambio de clase desde JS, cascada de archivos, temas, animaciones y buenas prácticas.
+
 ## [0.5.0] - 2026-08-03
 
 ### Añadido

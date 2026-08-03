@@ -257,7 +257,8 @@ Para reducir riesgo y permitir revisión experta en cada paso, las skills no se 
 
 ### 9.3. Fase 2: runtime y estilo
 - ✅ `xone-javascript` (objetos globales, ciclo de vida, callbacks, Futures, SQL seguro y patrones críticos) — implementada en v0.5.0, alineada con los métodos del runtime `xone-simulator`.
-- `xone-css` (selectores, unidades, temas, animaciones) — pendiente.
+- ✅ `xone-css` (selectores, unidades, colores ARGB, atributos, herencia `extends`, estilos dinámicos, temas y animaciones) — implementada en v0.6.0.
+- Fase 2 completa.
 
 ### 9.4. Fase 3: integraciones y dispositivo
 - `xone-data-integration` (SQL, `$http`, OAuth2, TLS, réplica, seguridad).
