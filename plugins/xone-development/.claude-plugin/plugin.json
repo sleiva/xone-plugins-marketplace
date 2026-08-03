@@ -1,0 +1,13 @@
+{
+  "name": "xone-development",
+  "description": "Skills para desarrollar, revisar y depurar aplicaciones móviles XOne",
+  "version": "0.1.0",
+  "author": {
+    "name": "Sergio Leiva Ortega",
+    "url": "https://github.com/sleiva"
+  },
+  "homepage": "https://github.com/sleiva/xone-plugins-market",
+  "repository": "https://github.com/sleiva/xone-plugins-market",
+  "license": "MIT",
+  "keywords": ["xone", "xml", "javascript", "css", "mobile-development"]
+}

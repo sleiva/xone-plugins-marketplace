@@ -1,0 +1,27 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "xone-plugins",
+  "owner": {
+    "name": "Sergio Leiva Ortega",
+    "url": "https://github.com/sleiva"
+  },
+  "metadata": {
+    "description": "Plugins de Claude Code para desarrollo con XOne"
+  },
+  "plugins": [
+    {
+      "name": "xone-development",
+      "source": "./plugins/xone-development",
+      "description": "Asistente experto para crear, revisar y depurar aplicaciones XOne",
+      "version": "0.1.0",
+      "author": {
+        "name": "Sergio Leiva Ortega",
+        "url": "https://github.com/sleiva"
+      },
+      "repository": "https://github.com/sleiva/xone-plugins-market",
+      "license": "MIT",
+      "category": "development",
+      "keywords": ["xone", "xml", "javascript", "css", "mobile"]
+    }
+  ]
+}
