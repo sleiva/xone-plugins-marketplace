@@ -84,7 +84,9 @@ OpenCode descubre skills desde `.opencode/skills/<name>/SKILL.md`. Durante la pr
 opencode.json
 ```
 
-La fuente canónica será `plugins/xone-development/skills/`. Las copias de OpenCode deben mantenerse sincronizadas y no introducir reglas diferentes.
+La fuente canónica será `plugins/xone-development/skills/`. Las copias de OpenCode deben mantenerse sincronizadas y no deben introducir reglas diferentes.
+
+La sincronización se automatizará con un script `scripts/sync.sh` que copie la fuente canónica hacia `.opencode/skills/` y verifique cada fichero con `cmp`, para fail si divergen. Se ejecutará de forma local y, si se habilita CI, como paso de validación. Esto evita duplicación manual y cubre la aceptación "sincronizarse sin divergencias manuales".
 
 ## 4. Taxonomía propuesta
 
@@ -222,8 +224,37 @@ Las reglas de nivel C deben incluir una nota de cautela. Las de nivel D no deben
 - Las nuevas skills o APIs compatibles incrementan minor.
 - Cambios que retiren, contradigan o modifiquen reglas existentes incrementan major.
 - Toda skill debe declarar si una API depende de una versión concreta del runtime XOne.
+- Los cambios visibles para usuarios finales (skills, reglas, correcciones) se registrarán en `CHANGELOG.md` con la versión correspondiente.
 
-## 9. Estructura objetivo
+## 9. Plan de implementación incremental
+
+Para reducir riesgo y permitir revisión experta en cada paso, las skills no se construirán todas a la vez, sino en fases con dependencias explícitas:
+
+### 9.1. Fase 0: habilitadores
+- Crear `scripts/sync.sh` y validar la sincronización Claude Code/OpenCode.
+- Añadir `CHANGELOG.md`.
+- Declarar las versiones de XOne soportadas y registrar esa decisión.
+
+### 9.2. Fase 1: núcleo de dominio
+- `xone-xml-ui` (colecciones, props, layouts, contents, herencia, eventos y errores de pantalla vacía).
+- `xone-debugging` (diagnóstico sistemático de errores y rendimiento).
+- Son las de mayor retorno: cubren la mayoría de consultas y errores recurrentes.
+
+### 9.3. Fase 2: runtime y estilo
+- `xone-javascript` (objetos globales, ciclo de vida, callbacks, Futures).
+- `xone-css` (selectores, unidades, temas, animaciones).
+
+### 9.4. Fase 3: integraciones y dispositivo
+- `xone-data-integration` (SQL, `$http`, OAuth2, TLS, réplica, seguridad).
+- `xone-device` (GPS, cámara, permisos, biometría, Bluetooth, NFC).
+
+### 9.5. Fase 4: control de calidad
+- `xone-review` (revisión de código).
+- Pruebas de activación real en proyectos XOne de ejemplo.
+
+Cada fase se revisa por expertos antes de iniciar la siguiente. Una fase solo se cierra cuando sus skills superan los criterios de aceptación aplicables a su área.
+
+## 10. Estructura objetivo
 
 ```text
 .
@@ -235,6 +266,8 @@ Las reglas de nivel C deben incluir una nota de cautela. Las de nivel D no deben
 │           └── SKILL.md
 ├── docs/
 │   └── ARCHITECTURE.md
+├── scripts/
+│   └── sync.sh
 ├── plugins/
 │   └── xone-development/
 │       ├── .claude-plugin/plugin.json
@@ -254,7 +287,7 @@ Las reglas de nivel C deben incluir una nota de cautela. Las de nivel D no deben
 └── README.md
 ```
 
-## 10. Criterios de aceptación
+## 11. Criterios de aceptación
 
 La arquitectura se considerará lista para implementación cuando:
 
@@ -263,13 +296,14 @@ La arquitectura se considerará lista para implementación cuando:
 - El flujo de selección funcione con tareas XML, JavaScript, CSS y debugging.
 - Las skills puedan instalarse en Claude Code y descubrirse en OpenCode.
 - Existan ejemplos mínimos verificables para cada dominio.
-- La copia de OpenCode pueda sincronizarse sin divergencias manuales.
+- La copia de OpenCode pueda sincronizarse sin divergencias manuales mediante `scripts/sync.sh`.
+- La activación real esté validada: una tarea de prueba invoca la skill adecuada sin intervención del usuario.
 - Dos revisores expertos hayan aprobado las reglas críticas de su área.
 
-## 11. Decisiones pendientes
+## 12. Decisiones pendientes
 
-- Confirmar las versiones de XOne que se quieren soportar.
+- Confirmar las versiones de XOne que se quieren soportar (condiciona el tono y las reglas de todas las skills).
 - Decidir si las referencias completas se publicarán dentro del plugin o en un repositorio documental separado.
-- Elegir si la sincronización Claude Code/OpenCode será manual inicialmente o automatizada mediante un script de validación.
+- Elegir si la sincronización Claude Code/OpenCode será manual inicialmente o automatizada mediante `scripts/sync.sh`.
 - Definir los proyectos de prueba representativos para XML/UI, datos, dispositivos y debugging.
 - Confirmar los expertos responsables de cada área y el canal de revisión.
