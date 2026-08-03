@@ -76,6 +76,7 @@ dup_allowlist_entries=(
   'xone-development ||| plantillas-y-funciones-utilitarias.md ||| xone-project-generator ||| Funciones JavaScript globales ||| Fila del índice de referencias del door vs. tabla de ficheros de configuración del generador: coincidencia de vocabulario, no regla duplicada.'
   'xone-development ||| dinamicos-cascada-y-componentes.md ||| xone-project-generator ||| viewmodes de mapa y calendario ||| Dos filas de índice/TOC en ficheros distintos: coincidencia de vocabulario de dominio (mapas, calendario), no regla duplicada.'
   'xone-development ||| Para crear un proyecto completo desde cero ||| xone-review ||| Para diagnosticar un fallo a partir de su síntoma, usa ||| Frase de cierre que enlaza unas skills con otras (puntero de navegación), no una regla de XOne.'
+  'xone-development ||| Conflicto conocido sin resolver ||| xone-review ||| Coll con `objname` pero sin `progid` ||| El door nombra el código `COLL_MISSING_PROGID` para registrar el conflicto linter/documentación (única fuente de esa advertencia); xone-review nombra el mismo código en su tabla de códigos del validador (dato ya exigido como contenido a conservar). Los dos necesariamente citan el mismo identificador de código; no es la regla de XOne repetida, es una fila de tabla de códigos y una nota de conflicto sobre esa fila.'
 )
 
 tmp_dir="$(mktemp -d)"

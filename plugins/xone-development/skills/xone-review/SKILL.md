@@ -69,7 +69,7 @@ xone-simulator render   ./proyecto --coll X                    # coll a HTML
 | `REF_INHERITS_MISSING` | `inherits` apunta a una coll inexistente |
 | `ANTIPATTERN_MULTIPLE_BEFORE_EDIT` | Más de un `before-edit` en la misma coll |
 | `ANTIPATTERN_SELF_AS_FUNCTION` | `self` usado como función |
-| `ANTIPATTERN_MACRO_SYNTAX` | Sintaxis de macro no soportada, llamada sobre la coll |
+| `ANTIPATTERN_MACRO_SYNTAX` | `macro` llamado como método de `coll` |
 | `ANTIPATTERN_SELF_LOCK` | `lock`/`unlock` llamados sobre `self` |
 | `ANTIPATTERN_VBSCRIPT` | Include con `language="vbscript"` (descontinuado) |
 | `JS_SYNTAX` | Error de sintaxis JavaScript |
@@ -111,7 +111,7 @@ Las reglas y los anti-patrones de cada capa viven en la skill `xone-development`
 - [ ] Callbacks asíncronos preservando `self`.
 - [ ] Validación de entrada antes de `save()`.
 - [ ] SQL parametrizado.
-- [ ] CSS revisado contra la puerta de conocimiento.
+- [ ] CSS con unidades (`p`/`%`) y colores (`#AARRGGBB`) correctos.
 - [ ] `allowUnsafeCertificates: false`; sin credenciales hardcodeadas.
 - [ ] Solo se han tocado los `.xne` fuente (regla en `xone-development`).
 
