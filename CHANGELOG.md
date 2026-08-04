@@ -2,7 +2,9 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
-## [0.11.0] - 2026-08-03
+## [1.1.0] - 2026-08-04
+
+Primera versión de la serie 1.x: el plugin se declara estable en su forma —cuatro skills, una puerta de conocimiento— aunque las pruebas de activación real siguen pendientes (ver `docs/TODO.md`). El trabajo de esta entrada se hizo el 2026-08-03 y se publicó al día siguiente.
 
 De nueve skills a cuatro: una puerta de conocimiento (`xone-development`) más tres de procedimiento (`xone-project-generator`, `xone-review`, `xone-debugging`).
 

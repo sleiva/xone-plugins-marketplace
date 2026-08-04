@@ -1,6 +1,6 @@
 # Consolidación de skills: de nueve puertas a cuatro
 
-Fecha: 2026-08-03 · Estado: aprobado, pendiente de implementar · Versión objetivo: `0.11.0`
+Fecha: 2026-08-03 · Estado: aprobado, pendiente de implementar · Versión objetivo: `0.11.0` (publicado finalmente como `1.1.0`; ver `CHANGELOG.md`)
 
 ## Problema
 

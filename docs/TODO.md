@@ -9,8 +9,8 @@ Lista operativa de trabajo pendiente sobre `xone-plugins-market`. Detalle técni
 - [x] **3. Configurar `opencode.json` con `skills.paths`**
 - [x] **4. Versionar la fuente canónica `xone/` en git**
 - [x] **5. Validador que compruebe enlaces y huérfanos**
-- [ ] **6. Pruebas de activación real** ← siguiente (simplificada por la tarea 7, v0.11.0)
-- [x] **7. Consolidación de fronteras entre skills** (v0.11.0 — cuatro puertas)
+- [ ] **6. Pruebas de activación real** ← siguiente (simplificada por la tarea 7, v1.1.0)
+- [x] **7. Consolidación de fronteras entre skills** (v1.1.0 — cuatro puertas)
 - [ ] **8. Versiones de XOne soportadas**
 - [ ] **9. Revisores expertos por área**
 - [ ] **10. Consolidación editorial de las dos redacciones del corpus** (prioridad baja)
@@ -23,7 +23,7 @@ Lista operativa de trabajo pendiente sobre `xone-plugins-market`. Detalle técni
 
 Es la única tarea que sigue pendiente desde el plan original. El validador estático comprueba estructura y enlaces, pero no si el agente elige la skill correcta ni si lee sus referencias.
 
-**Simplificada por la consolidación a cuatro puertas (tarea 7, v0.11.0).** Con seis skills de conocimiento solapadas la pregunta era «¿elige el agente la puerta correcta entre seis?». Con una sola puerta de conocimiento (`xone-development`) esa elección casi desaparece; la pregunta que queda, y la que de verdad importa, es **si el agente abre las referencias del índice o contesta solo con las reglas de cabecera del `SKILL.md`**.
+**Simplificada por la consolidación a cuatro puertas (tarea 7, v1.1.0).** Con seis skills de conocimiento solapadas la pregunta era «¿elige el agente la puerta correcta entre seis?». Con una sola puerta de conocimiento (`xone-development`) esa elección casi desaparece; la pregunta que queda, y la que de verdad importa, es **si el agente abre las referencias del índice o contesta solo con las reglas de cabecera del `SKILL.md`**.
 
 - [ ] Proyecto XOne mínimo de prueba con XML, JS y CSS.
 - [ ] Tarea XML, JavaScript o CSS → debe invocar `xone-development` y abrir la referencia que indica su índice para esa área, no responder solo con las reglas de cabecera.
@@ -38,7 +38,7 @@ La última comprobación es la que valida el rediseño de la v0.10.0: si el agen
 
 ## 7. Consolidación de fronteras entre skills
 
-**Estado:** hecha en v0.11.0 · **Ref:** ARCHITECTURE.md §13.4
+**Estado:** hecha en v1.1.0 · **Ref:** ARCHITECTURE.md §13.4
 
 `xone-verification` ya se había fusionado en `xone-review` (v0.10.0: era contenido duplicado, no una duda empírica). Para las seis skills de conocimiento se decidió sin esperar a la tarea 6 (las pruebas de activación seguían pendientes): el peor caso — el agente abre una sola puerta y escribe el resto de memoria — solo se evita con una puerta única, y la asimetría de coste (cargar contexto de más vs. inventar) hacía que esperar no compensara.
 
