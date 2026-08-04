@@ -1,5 +1,8 @@
 # entorno de desarrollo de plugins OpenCode (node_modules, package.json)
 .opencode/
 
+# corpus antiguo de skills XOne, conservado solo como referencia local
+/xone/
+
 # macOS
 .DS_Store

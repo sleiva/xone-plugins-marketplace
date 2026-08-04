@@ -62,7 +62,7 @@ Confirmar qué versiones de XOne se soportan y documentarlo en `ARCHITECTURE.md`
 - [ ] Experto de JavaScript y runtime
 - [ ] Experto de CSS y diseño responsive
 - [ ] Experto de integraciones, seguridad y sincronización
-- [ ] Desarrollador que valide la experiencia real en Claude Code y OpenCode
+- [ ] Desarrollador que valide la experiencia real en Claude Code, OpenCode y Antigravity
 
 Dos discrepancias concretas que necesitan que un experto zanje:
 

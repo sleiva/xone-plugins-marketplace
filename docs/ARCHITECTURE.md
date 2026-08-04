@@ -1,10 +1,10 @@
 # Arquitectura de Skills XOne
 
-**Estado:** skills implementadas, capa de referencias reconstruida sobre el corpus original (v0.10.0), adaptación a OpenCode completada y consolidación de nueve skills a cuatro completada (v1.1.0, ver §13.4). Pendiente: pruebas de activación con tareas reales, versiones soportadas de XOne y revisión experta.
+**Estado:** skills implementadas, capa de referencias reconstruida sobre el corpus original (v0.10.0), adaptación a OpenCode y Antigravity completada, y consolidación de nueve skills a cuatro completada (v1.1.0, ver §13.4). La integración con `xone-db-tools` está documentada en v1.2.0. Pendiente: pruebas de activación con tareas reales, versiones soportadas de XOne y revisión experta.
 
 **Versión:** 0.3
 
-**Ámbito:** marketplace `xone-plugins-marketplace`, plugin `xone-development` y skills compatibles con Claude Code y OpenCode.
+**Ámbito:** marketplace `xone-plugins-marketplace`, plugin `xone-development`, skills compatibles con Claude Code, OpenCode y Antigravity, y uso de las herramientas npm `xone-linter` y `xone-db-tools`.
 
 ## 1. Objetivo
 
@@ -15,7 +15,7 @@ La arquitectura debe:
 - Separar el conocimiento por áreas para reducir instrucciones irrelevantes.
 - Activar la skill adecuada según la tarea, sin obligar al usuario a conocer la taxonomía.
 - Mantener las restricciones reales del runtime XOne visibles y verificables.
-- Funcionar en Claude Code y OpenCode sin crear comportamientos incompatibles.
+- Funcionar en Claude Code, OpenCode y Antigravity sin crear comportamientos incompatibles.
 - Permitir revisión por expertos de XOne antes de publicar conocimiento sensible o dudoso.
 - Evolucionar sin romper instalaciones existentes del plugin.
 
@@ -35,7 +35,7 @@ La skill debe inspeccionar el proyecto antes de editar, respetar sus convencione
 
 ### 2.4. Compatibilidad explícita
 
-Claude Code y OpenCode comparten el formato `SKILL.md`, pero no comparten el sistema de marketplace ni todos los mecanismos de instalación. La documentación y las pruebas deben distinguir ambos canales.
+Claude Code, OpenCode y Antigravity comparten el formato `SKILL.md`, pero no comparten los mecanismos de instalación. La documentación y las pruebas deben distinguir cada canal.
 
 ### 2.5. Conocimiento versionado
 
@@ -88,7 +88,22 @@ OpenCode descubre skills desde varias rutas (`.opencode/skills/`, `.claude/skill
 
 La carpeta `.opencode/` queda reservada para el entorno de desarrollo de plugins OpenCode (`node_modules`, `package.json` con `@opencode-ai/plugin`) y se ignora en git.
 
-### 3.5. Frontmatter compatible
+### 3.5. Adaptador Antigravity
+
+Antigravity descubre skills Agent Skills desde dos ubicaciones:
+
+```text
+<workspace>/.agents/skills/<skill-name>/SKILL.md
+~/.gemini/config/skills/<skill-name>/SKILL.md
+```
+
+La instalación global usa enlaces simbólicos hacia la fuente canónica
+`plugins/xone-development/skills/`, evitando copias duplicadas. Antigravity no
+consume `.claude-plugin/marketplace.json`, `opencode.json` ni el comando
+`/xone-validate`; para validar se ejecutan directamente `xone-simulator` y
+`xone-db-tools`.
+
+### 3.6. Frontmatter compatible
 
 OpenCode exige `name` en el frontmatter (debe coincidir con el nombre del directorio y seguir `^[a-z0-9]+(-[a-z0-9]+)*$`). Claude Code lo trata como opcional. Para compatibilidad cruzada, todo `SKILL.md` debe incluir:
 
@@ -142,7 +157,17 @@ Debe cubrir:
 - Corrección iterativa hasta que la validación pase.
 - Checklist de entrega y priorización por severidad, con archivo, línea, impacto y corrección propuesta. Anti-patrones y reglas por capa se referencian desde `xone-development` (§10.1), no se repiten aquí.
 
-Debe comprobar que `xone-simulator` exista e indicar `npm install -g xone-linter` si no. Trabaja sobre el paquete publicado, no asume acceso al código fuente del simulador.
+Debe comprobar que `xone-simulator` y, cuando exista `bd/gestion.db`,
+`xone-db-tools` existan. Si faltan, indicar:
+
+```bash
+npm install -g xone-linter xone-db-tools
+```
+
+`xone-db-tools validate-db` valida la integridad y el esquema de la BD contra
+los `.xne`; `xone-db-tools describe-table` permite inspeccionar una tabla.
+Ambas herramientas trabajan sobre paquetes publicados y no asumen acceso a sus
+repositorios fuente.
 
 **Nota de diseño (v0.10.0).** Antes eran dos skills, `xone-verification` y `xone-review`. Se fusionaron: envolvían el mismo CLI con el mismo bloque de comandos, describían el mismo bucle (validar → corregir → smoke) y sus descripciones disparaban con lo mismo («revisar si un cambio rompe la app» frente a «auditar un cambio antes de entregarlo»). No eran dos procedimientos, sino dos fases de uno. La duplicación ya había divergido: ambas repetían las reglas de sintaxis JavaScript y ambas estaban mal del mismo modo.
 
