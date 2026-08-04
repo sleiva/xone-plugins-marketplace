@@ -1,7 +1,7 @@
 # Instalacion
 
 Este repositorio distribuye el plugin `xone-development` para Claude Code y las
-skills compatibles para OpenCode.
+skills compatibles para OpenCode y Antigravity.
 
 ## Claude Code
 
@@ -109,17 +109,59 @@ Deben aparecer estas cuatro skills con una ruta que termine en
 El comando `/xone-validate` es especifico de Claude Code. En OpenCode se debe
 invocar la skill `xone-review`.
 
+## Antigravity
+
+Antigravity no instala el marketplace de Claude. Descubre skills compatibles con
+`SKILL.md` desde estas rutas:
+
+```text
+<proyecto>/.agents/skills/<skill>/SKILL.md
+~/.gemini/config/skills/<skill>/SKILL.md
+```
+
+### Instalacion global
+
+Clona el repositorio y crea enlaces simbolicos para mantener una unica fuente:
+
+```bash
+git clone https://github.com/sleiva/xone-plugins-marketplace.git ~/xone-plugins-marketplace
+mkdir -p ~/.gemini/config/skills
+
+for skill in xone-development xone-project-generator xone-review xone-debugging; do
+  ln -s ~/xone-plugins-marketplace/plugins/xone-development/skills/$skill \
+    ~/.gemini/config/skills/$skill
+done
+```
+
+Si una skill ya existe, elimina primero el enlace o carpeta anterior. Para una
+instalacion solo para un proyecto, usa la misma estructura bajo
+`<proyecto>/.agents/skills/`.
+
+Reinicia Antigravity o abre una conversacion nueva. Deberian aparecer las cuatro
+skills por sus nombres exactos.
+
+Antigravity no soporta el comando `/xone-validate` de Claude Code. Ejecuta las
+herramientas directamente:
+
+```bash
+xone-simulator validate ./proyecto
+xone-db-tools create-db ./proyecto --overwrite
+xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto
+```
+
 ## Requisito para validar y depurar
 
 Las skills `xone-review` y `xone-debugging` utilizan el binario
 `xone-simulator`, incluido en el paquete `xone-linter`:
 
 ```bash
-npm install -g xone-linter
+npm install -g xone-linter xone-db-tools
+xone-db-tools --help
 xone-simulator --help
 ```
 
-Las skills de conocimiento y `xone-project-generator` no necesitan este paquete.
+`xone-db-tools` se necesita para generar, validar y describir la BD. Las skills de
+conocimiento no necesitan herramientas externas.
 
 ## Actualizar
 
