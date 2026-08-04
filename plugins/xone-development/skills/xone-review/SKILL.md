@@ -5,7 +5,7 @@ description: "Validar, verificar y revisar proyectos XOne con el linter xone-sim
 
 # XOne Review
 
-Verificación y revisión de proyectos XOne. Combina la validación automatizada con el CLI `xone-simulator` (paquete npm `xone-linter`) y una revisión manual anclada a las reglas de `xone-development`.
+Verificación y revisión de proyectos XOne. Combina la validación automatizada con el CLI `xone-simulator` (paquete npm `xone-linter`), la validación de la BD con `xone-db-tools` y una revisión manual anclada a las reglas de `xone-development`.
 
 **El linter dice qué está mal, no cuál es la forma correcta.** Para eso lee `xone-development`. No reportes como hallazgo ni apliques como arreglo nada que no puedas anclar al validador o a esas reglas.
 
@@ -15,19 +15,20 @@ Verificación y revisión de proyectos XOne. Combina la validación automatizada
 command -v xone-simulator
 ```
 
-Si no existe: `npm install -g xone-linter`. Si está instalado pero el shell no lo encuentra, usa la ruta completa al binario global (comprueba `npm config get prefix`).
+Si no existe: `npm install -g xone-linter xone-db-tools`. Si está instalado pero el shell no lo encuentra, usa la ruta completa al binario global (comprueba `npm config get prefix`).
 
 En Claude Code, `/xone-validate [ruta]` ejecuta el flujo de validación y corrección completo.
 
 ## Flujo
 
-1. Comprueba que el CLI existe; si no, indícalo al usuario y detente.
+1. Comprueba que `xone-simulator` existe; si no, indícalo al usuario y detente.
 2. `validate` y lee los issues. Prioriza `errors` sobre `warnings`.
-3. Corrige **un tipo de error a la vez** y revalida tras cada tanda, para no introducir regresiones.
-4. `smoke` sobre la app completa cuando `validate` pase.
-5. Si `smoke` falla, aísla con `run` (evento concreto) y `render` (UI).
-6. Revisión manual contra las reglas de `xone-development` (ver «Qué revisar en cada capa»).
-7. Prioriza los hallazgos y reporta con severidad, `archivo:línea` y causa raíz.
+3. Si existe `bd/gestion.db`, ejecuta `xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto --json`.
+4. Corrige **un tipo de error a la vez** y revalida tras cada tanda, para no introducir regresiones.
+5. `smoke` sobre la app completa cuando `validate` pase.
+6. Si `smoke` falla, aísla con `run` (evento concreto) y `render` (UI).
+7. Revisión manual contra las reglas de `xone-development` (ver «Qué revisar en cada capa»).
+8. Prioriza los hallazgos y reporta con severidad, `archivo:línea` y causa raíz.
 
 No des por cerrado el trabajo hasta que `validate` pase sin `errors` y `smoke` devuelva exit 0, o hasta que los `failures` restantes estén justificados.
 
@@ -38,6 +39,7 @@ xone-simulator validate ./proyecto --json                      # verificación e
 xone-simulator smoke    ./proyecto --json                      # ciclo de vida completo
 xone-simulator run      ./proyecto --coll X --event before-edit --json
 xone-simulator render   ./proyecto --coll X                    # coll a HTML
+xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto --json
 ```
 
 **`validate`** comprueba XML bien formado y encoding, atributos obligatorios, unicidad de nombres, tipos de propiedad, `progid`, ficheros y estilos incluidos, sintaxis JS y referencias cruzadas (`mapcol`, `inherits`, `contents`, `openEditView`), más los anti-patrones documentados. Con `--json` devuelve `success`, `summary` e `issues` con severidad, fichero y mensaje.

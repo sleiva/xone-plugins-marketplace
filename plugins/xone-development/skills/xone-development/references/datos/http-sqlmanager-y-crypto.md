@@ -547,7 +547,7 @@ sqlManager.openDatabase(jsParams);
 ```javascript
 try {
     let cursor = sqlManager.doRawQuery(
-        "SELECT * FROM gen_Usuarios WHERE LOGIN=? AND ACTIVO=?",
+        "SELECT * FROM gen_usuarios WHERE LOGIN=? AND ACTIVO=?",
         "admin", 1
     );
     try {
@@ -569,7 +569,7 @@ try {
 
 ```javascript
 let jsInsertParams = {
-    tableName: "gen_Productos",
+        tableName: "gen_productos",
     fields   : {
         CODIGO : "PROD001",
         NOMBRE : "Producto de prueba",
@@ -584,8 +584,8 @@ let nIndex = sqlManager.insert(jsInsertParams);
 
 ```javascript
 let sqls = [];
-sqls.push("UPDATE gen_Productos SET ACTIVO=0 WHERE STOCK=0");
-sqls.push("DELETE FROM gen_Log WHERE FECHA < '2024-01-01'");
+sqls.push("UPDATE gen_productos SET ACTIVO=0 WHERE STOCK=0");
+sqls.push("DELETE FROM gen_log WHERE FECHA < '2024-01-01'");
 sqlManager.doBatchParseSqls(sqls);
 ```
 
@@ -718,4 +718,3 @@ let cipherAlgorithms = crypto.getAvailableCipherAlgorithms();
 let signatureAlgorithms = crypto.getAvailableSignatureAlgorithms();
 let sslProtocols = crypto.getAvailableSslProtocols();
 ```
-

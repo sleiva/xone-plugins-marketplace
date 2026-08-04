@@ -83,7 +83,7 @@ self.getContents("miContent").lock();
 
 2. **Tabla no existe** - Regenerar la base de datos:
 ```bash
-python3 -m xone_db_generator mi_proyecto --overwrite
+xone-db-tools create-db mi_proyecto --overwrite
 ```
 
 3. **Filtro demasiado restrictivo** - Verificar el `filter` del `<contents>`.
@@ -290,7 +290,7 @@ try {
 }
 ```
 
-3. **La tabla no existe** en la base de datos. Regenerar con `xone_db_generator`.
+3. **La tabla no existe** en la base de datos. Regenerar con `xone-db-tools create-db` o inspeccionarla con `xone-db-tools describe-table`.
 
 ### 19.14 lock/unlock no funciona
 
@@ -427,4 +427,3 @@ appData.exit();
 | **##NOW_TIME##** | Macro del sistema que retorna la fecha y hora actual. |
 | **##PREF##** | Macro que se reemplaza por el prefijo de tabla configurado (típicamente `gen_`). |
 | **##USERID##** | Macro del sistema que retorna el ID del usuario logueado. |
-

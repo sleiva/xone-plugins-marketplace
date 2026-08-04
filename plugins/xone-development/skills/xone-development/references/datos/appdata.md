@@ -238,10 +238,10 @@ function limpiarSesion() {
 
 ```javascript
 // === Ejecutar SQL directo (UPDATE/INSERT/DELETE) ===
-appData.executeSql("UPDATE gen_Productos SET ACTIVO=0 WHERE STOCK=0");
+appData.executeSql("UPDATE gen_productos SET ACTIVO=0 WHERE STOCK=0");
 
 // NO usar executeSql para leer escalares: no devuelve el COUNT, devuelve un ResultSet
-// var n = appData.executeSql("SELECT COUNT(*) FROM gen_Clientes"); // MAL
+// var n = appData.executeSql("SELECT COUNT(*) FROM gen_clientes"); // MAL
 
 // === SqlManager para consultas avanzadas ===
 let sqlManager = new SqlManager();
@@ -258,7 +258,7 @@ try {
 
     // Consulta con parametros (SEGURO contra SQL injection)
     let cursor = sqlManager.doRawQuery(
-        "SELECT * FROM gen_Usuarios WHERE LOGIN=? AND ACTIVO=?",
+        "SELECT * FROM gen_usuarios WHERE LOGIN=? AND ACTIVO=?",
         "admin", 1
     );
     try {
@@ -273,7 +273,7 @@ try {
 
     // Insertar con parametros seguros
     sqlManager.insert({
-        tableName: "gen_Productos",
+        tableName: "gen_productos",
         fields: {
             CODIGO: "PROD001",
             NOMBRE: "Producto nuevo",
@@ -284,8 +284,8 @@ try {
 
     // Batch de SQLs
     let sqls = [];
-    sqls.push("UPDATE gen_Productos SET PROCESADO=1 WHERE FECHA < '2024-01-01'");
-    sqls.push("DELETE FROM gen_Log WHERE FECHA < '2023-01-01'");
+    sqls.push("UPDATE gen_productos SET PROCESADO=1 WHERE FECHA < '2024-01-01'");
+    sqls.push("DELETE FROM gen_log WHERE FECHA < '2023-01-01'");
     sqlManager.doBatchParseSqls(sqls);
 
     // Mantenimiento
@@ -609,4 +609,3 @@ function aplicarTemaOscuro() {
 | `<style>` en `<app>` | depende del fichero |
 | `<include>` en `<app>` | `"ISO-8859-1"` |
 | `<script>` en `<app>` | `"UTF-8"` |
-

@@ -56,7 +56,7 @@ El archivo `app.xml` es el **punto de partida** de toda la configuración. Defin
 
 | Atributo | Valor | Explicacion |
 |----------|-------|-------------|
-| `prefix` | `"gen"` | Prefijo para las tablas en la BD. Las tablas se llamaran `gen_Empresas`, `gen_Usuarios`, etc. **Siempre usar "gen" por defecto** a menos que el usuario pida otro |
+| `prefix` | `"gen"` | Prefijo para las tablas en la BD. Las tablas se llamaran `gen_empresas`, `gen_usuarios`, etc. **Siempre usar "gen" por defecto** a menos que el usuario pida otro |
 | `versión` | `"1.0.0"` | Versión semantica de la aplicación |
 | `debug` | `"true"` / `"false"` | Activa mensajes de depuracion. Usar `"true"` en desarrollo, `"false"` en produccion |
 | `autologon` | `"false"` | Si es `"true"`, salta la pantalla de login y entra directamente con el usuario `admin` sin password. **Solo para desarrollo/pruebas** |
@@ -485,7 +485,7 @@ Estas dos colecciones son especiales porque:
             COLECCION: Empresas
             - Define las empresas/organizaciones del sistema
             - sql: usa ##PREF## para insertar el prefijo automaticamente
-            - objname: nombre de la tabla en BD (genera gen_Empresas)
+            - objname: nombre de la tabla en BD (genera gen_empresas)
             - updateobj: nombre del objeto para operaciones de escritura
             - loadall: carga todos los registros al abrir
         -->
@@ -595,4 +595,3 @@ Cada coleccion adicional se define en su propio archivo `.xne`. Por ejemplo, `Ta
 ```
 
 > Para profundizar en la definición de colecciones y la estructura XML completa, consulta el tópico 02 - Estructura XML y Colecciones.
-

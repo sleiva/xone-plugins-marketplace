@@ -239,7 +239,7 @@ Los campos `ID` y `ROWID` existen siempre en toda tabla persistida (con `objname
       sql="SELECT * FROM ##PREF##Clientes"
       objname="Clientes" updateobj="Clientes"
       loadall="true">
-    <!-- Campos mapeados a columnas de gen_Clientes -->
+    <!-- Campos mapeados a columnas de gen_clientes -->
 </coll>
 ```
 
@@ -314,4 +314,3 @@ Ejemplo real basado en el proyecto UseCars:
 | `special="true"` con `sql` | Comportamiento indefinido | Usar uno u otro, nunca ambos |
 | `loadall="true"` en tabla grande | Lentitud al cargar | Solo para tablas con pocos registros |
 | `objname` diferente al nombre de tabla | No se guardan los datos | `objname` debe coincidir con el nombre de tabla (sin prefijo) |
-

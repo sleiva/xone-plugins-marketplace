@@ -16,7 +16,7 @@ Crear un README.md en cada carpeta del proyecto y un README.md principal con el 
 
 Cada carpeta obligatoria debe tener un README.md que describa:
 
-- **bd/README.md**: Proposito de la carpeta, como se genera gestion.db, comando xone_db_generator
+- **bd/README.md**: Proposito de la carpeta, como se genera gestion.db con `xone-db-tools create-db`
 - **icons/README.md**: Fuente de iconos (Google Material Icons), formato PNG, tamanios estándar, nomenclatura
 - **files/README.md**: Proposito (archivos dinámicos), como acceder desde código (appData.getFilesPath())
 - **fonts/README.md**: Fuentes incluidas, formatos soportados (TTF, OTF), uso en CSS y XML
@@ -46,17 +46,22 @@ Ejecutar las tareas finales de generación en el orden exacto especificado. Esta
 
 ### 11.2 Orden de Ejecución (OBLIGATORIO)
 
-1. Generar base de datos (xone_db_generator)
+1. Generar base de datos (`xone-db-tools create-db`)
 2. Insertar datos iniciales (Empresa + Usuario admin)
 3. Descargar iconos (Iconify API — PNG, JPG o SVG validos)
 
 ### 11.3 Tarea 1: Generar Base de Datos
 
-Comando: python3 -m xone_db_generator NombreProyecto --overwrite
+Comandos:
+
+```bash
+npm install -g xone-db-tools
+xone-db-tools create-db NombreProyecto --overwrite
+```
 
 Verificación: sqlite3 .../bd/gestion.db ".tables"
 
-Las tablas deben tener prefijo gen_ (ej: gen_Empresas, gen_Usuarios).
+Las tablas deben tener el prefijo `gen_` y estar en minúsculas (ej: `gen_empresas`, `gen_usuarios`). Los campos se generan en mayúsculas.
 
 **Mapeo de Tipos XOne a SQLite:**
 
@@ -176,7 +181,7 @@ Ejecutar el checklist completo de validación para asegurar que el proyecto esta
 - [ ] `fonts/` existe (recomendado)
 
 #### Base de Datos
-- [ ] `gestion.db` generado con `xone_db_generator`
+- [ ] `gestion.db` generado con `xone-db-tools create-db`
 - [ ] Tablas tienen prefijo `gen_` (o el especificado)
 - [ ] Empresa inicial: `CODIGO=1`, `NOMBRE="EMPRESA DE PRUEBA"`
 - [ ] Usuario admin: `CODIGO=1`, `LOGIN="admin"`, `IDEMPRESA=1`
@@ -188,4 +193,3 @@ Ejecutar el checklist completo de validación para asegurar que el proyecto esta
 #### README
 - [ ] `README.md` en la raiz con descripción del proyecto
 - [ ] `README.md` en `bd/`, `icons/`, `files/`
-

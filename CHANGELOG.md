@@ -2,6 +2,18 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.2.0] - 2026-08-04
+
+### Añadido
+
+- Integración con [`xone-db-tools`](https://www.npmjs.com/package/xone-db-tools) para generar, validar y describir bases de datos XOne.
+- `xone-review` valida `bd/gestion.db` con `xone-db-tools` cuando el proyecto incluye una base local.
+
+### Cambiado
+
+- Se sustituyeron todas las referencias al generador inexistente `xone_db_generator` por `xone-db-tools create-db`.
+- La documentación refleja el contrato del generador: tablas en minúsculas con prefijo `gen_` y campos en mayúsculas.
+
 ## [1.1.0] - 2026-08-04
 
 Primera versión de la serie 1.x: el plugin se declara estable en su forma —cuatro skills, una puerta de conocimiento— aunque las pruebas de activación real siguen pendientes (ver `docs/TODO.md`). El trabajo de esta entrada se hizo el 2026-08-03 y se publicó al día siguiente.

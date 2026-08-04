@@ -196,7 +196,7 @@ Para sombras usa `elevation` y `shadow-color`. No hay abreviados `margin` ni `pa
 Si un estilo no se aplica, empieza por `compatibility-mode`; el resto de síntomas está en la skill `xone-debugging`.
 
 ## Datos e integración
-**Modelo local.** La BD es `gestion.db`, normalmente bajo `bd/`, y las tablas suelen llevar prefijo `gen_`. Usa siempre `##PREF##`, nunca el prefijo literal. Cada registro replicable tiene `ROWID` como GUID hexadecimal de 32 caracteres sin guiones, declarado `type="T" fieldsize="32"`. Las colecciones con `objname`/`updateobj` generan tabla; si falta, regenera con `python3 -m xone_db_generator mi_proyecto --overwrite`.
+**Modelo local.** La BD es `gestion.db`, normalmente bajo `bd/`, y las tablas suelen llevar prefijo `gen_` en minúsculas. Usa siempre `##PREF##`, nunca el prefijo literal. Cada registro replicable tiene `ROWID` como GUID hexadecimal de 32 caracteres sin guiones, declarado `type="T" fieldsize="32"`. Las colecciones con `objname`/`updateobj` generan tabla; si falta, regenera con `xone-db-tools create-db mi_proyecto --overwrite`. Instala la herramienta con `npm install -g xone-db-tools`.
 
 Macros habituales: `##PREF##`, `##ENTID##`, `##USERID##`, `##NOW##`, `##NOW_DATE##`, `##NOW_TIME##`, `##FLD_CAMPO##`. Guarda y restaura filtros con `try/finally` y limpia la colección antes de recargar.
 

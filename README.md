@@ -17,7 +17,7 @@ Skills expertas para crear, verificar, revisar y depurar aplicaciones XOne con X
 | `xone-review` | Procedimiento: validar, hacer smoke y auditar con `xone-simulator` — códigos del validador, checklist de entrega y priorización por severidad (anti-patrones y reglas por capa viven en `xone-development`) |
 | `xone-debugging` | Procedimiento: diagnóstico sistemático de errores y rendimiento, síntoma → hipótesis → comprobación |
 
-`xone-review` y `xone-debugging` usan el paquete npm [`xone-linter`](https://www.npmjs.com/package/xone-linter) (binario `xone-simulator`) para validar, hacer smoke y revisar proyectos XOne.
+`xone-review` y `xone-debugging` usan el paquete npm [`xone-linter`](https://www.npmjs.com/package/xone-linter) (binario `xone-simulator`) para validar, hacer smoke y revisar proyectos XOne. `xone-project-generator` y los diagnósticos de BD usan [`xone-db-tools`](https://www.npmjs.com/package/xone-db-tools).
 
 #### Comandos
 
@@ -72,6 +72,7 @@ Desde Claude Code:
 
 ```bash
 npm install -g xone-linter
+npm install -g xone-db-tools
 ```
 
 Después Claude usará la skill automáticamente cuando la tarea esté relacionada con XOne. Para probar el plugin durante el desarrollo:

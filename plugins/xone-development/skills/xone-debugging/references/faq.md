@@ -538,13 +538,14 @@ El campo `ROWID` almacena un GUID (identificador único global) de 32 caracteres
 
 ### Como se genera la base de datos?
 
-La base de datos se genera automáticamente con el script `xone_db_generator`:
+La base de datos se genera con la herramienta `xone-db-tools`:
 
 ```bash
-python3 -m xone_db_generator templates/synthetic_samples/MiProyecto --overwrite
+npm install -g xone-db-tools
+xone-db-tools create-db templates/synthetic_samples/MiProyecto --overwrite
 ```
 
-Esto analiza todos los archivos `.xne` y crea las tablas correspondientes en `bd/gestion.db` con prefijo `gen_`.
+Esto analiza todos los archivos `.xne` y crea las tablas correspondientes en `bd/gestion.db` con prefijo `gen_`, nombres de tabla en minúsculas y campos en mayúsculas.
 
 ### Donde pongo las imágenes?
 
@@ -558,4 +559,3 @@ Esto analiza todos los archivos `.xne` y crea las tablas correspondientes en `bd
 ### Como muestro un SVG? Necesito un WebView (`type="WEB"`)?
 
 **No.** Un SVG es una imagen como cualquier otra: se renderiza de forma nativa. Refiérelo con `type="IMG"` (`path="dibujo.svg"`) o con los atributos `img`/`imgbk` de cualquier control, exactamente igual que un PNG. **Nunca** lo metas dentro de un `type="WEB"` ni lo conviertas a PNG: el control `WEB` es solo para contenido web remoto (URLs), y usarlo para una imagen local rompe el escalado y la integración con el control.
-

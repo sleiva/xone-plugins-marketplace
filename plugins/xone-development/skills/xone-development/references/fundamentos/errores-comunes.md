@@ -39,7 +39,7 @@ Contenido: §10 errores comunes al empezar con XOne y su corrección
 <coll name="Tareas" sql="SELECT * FROM Tareas" ...>
 
 <!-- INCORRECTO - Hardcodear el prefijo -->
-<coll name="Tareas" sql="SELECT * FROM gen_Tareas" ...>
+<coll name="Tareas" sql="SELECT * FROM gen_tareas" ...>
 
 <!-- CORRECTO - Usar la macro ##PREF## -->
 <coll name="Tareas" sql="SELECT * FROM ##PREF##Tareas" ...>
@@ -149,7 +149,7 @@ MiProyecto/
     <!-- Falta objname, así que no se persiste -->
 </coll>
 
-<!-- CORRECTO - Con objname, se creara la tabla gen_Tareas -->
+<!-- CORRECTO - Con objname, se creara la tabla gen_tareas -->
 <coll name="Tareas"
       sql="SELECT * FROM ##PREF##Tareas"
       objname="Tareas"
@@ -310,4 +310,3 @@ Esta guía ha cubierto los conceptos fundamentales de XOne:
 ---
 
 *Este documento forma parte del sistema de ayuda XOne. Basado en el análisis de 224 proyectos de ejemplo reales, 5 proyectos sinteticos documentados y la documentación oficial de la plataforma.*
-

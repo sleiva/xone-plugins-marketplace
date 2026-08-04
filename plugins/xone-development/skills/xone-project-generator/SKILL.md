@@ -160,7 +160,7 @@ NombreProyecto/
 ### Fase 5: Post-Generación
 
 Indicar al usuario que ejecute:
-1. Generar base de datos con `xone_db_generator`
+1. Generar base de datos con `xone-db-tools create-db`
 2. Insertar datos iniciales (Empresa + Usuario admin)
 3. Descargar iconos de Google Material Icons (PNG, JPG o SVG — todos validos)
 

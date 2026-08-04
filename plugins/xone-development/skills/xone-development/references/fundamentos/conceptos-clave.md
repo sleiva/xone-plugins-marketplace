@@ -34,7 +34,7 @@ Se identifica porque tiene los atributos `sql` y `objname`:
       objname="Clientes"
       updateobj="Clientes"
       loadall="true">
-    <!-- Esta coleccion TIENE tabla en la BD: gen_Clientes -->
+    <!-- Esta coleccion TIENE tabla en la BD: gen_clientes -->
 </coll>
 ```
 
@@ -315,7 +315,7 @@ prefix = "gen"
 +
 objname = "Tareas"
 =
-Tabla en BD: gen_Tareas
+Tabla en BD: gen_tareas
 ```
 
 #### La macro ##PREF##
@@ -327,7 +327,7 @@ En las consultas SQL de las colecciones, se usa la macro `##PREF##` para que el 
 <coll name="Tareas" sql="SELECT * FROM ##PREF##Tareas" ...>
 
 <!-- Se convierte en tiempo de ejecución en: -->
-<!-- SELECT * FROM gen_Tareas -->
+<!-- SELECT * FROM gen_tareas -->
 ```
 
 #### Por que usar ##PREF## en vez de escribir "gen_" directamente?
@@ -340,7 +340,7 @@ SELECT * FROM inv_Tareas
 
 Sin necesidad de modificar ningun archivo `.xne`.
 
-> **Error común:** Olvidar `##PREF##` en las consultas SQL. Si escribes `SELECT * FROM Tareas`, la consulta fallara porque la tabla real se llama `gen_Tareas`.
+> **Error común:** Olvidar `##PREF##` en las consultas SQL. Si escribes `SELECT * FROM Tareas`, la consulta fallara porque la tabla real se llama `gen_tareas`.
 
 ### 6.5 Macros del Sistema
 
@@ -693,4 +693,3 @@ Compatible con la semántica de la spec, registrado en `RhinoJavascriptEngine.ad
 | `crypto`, `clipboard`, `deviceInfo`, `systemSettings`, `packageManager`, `biometricsManager`, … | Singletons XOne; ver tópico 06. |
 
 > Para más detalles sobre buenas prácticas de JavaScript en XOne, consulta 03 - Guía de API JavaScript.
-

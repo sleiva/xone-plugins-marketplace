@@ -175,7 +175,7 @@ function buscarUsuario(loginUsuario) {
 
 // PELIGROSO: SQL directo sin parametrizar
 function eliminarRegistro(id) {
-    appData.executeSql("DELETE FROM gen_Productos WHERE ID = " + id);
+    appData.executeSql("DELETE FROM gen_productos WHERE ID = " + id);
 }
 ```
 
@@ -192,7 +192,7 @@ function buscarUsuarioSeguro(loginUsuario) {
         });
 
         let cursor = sqlManager.doRawQuery(
-            "SELECT * FROM gen_Usuarios WHERE LOGIN=?",
+            "SELECT * FROM gen_usuarios WHERE LOGIN=?",
             loginUsuario  // El parametro se escapa automaticamente
         );
         try {
@@ -227,7 +227,7 @@ function eliminarRegistroSeguro(id) {
         ui.showToast("ID no valido");
         return;
     }
-    appData.executeSql("DELETE FROM gen_Productos WHERE ID = " + nId);
+    appData.executeSql("DELETE FROM gen_productos WHERE ID = " + nId);
 }
 ```
 
@@ -501,7 +501,7 @@ try {
     sqlManager.openDatabase({ databasePath: "gestion.db", useWal: true, useExistingConnection: true });
     let sqls = [];
     for (let i = 0; i < items.length; i++) {
-        sqls.push("INSERT INTO gen_Tabla (NOMBRE) VALUES ('" +
+        sqls.push("INSERT INTO gen_tabla (NOMBRE) VALUES ('" +
             items[i].nombre.replace(/'/g, "''") + "')");
     }
     sqlManager.doBatchParseSqls(sqls);
@@ -593,4 +593,3 @@ const { promise, resolve, reject } = Promise.withResolvers();
 ui.startGps(coords => resolve(coords));
 return promise;
 ```
-

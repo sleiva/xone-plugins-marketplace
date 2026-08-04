@@ -174,7 +174,7 @@ XOneStudio genera automáticamente un `.xml` por cada `.xne` porque algunos moto
 
 | Atributo | Descripción | Valor por Defecto |
 |----------|-------------|-------------------|
-| `prefix` | Define la macro `##PREF##` usada en todos los SQL de las colecciones. **IMPORTANTE:** al sustituirse, la macro inserta un **guion bajo** entre el prefix y el nombre de la tabla. Es decir, `##PREF##Empresas` se expande a `gen_Empresas` (NO `genEmpresas`). En los `.xne` se escribe siempre `##PREF##Empresas` sin guion bajo (la macro lo añade ella), pero al generar DDL/DML literal (`bd/createdb.sql`, `bd/seed.sql`) y al ejecutar SQL directo sin la macro (`appData.executeSql`, `sqlManager.doRawQuery` con string literal), el nombre real de la tabla es `<prefix>_<NombreColeccion>` y hay que escribirlo con el underscore explícito. | `"gen"` — NUNCA cambiar sin indicacion explicita del usuario |
+| `prefix` | Define la macro `##PREF##` usada en todos los SQL de las colecciones. **IMPORTANTE:** al sustituirse, la macro inserta un **guion bajo** entre el prefix y el nombre de la tabla. Es decir, `##PREF##Empresas` se expande a `gen_empresas` (NO `genempresas`). En los `.xne` se escribe siempre `##PREF##Empresas` sin guion bajo (la macro lo añade ella), pero al generar DDL/DML literal (`bd/createdb.sql`, `bd/seed.sql`) y al ejecutar SQL directo sin la macro (`appData.executeSql`, `sqlManager.doRawQuery` con string literal), el nombre real de la tabla es `<prefix>_<NombreColeccion>` y hay que escribirlo con el underscore explícito. | `"gen"` — NUNCA cambiar sin indicacion explicita del usuario |
 | `versión` | Versión del mappings. XOneStudio la incrementa automáticamente al guardar | `"1.0.0"` |
 | `debug` | Modo depuracion — muestra más información en el dispositivo | `"false"` (produccion) / `"true"` (desarrollo) |
 | `sql-debug` | Loguea todas las SQL ejecutadas por el framework | `"false"` |
@@ -585,4 +585,3 @@ Disabled=true
 8. **Evento `<create>` en Usuarios** — asigna `##ENTID##` a `IDEMPRESA` automáticamente al crear un usuario
 9. **Tipos validos** — solo los documentados en sección 3.3
 10. **Visible bitmask** — valores típicos: 0 (oculto), 1 (edición), 3 (edición+lista), 7 (edición+lista+content), 8 (combo), 15 (todos). Ver sección 3.4
-
