@@ -3648,10 +3648,10 @@ El campo `ROWID` almacena un GUID (identificador único global) de 32 caracteres
 
 ### Como se genera la base de datos?
 
-La base de datos se genera automáticamente con el script `xone_db_generator`:
+La base de datos se genera con la herramienta `xone-db-tools`:
 
 ```bash
-python3 -m xone_db_generator templates/synthetic_samples/MiProyecto --overwrite
+xone-db-tools create-db templates/synthetic_samples/MiProyecto --overwrite
 ```
 
 Esto analiza todos los archivos `.xne` y crea las tablas correspondientes en `bd/gestion.db` con prefijo `gen_`.
@@ -3748,7 +3748,7 @@ self.getContents("miContent").lock();
 
 2. **Tabla no existe** - Regenerar la base de datos:
 ```bash
-python3 -m xone_db_generator mi_proyecto --overwrite
+xone-db-tools create-db mi_proyecto --overwrite
 ```
 
 3. **Filtro demasiado restrictivo** - Verificar el `filter` del `<contents>`.
@@ -3955,7 +3955,7 @@ try {
 }
 ```
 
-3. **La tabla no existe** en la base de datos. Regenerar con `xone_db_generator`.
+3. **La tabla no existe** en la base de datos. Regenerar con `xone-db-tools create-db`.
 
 ### 19.14 lock/unlock no funciona
 

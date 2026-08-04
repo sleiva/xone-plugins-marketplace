@@ -11,7 +11,7 @@ Todos los cambios visibles de `xone-development` se registran aquí. Formato bas
 
 ### Cambiado
 
-- Se sustituyeron todas las referencias al generador inexistente `xone_db_generator` por `xone-db-tools create-db`.
+- Se sustituyeron todas las referencias al generador anterior por `xone-db-tools create-db`.
 - La documentación refleja el contrato del generador: tablas en minúsculas con prefijo `gen_` y campos en mayúsculas.
 
 ## [1.1.0] - 2026-08-04
