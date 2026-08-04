@@ -27,7 +27,7 @@ xone-simulator smoke ./proyecto --json
 ## Diagnóstico rápido
 
 - **Pantalla vacía**: revisa `loadAll()`, `visible`, `unlock`, `ui.refresh()`, filtros `##FLD_CAMPO##`, que el `contents` del `prop type="Z"` coincida con el `<contents name>`, nombres duplicados en la coll, `special` junto a `sql`, y `newline="false"` en el primer elemento de un frame.
-- **CSS que no se aplica**: comprueba `compatibility-mode` en el nodo `<app>`; si es `true`, el CSS se ignora por completo.
+- **CSS que no se aplica**: comprueba primero `compatibility-mode` en el nodo `<app>` (regla en `xone-development`).
 - **Botón mudo**: `visible`, `disableedit`, solapamientos, y que exista el handler de `onclick` o `method="ExecuteNode(nombre)"` (nunca los dos a la vez).
 - **Evento que no dispara**: nombres exactos y case-sensitive, y errores JavaScript silenciosos.
 - **`onchange` que no salta**: en `type="T"` ocurre al perder el foco; para cada tecla, `ontextchanged`. `onchange` acepta comandos (`refresh`, `refresh(MAP_CAMPO)`), no booleanos.
@@ -35,16 +35,12 @@ xone-simulator smoke ./proyecto --json
 - **Datos que no persisten**: los campos `MAP_` son transitorios y el framework los excluye de INSERT y UPDATE. Para guardar, usa un campo con columna.
 - **Pantalla que no se inicializa**: la lógica está en `<load>`. Muévela a `<before-edit>`.
 - **`-8100`**: falta un campo obligatorio.
-- **`-11888`**: con `##EXIT##` es cierre normal de pantalla; con `##EXITAPP##`, cierre de la aplicación.
+- **`-11888`**: distingue `##EXIT##` de `##EXITAPP##` (regla en `xone-development`).
 - **Lentitud**: trabajo pesado en `<load>`, `loadall="true"` en tablas grandes, refrescos dentro de bucles.
 
 ## Reglas
 
-- No uses `<load>` para inicializar ni dupliques `<before-edit>`.
-- No modifiques colecciones sin `unlock`/`lock` garantizado en `finally`, ni hagas browse sin `endBrowse()` en `finally`.
-- No trates `MAP_` como columna persistente.
-- No apuntes el simulador a la BD original.
-- No cambies `visible` por script: es estático; para condicional, `disablevisible`.
+Las reglas de XOne detrás de estos síntomas viven en la skill `xone-development`. Aquí solo se diagnostica: para la forma correcta, consulta allí antes de aplicar una corrección.
 
 ## Referencias
 
@@ -53,4 +49,4 @@ xone-simulator smoke ./proyecto --json
 | Preguntas frecuentes por área: general, XML/UI, JavaScript, CSS y estructura de proyecto | [references/faq.md](references/faq.md) |
 | Troubleshooting completo por síntoma (incluye «`load` no inicializa la pantalla») y glosario de términos XOne | [references/troubleshooting-y-glosario.md](references/troubleshooting-y-glosario.md) |
 
-Errores específicos de XML: `xone-xml-ui` → `references/errores-comunes-xml.md`. Errores de JavaScript: `xone-javascript` → `references/debugging-y-best-practices.md`. Para el flujo completo de validación y auditoría, `xone-review`.
+Para las reglas y anti-patrones de cada capa, `xone-development`. Para el flujo completo de validación y auditoría, `xone-review`.

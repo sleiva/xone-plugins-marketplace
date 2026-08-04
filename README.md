@@ -8,19 +8,14 @@ También incluye una instalación nativa para [OpenCode](https://opencode.ai/), 
 
 ### xone-development
 
-Skills expertas para crear, verificar, revisar y depurar aplicaciones XOne con XML `.xne`, JavaScript y CSS XOne. Incluye 9 skills:
+Skills expertas para crear, verificar, revisar y depurar aplicaciones XOne con XML `.xne`, JavaScript y CSS XOne. Incluye 4 skills: una puerta de conocimiento y tres de procedimiento.
 
-| Skill | Área |
+| Skill | Rol |
 | --- | --- |
-| `xone-development` | Fundamentos y estructura: `app.xml`, `app.ini`, `mappings.xne`, anatomía de carpetas, macros del sistema, códigos de error, sintaxis JS soportada y reglas transversales |
-| `xone-xml-ui` | XML `.xne`: colecciones, props y tipos, groups, frames, contents, `asfilter`, combos, mapas, layouts, herencia, macros, eventos y permisos |
-| `xone-javascript` | Runtime: `self`, `selfDataColl`, `ui`, objetos creables, singletons, métodos de los controles, patrones críticos y objeto `ai` |
-| `xone-css` | Selectores, unidades, colores ARGB, atributos, herencia `extends`/`@extend`, funciones del parser, temas y animaciones |
-| `xone-data-integration` | `appData`, SQL con `SqlManager`, `$http` con TLS/pinning/mTLS, OAuth2, réplica, mocks y seguridad |
-| `xone-device` | GPS, cámara, escáner, firma `DR`, permisos, biometría, Bluetooth, impresión, NFC, WiFi y archivos |
-| `xone-project-generator` | Generación de un proyecto completo desde lenguaje natural: flujo de 12 fases, plantillas y tamaños canónicos |
-| `xone-debugging` | Diagnóstico sistemático de errores y rendimiento |
-| `xone-review` | Validar, hacer smoke y auditar con `xone-simulator`: códigos del validador, revisión por capas, anti-patrones y checklist de entrega |
+| `xone-development` | Puerta de conocimiento: todas las reglas duras de XOne (XML `.xne`, JavaScript del runtime, CSS, datos e integración, dispositivo y fundamentos de proyecto) y el índice maestro de referencias, organizado en subcarpetas por área |
+| `xone-project-generator` | Procedimiento: generación de un proyecto completo desde lenguaje natural, flujo de 12 fases, plantillas y tamaños canónicos |
+| `xone-review` | Procedimiento: validar, hacer smoke y auditar con `xone-simulator` — códigos del validador, checklist de entrega y priorización por severidad (anti-patrones y reglas por capa viven en `xone-development`) |
+| `xone-debugging` | Procedimiento: diagnóstico sistemático de errores y rendimiento, síntoma → hipótesis → comprobación |
 
 `xone-review` y `xone-debugging` usan el paquete npm [`xone-linter`](https://www.npmjs.com/package/xone-linter) (binario `xone-simulator`) para validar, hacer smoke y revisar proyectos XOne.
 
@@ -32,12 +27,26 @@ Skills expertas para crear, verificar, revisar y depurar aplicaciones XOne con X
 
 ## Cómo está organizado el conocimiento
 
-Cada skill sigue el patrón de Agent Skills:
+Cada skill sigue el patrón de Agent Skills. La puerta de conocimiento, `xone-development`, organiza sus referencias en subcarpetas por área:
+
+```text
+xone-development/
+├── SKILL.md              # reglas duras + índice «para responder X, lee Y» (<400 líneas)
+└── references/
+    ├── fundamentos/       (5 ficheros)
+    ├── xml-ui/            (18 ficheros)
+    ├── javascript/        (16 ficheros)
+    ├── css/               (6 ficheros)
+    ├── datos/             (5 ficheros)
+    └── device/            (4 ficheros)
+```
+
+Las tres skills de procedimiento (`xone-project-generator`, `xone-review`, `xone-debugging`) siguen el patrón simple:
 
 ```text
 <skill-name>/
-├── SKILL.md      # reglas duras + índice «para responder X, lee Y»
-└── references/   # material autoritativo troceado, de lectura perezosa
+├── SKILL.md
+└── references/    # opcional
 ```
 
 El `SKILL.md` se carga siempre al invocar la skill, así que contiene solo lo que hace falta en todo momento: reglas, anti-patrones y el índice. Las referencias contienen el **material original completo** —no resúmenes—, troceado por secciones en piezas de 5-33 KB para que una lectura no agote el contexto. Cada chunk declara su procedencia en la cabecera:
@@ -73,6 +82,8 @@ claude --plugin-dir ./plugins/xone-development
 
 En OpenCode, abre este repositorio como proyecto. Las skills se descubren desde `plugins/xone-development/skills/`, configurado mediante `skills.paths` en `opencode.json`. Los comandos son específicos de Claude Code.
 
+En Codex, abre este repositorio como proyecto: `AGENTS.md` en la raíz apunta a `plugins/xone-development/skills/` y lista las cuatro skills. No se mantienen copias para Codex, igual que con OpenCode. Comprobado el 2026-08-03 con `codex-cli 0.146.0` (`codex exec "Lista las skills de XOne disponibles en este repositorio, por su nombre exacto."`), enumerando exactamente las cuatro skills.
+
 ## Desarrollo
 
 Las skills canónicas viven en `plugins/xone-development/skills/`; no se mantienen copias sincronizadas para OpenCode.
@@ -84,7 +95,7 @@ claude plugin validate ./plugins/xone-development
 scripts/validate-skills.sh
 ```
 
-`scripts/validate-skills.sh` descubre las skills desde el sistema de ficheros y comprueba el frontmatter, el tamaño del `SKILL.md`, que todo enlace a `references/` resuelva, que ninguna referencia quede huérfana y que OpenCode pueda enumerarlas.
+`scripts/validate-skills.sh` descubre las skills desde el sistema de ficheros y comprueba: el frontmatter (`name`/`description` presentes, más un parseo YAML real que detecta un frontmatter sintácticamente inválido); el tamaño del `SKILL.md` (techo general de 500 líneas, y uno propio de 400 para la puerta de conocimiento `xone-development`); que todo enlace a `references/` resuelva, tanto desde el `SKILL.md` como los enlaces relativos dentro de los propios ficheros de referencia; que ninguna referencia quede huérfana; un guardián de duplicados que falla si dos líneas largas (>35 caracteres) de `SKILL.md` distintos superan el 65% de solape de tokens — una heurística con malla conocida, no una prueba exhaustiva: ver `docs/ARCHITECTURE.md` §10.1 — con una allowlist corta de excepciones documentadas; y que `opencode debug skill` enumere las cuatro por nombre con su `location` bajo `plugins/xone-development/skills/` (no solo por nombre: un `xone-help-docs` global homónimo no basta para pasar).
 
 ## Documentación
 

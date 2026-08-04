@@ -1,6 +1,6 @@
 ---
 name: xone-project-generator
-description: Generación de proyectos XOne completos a partir de descripciones en lenguaje natural. Usar al crear un proyecto XOne desde cero (estructura de carpetas bd/icons/files/fonts, app.xml, app.ini, mappings.xne con Empresas y Usuarios, colecciones .xne, pantallas, default.css, functions.js, splash), aplicar reglas críticas de generación, elegir tamaños canónicos width/height/fontsize, o consultar anti-patrones de XML, JavaScript y CSS.
+description: Generación de proyectos XOne completos a partir de descripciones en lenguaje natural. Usar al crear un proyecto XOne desde cero (estructura de carpetas bd/icons/files/fonts, app.xml, app.ini, mappings.xne con Empresas y Usuarios, colecciones .xne, pantallas, default.css, functions.js, splash), seguir el flujo de generación de 12 fases o elegir tamaños canónicos width/height/fontsize. Las reglas y anti-patrones de XML, JavaScript y CSS viven en xone-development.
 ---
 
 # XOne Project Generator & Development Assistant
@@ -25,7 +25,7 @@ Creas proyectos XOne completos a partir de descripciones en lenguaje natural:
 Respondes preguntas, depuras problemas y guías el desarrollo en XOne:
 - Estructura y atributos de archivos XML (.xne)
 - API JavaScript de XOne (`ui`, `self`, `appData`, `$http`, `deviceInfo`, `systemSettings`)
-- Sistema de estilos CSS propietario de XOne
+- CSS propietario de XOne
 - Patrones de navegación y flujo de pantallas
 - Integraciones con hardware (camara, GPS, firma digital DR, escaner)
 - Modelo de datos y persistencia en SQLite
@@ -70,33 +70,7 @@ Antes de escribir cualquier código:
 
 ### Prohibiciones Explicitas
 
-- **NO** inventar atributos XML que no estén en los archivos de referencia
-- **NO** usar funciones JavaScript que no estén documentadas en la API de XOne
-- **NO** crear propiedades CSS que no existan en el sistema XOne
-- **NO** asumir comportamientos basados en HTML/CSS/JS web estándar
-- **NO** mezclar sintaxis de otros frameworks (React, Angular, Vue, etc.)
-- **NO** usar unidades CSS web como `px`, `em`, `rem` (usar `p` para puntos y `%` para porcentaje)
-- **NO** poner todas las colecciones en `mappings.xne` (solo Empresas y Usuarios)
-- **NO** omitir campos obligatorios mínimos en las colecciones base
-- **NO** tratar `progid` como obligatorio: es OPCIONAL (sin él, objeto de datos genérico ≡ `ASData.CASBasicDataObj`). Solo **Empresas** (`ASGestion.CASEmpresa`) y **Usuarios** (`ASGestion.CASUser`) requieren su progid propio
-- **NO** declarar en un `.xne` un encoding distinto de cómo está guardado el fichero (corrompe tildes/ñ). UTF-8 (default del motor) e `iso-8859-15` son válidos; sé coherente en todo el proyecto
-- **NO** implementar el splash de carga inicial como una pantalla `.xne` ni meterlo dentro de `EntradaApp` (con logo + timer + redirect). El splash **no es una `<coll>`**: es un fichero estático (`splash.png` / `.jpg` / `.gif` / `.webp` / `.apng` / `.mp4` / `.3gp`) que se coloca en la **raíz del proyecto** y que `LoadAppActivity` del framework carga automáticamente antes de iniciar la app. `EntradaApp` es la pantalla **post-login** de bienvenida (con botón "Entrar"), no el splash. Tampoco confundir con `load-imgbk` del `<app>`, que es la imagen de fondo del EditView
-- **NO** crear, editar, leer ni referenciar ficheros `.xml` de colecciones o pantallas. El único formato fuente para colecciones/pantallas es `.xne`. Los ficheros `.xml` de colecciones son **artefactos generados automáticamente por XOneStudio**. Tratalos como salida de compilación: no son fuente. La única excepción es `app.xml` (configuración global), que SI es fuente. Regla operativa: si un proyecto tiene `.xne` y `.xml` conviviendo, trabajar solo sobre los `.xne`; los `.xml` se ignoran por completo
-- **NO** usar APIs del DOM — XOne no es HTML y no tiene navegador. Estas funciones NO existen en XOne: `document`, `document.getElementById`, `document.querySelector`, `window`, `window.location`, `localStorage`, `sessionStorage`, `XMLHttpRequest`, `navigator`, `history`. Para HTTP idiomático usar `$http`; para navegación `ui.*`; para datos `self.*` y `appData.*`. **SÍ existen** con implementación custom XOne (semántica spec-compatible): `Promise` (ES2024 con `all`/`allSettled`/`race`/`any`/`withResolvers`/`.then`/`.catch`/`.finally`), `fetch`, `setTimeout`/`setInterval`, `URL`, `Headers`, `AbortController`, `EventTarget`, `TextEncoder`/`TextDecoder`, `console`, `performance.now()`, `atob`/`btoa`. La sintaxis `class` ES6+ también está soportada (declaraciones, expresiones, `extends`/`super`/`static`/getters/setters/computed keys, **field declarations** `name = expr;` y `static name = expr;`, **generator methods** `*method()`). Los generadores con `yield` funcionan pero usan runtime estilo SpiderMonkey legacy (`gen.next()` devuelve el valor directo + lanza `StopIteration`; `for...of` no los itera). **NO** está soportado: `async`/`await`, template literals, spread/rest, default params, optional chaining `?.`, `import`/`export`, private fields `#name`, static blocks.
-- **NO** usar `<load>` para inicializar pantallas — usar `<before-edit>`
-- **NO repetir nombres de nodos dentro de la misma coleccion** — Restricción crítica. **El ambito de unicidad es la `<coll>` ENTERA**, no el `<group>` o `<frame>` que contiene al nodo. Es decir: no pueden existir dos `<prop>`, dos `<group>`, dos `<frame>` ni dos eventos con el mismo `name` en cualquier parte de la misma coll, **aunque estén en `<group>` o `<frame>` distintos**. Razón: el `name` se publica a nivel de la coll (los `collprops`), por lo que actuaria como identificador único ambiguo si se repitiera.
-- **NO usar VBScript** en NINGUN lado (ni en respuestas, ni en proyectos generados). VBScript esta **descontinuado** en XOne. La única solución valida es **JavaScript** (`<script language="javascript">`). Si encuentras un ejemplo en VBScript en una fuente, traducelo a JavaScript antes de proponerlo
-- **NO usar `coll.macro(...)` ni `content.macro(...)`** — esa sintaxis es **incorrecta** y no existe. La API valida es `setMacro("##NOMBRE##", valor)` para asignar y `getMacro("##NOMBRE##")` para leer. Para macros globales, `appData.setGlobalMacro` / `appData.getGlobalMacro`
-- **NO olvidar declarar el nodo `<macro>` en el XML** antes de hacer `setMacro` — la macro debe existir en la coll con `<macro name="##X##" value="..." default="true" />` **al mismo nivel que los `<group>`** (hijo directo de `<coll>`, no anidado). Sin esa declaración, `setMacro` no inyecta nada en el SQL.
-- **Escape XML del JS dentro de un `.xne`** — para JS no trivial, la **forma preferida** es declarar la función en un fichero `.js` externo y llamarla desde el XML con `miFuncion();` (el JS se escribe normal, sin entidades ni CDATA). Para snippets cortos inline, el parser de XOne acepta dos formas: (a) escapar los caracteres especiales con entidades XML dentro del JS (`&` -> `&amp;`, `<` -> `&lt;`, `>` -> `&gt;`, `"` -> `&quot;`, `'` -> `&apos;`), o (b) envolver el bloque en `<![CDATA[…]]>` cuando está dentro de un nodo `<script>` (CDATA no es válido dentro de atributos XML como `onclick="…"`).
-- **`ID` y `ROWID` los gestiona la plataforma** — no hace falta declararlos como `<prop>` (declararlos es válido pero redundante; la recomendación es omitirlos por limpieza). En el atributo `sql=` de la coll, el campo **`ID` SÍ se rescata** en el SELECT (`SELECT ID, NOMBRE, ... FROM ##PREF##Tabla`); el `ROWID` **no es necesario** en el SELECT.
-- **NO** usar el método obsoleto de firma `type="IMG" readonly="false"` — usar `type="DR"`
-- **NO** instanciar `deviceInfo` ni `systemSettings` con new — son singletons globales
-- **NO** usar `self("CAMPO")` ni `self('CAMPO')` para acceder a campos — la sintaxis correcta es `self.CAMPO` (notacion de punto) o `self["CAMPO"]` (notacion de corchetes) o `self.getValue("CAMPO")`. La notacion `self()` como función NO existe en XOne
-- **NO** omitir el prefijo `MAP_` en props cuyo valor NO sea una columna de la tabla apuntada por `objname`. El framework excluye los `MAP_*` de los `INSERT`/`UPDATE`. Aplica a: (a) campos de JOIN en el SQL, (b) props enlazados via `linkedto` (combos/lookups), (c) props puramente visuales: etiquetas `L` (o su alias legacy `TL`), botones `B`, imágenes decorativas, contenedores `Z`, valores calculados, estados de UI. Inversamente, **NO** poner `MAP_` a un campo que SI es columna BD.
-- **NO** usar tipos de prop inventados. Los tipos validos son: `T`, `TN`/`TN2`..`TN6`, `N`/`N2`..`N6`, `D`, `DT`, `TT`, `B`, `L` (o su alias legacy `TL`), `THTML`, `WEB`, `IMG`, `PH`, `VD`, `DR`, `NC`, `X`, `Z`, `AT`, `O`. El sufijo numérico en `N` y `TN` indica los decimales visibles en el control (`N2` = 2 decimales, `N6` = 6, etc.). Los tipos `BT`, `C`, `M`, `A`, `R`, `E`, `H`, `W`, `F` **NO existen** en XOne y causaran errores. Los combos/selectores se implementan con `type="T"` (o `type="N"`) más los atributos `mapcol` y `mapfld`, NO con un type especifico.
-- **NO mezclar mayusculas/minusculas en el atributo `name`** — El `name` de los nodos `<coll>`, `<group>`, `<frame>` y `<prop>` es **case-sensitive**. `name="MiNombre"` y `name="minombre"` son nombres **distintos** para XOne. Esto aplica también a TODAS las referencias cruzadas: `self.MiNombre` vs `self.minombre`, `mapcol`, `linkedto`, `inherits`, `<field name="...">`, `getControl("...")`, `ui.openEditView("...")`, `appData.getCollection("...")`, etc. Mantener una convencion uniforme en todo el proyecto (recomendado: PascalCase para colls/groups/frames y MAYUSCULAS para campos de BD).
-- **NO repetir el atributo `id` de `<group>` dentro de la misma `<coll>`** — En cada `<group>` el atributo `id` es **obligatorio** y debe ser **único dentro de la coll que lo contiene**. Si hay dos `<group id="1">` en la misma coll el comportamiento es indefinido (la navegación entre tabs y el rebuild de layout fallan). Convencion habitual: `id="1"`, `id="2"`, ... para grupos normales; `id="999"` para HEADER fijo (`class="groupfixed_header"`) y `id="0"` para FOOTER fijo (`class="groupfixed_footer"`).
+Las prohibiciones de generación no se repiten aquí: viven en `xone-development/SKILL.md` (secciones «Siempre» y «Nunca», sintaxis JS soportada, tipos de prop, unicidad de nombres y anti-patrones). Léelas allí antes de generar una línea de XML, JS o CSS — un proyecto generado que las viole falla igual que uno escrito a mano.
 
 ### Herencia entre Colecciones (`inherits`) y Composición XML (`<include-layout>`)
 
@@ -126,7 +100,7 @@ Referencia completa: [references/fase-6-colecciones.md](references/fase-6-colecc
 | **Usuarios** | `ASGestion.CASUser` | `CODIGO` (N), `NOMBRE` (T), `IDEMPRESA` (N), `LOGIN` (T), `PWD` (X) |
 | **Resto** | `ASData.CASBasicDataObj` | Los que defina el desarrollador |
 
-> **`ID` y `ROWID` los gestiona la plataforma** — no hace falta declararlos como `<prop>` (declararlos es válido pero redundante). En el `sql=` de la coll, **`ID` sí se rescata en el SELECT** (`SELECT ID, ...`); el `ROWID` no es necesario en el SELECT.
+> `ID` y `ROWID`: no declararlos como `<prop>` en estas colecciones tampoco. Ver la regla en `xone-development`.
 
 ---
 
@@ -164,24 +138,24 @@ NombreProyecto/
 |---------|-------------|
 | `app.xml` | Configuración de la app. Atributo `prefix="gen"` por defecto |
 | `app.ini` | Metadatos: Name, Title, Caption, Icon, IconFolder=icons, FilesFolder=files |
-| `mappings.xne` | SOLO colecciones Empresas y Usuarios con progid y campos obligatorios. Encoding: UTF-8 o iso-8859-15 (coherente con los bytes) |
+| `mappings.xne` | SOLO colecciones Empresas y Usuarios, con los campos de la tabla de arriba. Encoding coherente con el resto del proyecto (regla en `xone-development`) |
 | `default.css` | Estilos globales con clases base |
 | `functions.js` | Funciones JavaScript globales |
 
 ### Fase 4: Colecciones y Pantallas
 
 **Colecciones:**
-- Un archivo `.xne` por cada coleccion adicional. Encoding: `UTF-8` (default del motor) o `iso-8859-15`, coherente con cómo se guarda
-- `progid` es **opcional** (default = objeto de datos genérico ≡ `ASData.CASBasicDataObj`). Declararlo solo si se quiere ser explícito; **Empresas** usa `ASGestion.CASEmpresa` y **Usuarios** `ASGestion.CASUser`
+- Un archivo `.xne` por cada coleccion adicional. Encoding coherente con cómo se guarda (regla en `xone-development`)
+- `progid`: opcional salvo Empresas y Usuarios (regla en `xone-development`)
 - Usar macro `##PREF##` en queries SQL
-- **Tipos validos:** T, TN/TN2..TN6, N/N2..N6, D, DT, TT, B, L, TL (alias legacy), THTML, WEB, IMG, PH, VD, DR, NC, X, Z, AT, O (el sufijo en N/TN indica decimales visibles)
+- Tipos de prop: solo los de la tabla de tipos de `xone-development`; no inventar otros
 
 **Pantallas:**
-- `EntradaApp.xne` — Pantalla de entrada **post-login** (bienvenida con botón "Entrar"). Obligatoria salvo que la app arranque directamente en `MenuPrincipal`. **NO es el splash de carga** — el splash es un fichero `splash.png` en la raíz del proyecto
+- `EntradaApp.xne` — Pantalla de entrada **post-login** (bienvenida con botón "Entrar"). Obligatoria salvo que la app arranque directamente en `MenuPrincipal`. No es el splash (ver la regla de `xone-development` sobre la diferencia)
 - `MenuPrincipal.xne` — Menu principal
 - Pantallas de listado, detalle, formularios según requisitos
-- Inicializar siempre con `<before-edit>`, nunca con `<load>`
-- **Splash de carga:** NO es una pantalla `.xne` — colocar `splash.png` (o `.jpg`/`.gif`/`.webp`/`.apng`/`.mp4`/`.3gp`) en la **raíz del proyecto**. El framework lo carga automáticamente
+- Inicializar con `<before-edit>` (regla en `xone-development`)
+- Splash de carga: fichero en la raíz del proyecto, no una pantalla `.xne` (misma regla)
 
 ### Fase 5: Post-Generación
 
@@ -206,7 +180,7 @@ Antes de fijar cualquier `width` o `height`, consulta **[references/canonical-si
 4. **Imágenes, avatares, iconos** → `Np` fijos en **ambos** ejes para preservar aspecto. NUNCA `width="100%" height="100%"` en una imagen.
 5. **Botones** → `width` en `%`, `height` en `Np`, mínimo **144p** (touch target Material 48dp × 3 en xxhdpi). CTAs principales: `124p` (workflow pill).
 6. **Inputs** → `width="95%"`–`"100%"`, `height` en `Np` (típico `144p`).
-7. **Dos elementos en la misma fila** → cada uno con `width` `%` que sume ≤ 100%, el segundo con `newline="false"`.
+7. **Dos elementos en la misma fila** → anchos `%` que sumen ≤ 100%; el segundo no hereda el salto de línea por defecto (regla en `xone-development`).
 8. **Los `%` se refieren al padre directo**, no a la pantalla. Tres frames hermanos con `height="40%"` desbordan (suman 120%).
 9. **`<prop>` tiene 2 columnas internas (label + valor)**: si `labelwidth="50"` y `width="50%"`, el valor real queda con 25% de la fila. Bajar `labelwidth` a 20-30 o subir `width` a 95-100%.
 10. **`fontsize` usa escala XOne 1-12**, NO Material `sp`/`dp`. Texto estándar = `5`, título sección = `7`, topbar = `10`–`11`, nombre app = `12`.
@@ -342,4 +316,4 @@ Antes de fijar cualquier `width` o `height`, consulta **[references/canonical-si
 
 El índice completo de referencias está en la sección «Archivos de Referencia» de este mismo fichero.
 
-Para el detalle de cada área durante la generación, usa las skills especializadas: `xone-xml-ui` (nodos y atributos), `xone-javascript` (API del runtime), `xone-css` (estilos), `xone-data-integration` (SQL, `$http`, réplica), `xone-device` (hardware) y `xone-development` (fundamentos y reglas transversales). Al terminar, valida y audita con `xone-review`.
+Para el detalle de cualquier atributo, API o regla durante la generación, usa `xone-development` (fundamentos y reglas transversales) y su índice de referencias. Al terminar, valida y audita con `xone-review`.

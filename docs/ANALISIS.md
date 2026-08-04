@@ -2,7 +2,7 @@
 
 Fecha: 2026-08-03 · Estado del repo analizado: commit `8955635`
 
-> **Estado del rediseño.** Aplicado en la v0.10.0: R1 (referencias troceadas desde el corpus), R2 (`SKILL.md` como reglas + índice), R3 (activación de `xone-development`), R4 (`xone-project-generator` integrada en README, arquitectura, changelog y validador), R5 (validador que descubre skills y comprueba enlaces) y R6 (`xone/` versionada). Pendiente: las pruebas de activación real, que son las que dicen si el rediseño funciona de verdad — ver [`TODO.md`](TODO.md) tarea 6.
+> **Estado del rediseño.** Aplicado en la v0.10.0: R1 (referencias troceadas desde el corpus), R2 (`SKILL.md` como reglas + índice), R3 (activación de `xone-development`), R4 (`xone-project-generator` integrada en README, arquitectura, changelog y validador), R5 (validador que descubre skills y comprueba enlaces) y R6 (`xone/` versionada). Pendiente: las pruebas de activación real, que son las que dicen si el rediseño funciona de verdad — ver [`TODO.md`](TODO.md) tarea 6. **Actualización v1.1.0:** la taxonomía de nueve skills que este análisis diagnostica (tabla de la sección 1) ya no existe — se consolidó en cuatro (una puerta de conocimiento más tres de procedimiento); ver [`ARCHITECTURE.md`](ARCHITECTURE.md) §13.4. Lo que sigue es una fotografía honesta del estado en el commit `8955635`, no el diseño actual.
 
 ## Resumen en una frase
 

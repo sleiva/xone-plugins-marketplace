@@ -4,13 +4,13 @@
     {
       "id": 0,
       "subject": "Task 1: Hacer recursivo el validador",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Que `scripts/validate-skills.sh` encuentre referencias en subcarpetas, para que la migración no pueda dejar enlaces rotos ni huérfanas sin que el script lo vea.\n\n**Files:**\n- Modify: `scripts/validate-skills.sh`\n\n**Acceptance Criteria:**\n- [ ] El script recorre `references/**/*.md`, no solo el nivel plano.\n- [ ] Sobre el layout actual de 9 skills el script sigue dando exit 0.\n- [ ] Una referencia colocada en una subcarpeta y no enlazada se reporta como huérfana.\n\n**Verify:** `scripts/validate-skills.sh` → `Validated 9 skills…` con exit 0\n\nPasos con el código exacto en `docs/superpowers/plans/2026-08-03-consolidacion-de-skills.md`, Task 1.\n\n```json:metadata\n{\"files\": [\"scripts/validate-skills.sh\"], \"verifyCommand\": \"scripts/validate-skills.sh; echo exit=$?\", \"acceptanceCriteria\": [\"recorre references/**/*.md recursivamente\", \"exit 0 sobre el layout actual de 9 skills\", \"detecta una huerfana colocada en subcarpeta\"], \"modelTier\": \"mechanical\"}\n```"
     },
     {
       "id": 1,
       "subject": "Task 2: Inventario de reglas como red de seguridad",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         0
       ],
@@ -19,7 +19,7 @@
     {
       "id": 2,
       "subject": "Task 3: Consolidar las seis puertas en una",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         1
       ],
@@ -28,7 +28,7 @@
     {
       "id": 3,
       "subject": "Task 4: Comprobar que no se perdió ninguna regla",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         2
       ],
@@ -37,7 +37,7 @@
     {
       "id": 4,
       "subject": "Task 5: Guardián de duplicados y techo de tamaño",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         3
       ],
@@ -46,7 +46,7 @@
     {
       "id": 5,
       "subject": "Task 6: Adelgazar xone-review y xone-debugging",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         4
       ],
@@ -55,7 +55,7 @@
     {
       "id": 6,
       "subject": "Task 7: Resolver el descubrimiento en Codex",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         5
       ],
@@ -64,12 +64,12 @@
     {
       "id": 7,
       "subject": "Task 8: Actualizar documentación y versión",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [
         6
       ],
       "description": "**Goal:** Dejar README, arquitectura, changelog y TODO coherentes con las cuatro skills, y subir la versión a `0.11.0` en los dos manifiestos.\n\n**Files:**\n- Modify: `README.md`, `docs/ARCHITECTURE.md`, `CHANGELOG.md`, `docs/TODO.md`\n- Modify: `plugins/xone-development/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`\n- Modify: `plugins/xone-development/commands/xone-validate.md`\n\n**Acceptance Criteria:**\n- [ ] Sin menciones obsoletas a las cinco skills absorbidas.\n- [ ] README con cuatro skills y subcarpetas por área.\n- [ ] `ARCHITECTURE.md` §4, §10, §10.1 y §13.4 actualizadas.\n- [ ] Entrada `0.11.0` en `CHANGELOG.md`.\n- [ ] `TODO.md` con la tarea 7 cerrada.\n- [ ] Ambos manifiestos en `0.11.0`.\n\n**Verify:** `scripts/validate-skills.sh && claude plugin validate ./plugins/xone-development` → ambos en verde\n\nTexto del CHANGELOG y grep de menciones obsoletas en `docs/superpowers/plans/2026-08-03-consolidacion-de-skills.md`, Task 8.\n\n```json:metadata\n{\"files\": [\"README.md\", \"docs/ARCHITECTURE.md\", \"CHANGELOG.md\", \"docs/TODO.md\", \"plugins/xone-development/.claude-plugin/plugin.json\", \".claude-plugin/marketplace.json\", \"plugins/xone-development/commands/xone-validate.md\"], \"verifyCommand\": \"scripts/validate-skills.sh && claude plugin validate ./plugins/xone-development\", \"acceptanceCriteria\": [\"sin menciones obsoletas\", \"README con cuatro skills\", \"ARCHITECTURE actualizada\", \"entrada 0.11.0 en CHANGELOG\", \"TODO con tarea 7 cerrada\", \"ambos manifiestos en 0.11.0\"], \"modelTier\": \"standard\"}\n```"
     }
   ],
-  "lastUpdated": "2026-08-03T00:00:00Z"
+  "lastUpdated": "2026-08-03T20:27:56+00:00"
 }

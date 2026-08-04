@@ -1,13 +1,13 @@
 ---
 name: xone-review
-description: "Validar, verificar y revisar proyectos XOne con el linter xone-simulator. Usar al validar un proyecto, hacer smoke de una app, ejecutar un evento concreto, renderizar una coll, corregir iterativamente los errores del validador, o auditar un proyecto o un cambio antes de entregarlo: revisión por capas (XML/UI, JavaScript, CSS, datos/integración, device), anti-patrones, checklist de entrega y priorización de hallazgos por severidad."
+description: "Validar, verificar y revisar proyectos XOne con el linter xone-simulator. Usar al validar un proyecto, hacer smoke de una app, ejecutar un evento concreto, renderizar una coll, corregir iterativamente los errores del validador, o auditar un proyecto o un cambio antes de entregarlo: códigos del validador, checklist de entrega y priorización de hallazgos por severidad. Las reglas y anti-patrones de cada capa viven en xone-development."
 ---
 
 # XOne Review
 
-Verificación y revisión de proyectos XOne. Combina la validación automatizada con el CLI `xone-simulator` (paquete npm `xone-linter`) y una revisión manual por capas anclada al corpus de XOne.
+Verificación y revisión de proyectos XOne. Combina la validación automatizada con el CLI `xone-simulator` (paquete npm `xone-linter`) y una revisión manual anclada a las reglas de `xone-development`.
 
-**El linter dice qué está mal, no cuál es la forma correcta.** Para eso lee la referencia de la skill del área. No reportes como hallazgo ni apliques como arreglo nada que no puedas anclar al validador o al corpus.
+**El linter dice qué está mal, no cuál es la forma correcta.** Para eso lee `xone-development`. No reportes como hallazgo ni apliques como arreglo nada que no puedas anclar al validador o a esas reglas.
 
 ## Precondiciones
 
@@ -26,7 +26,7 @@ En Claude Code, `/xone-validate [ruta]` ejecuta el flujo de validación y correc
 3. Corrige **un tipo de error a la vez** y revalida tras cada tanda, para no introducir regresiones.
 4. `smoke` sobre la app completa cuando `validate` pase.
 5. Si `smoke` falla, aísla con `run` (evento concreto) y `render` (UI).
-6. Revisión por capas: XML/UI, JavaScript, CSS, datos/integración, device.
+6. Revisión manual contra las reglas de `xone-development` (ver «Qué revisar en cada capa»).
 7. Prioriza los hallazgos y reporta con severidad, `archivo:línea` y causa raíz.
 
 No des por cerrado el trabajo hasta que `validate` pase sin `errors` y `smoke` devuelva exit 0, o hasta que los `failures` restantes estén justificados.
@@ -68,9 +68,9 @@ xone-simulator render   ./proyecto --coll X                    # coll a HTML
 | `REF_CONTENTS_SRC_MISSING` | `contents src` apunta a una coll inexistente |
 | `REF_INHERITS_MISSING` | `inherits` apunta a una coll inexistente |
 | `ANTIPATTERN_MULTIPLE_BEFORE_EDIT` | Más de un `before-edit` en la misma coll |
-| `ANTIPATTERN_SELF_AS_FUNCTION` | `self("CAMPO")`; usar `self.CAMPO` o `self.getValue` |
-| `ANTIPATTERN_MACRO_SYNTAX` | `coll.macro(...)`; usar `setMacro`/`getMacro` |
-| `ANTIPATTERN_SELF_LOCK` | `self.lock()`/`self.unlock()`; son de la colección |
+| `ANTIPATTERN_SELF_AS_FUNCTION` | `self` usado como función |
+| `ANTIPATTERN_MACRO_SYNTAX` | `macro` llamado como método de `coll` |
+| `ANTIPATTERN_SELF_LOCK` | `lock`/`unlock` llamados sobre `self` |
 | `ANTIPATTERN_VBSCRIPT` | Include con `language="vbscript"` (descontinuado) |
 | `JS_SYNTAX` | Error de sintaxis JavaScript |
 | `JS_TEMPLATE_LITERAL` | Template literals no soportados |
@@ -89,96 +89,31 @@ xone-simulator render   ./proyecto --coll X                    # coll a HTML
 
 Los códigos son case-sensitive. Cada warning debe justificarse o corregirse.
 
-## Revisión XML/UI
+## Qué revisar en cada capa
 
-- Jerarquía `coll > group > frame > prop` correcta.
-- `prop` siempre con `name` y `type` válido: `T`, `TN`/`TN2`-`TN6`, `N`/`N2`-`N6`, `D`, `DT`, `TT`, `B`, `L`, `TL`, `NC`, `X`, `IMG`, `PH`, `VD`, `DR`, `WEB`, `AT`, `O`, `THTML`, `Z`.
-- Coll de datos con `sql` (con `##PREF##`), `objname` y `updateobj`. Pantalla sin datos (`special="true"`) sin `sql`.
-- **`progid`: conflicto entre fuentes.** El validador emite `COLL_MISSING_PROGID` como error cuando una coll tiene `objname` sin `progid`, pero la documentación lo declara opcional (sin él la coll equivale a `ASData.CASBasicDataObj`; solo **Empresas** y **Usuarios** requieren el suyo). No resuelvas la discrepancia por tu cuenta: si el proyecto no lo declara, señala que el linter lo marcará y deja la decisión al desarrollador.
-- Combo bien definido: prop oculto con `mapcol`/`mapfld` más prop visible con `linkedto`/`linkedfield`; `mapcol-values` para valores fijos.
-- Mapa con `type="Z" viewmode="mapview"` vinculado a un `<contents>`.
-- `visible` correcto: 4 bits (`1` edición, `2` lista, `4` content, `8` combo), `7` lo habitual y `15` todos. Es estático; para condicional, `disablevisible`.
-- Grupos con `id` único en la coll; un solo grupo visible → `notab="true"`.
-- Un solo `before-edit` por coll; sin `load` para inicializar.
-- Nombres únicos en la coll entera y case-sensitive en todas las referencias cruzadas.
-- El primer elemento de una fila sin `newline="false"`.
+Las reglas y los anti-patrones de cada capa viven en la skill `xone-development`, que es donde se escriben una sola vez. Antes de marcar un hallazgo, contrástalo allí:
 
-## Revisión JavaScript
+- Reglas transversales, tipos de prop, visibilidad, ciclo de vida y sintaxis del motor: `xone-development/SKILL.md`.
+- Anti-patrones por área (XML, JavaScript, CSS, datos, dispositivo): sección «Anti-patrones» de `xone-development/SKILL.md`.
+- Detalle de un atributo, una API o un valor admitido: el índice de referencias de `xone-development/SKILL.md`.
 
-- **Patrones de bloqueo**: toda modificación de colección con `unlock`/`lock` en `finally`; browse con `startBrowse`/`endBrowse` en `finally`; cursor y conexión SQL cerrados en `finally`.
-- **Contexto `self`**: en callbacks asíncronos (`$http`, GPS, cámara, WebSocket) `self` se guarda en variable local antes del callback.
-- **Acceso a campos**: `self.CAMPO` o `self.getValue`; nunca `self("CAMPO")`.
-- **Macros**: `setMacro`/`getMacro`, con la macro declarada en el XML antes de usarla.
-- **`lock`/`unlock`** son de la colección, no del DataObject.
-- **Sintaxis del motor**: `let`, `const`, arrow functions, destructuring, `class`, `Promise` (ES2024) y generadores **sí** están soportados. No lo están: template literals, `async`/`await`, spread/rest, parámetros por defecto, optional chaining `?.`, `??` y campos privados. No marques `let`/`const` como hallazgo.
-- **APIs web**: no existen `document`, `window`, `localStorage`, `sessionStorage`, `XMLHttpRequest`, `navigator` ni `history`. En cambio `fetch`, `setTimeout`, `setInterval`, `Promise`, `URL`, `AbortController` y la API `console` completa **sí existen** con implementación custom: su uso no es un error, aunque lo idiomático sea `$http` y `ui.executeActionAfterDelay`.
-- **`executeActionAfterDelay`**: el segundo parámetro va en segundos, no en milisegundos.
-- **Validación antes de guardar**: obligatorios, rangos y formatos antes de `save()`; evita `-8100`.
-- Refrescos acotados al campo afectado, no `ui.refresh()` global.
-
-## Revisión CSS
-
-- `default.css` en la raíz, declarado en `app.xml`; selectores `coll` y `prop` globales presentes.
-- Unidades `p`/`%`; sin `px`, `em`, `rem`, `vh`, `vw`. Sin unidad: `fontsize`, `border-corner-radius`, `border-width`, `labelwidth`, `lines`, `visible`, `gallery-columns`, `img-width`, `img-height`.
-- Colores `#RRGGBB` o `#AARRGGBB` con **alpha primero**; sin nombres de color.
-- Márgenes y padding individuales; no existen los abreviados `margin`/`padding`.
-- Selectores solo `coll`, `prop`, `prop:TYPE`, `.clase`, `group`, `frame`; sin combinadores ni IDs.
-- `extends:` o `@extend` sin ciclos; recuerda que solo `@extend` los detecta en parseo.
-- `:root`/`var()`, `calc()`, `@import`, `!important` y `!default` **son válidos**: no los marques como hallazgo.
-- Si el CSS «no se aplica», comprueba `compatibility-mode` antes de cualquier otra cosa.
-
-## Revisión datos / integración
-
-- SQL de colecciones con `##PREF##`, nunca el prefijo literal.
-- SQL directo parametrizado con `?`; sin concatenar entrada de usuario.
-- Cursor y conexión cerrados en `finally`.
-- `$http` con `allowUnsafeCertificates: false` en producción; `enablePinning` donde aplique.
-- Tokens cifrados; credenciales nunca hardcodeadas ni logueadas.
-- Réplica: configuración en `Empresas`, manejo de `sys-message` correcto.
-
-## Revisión device
-
-- Permisos pedidos y comprobados antes de GPS, cámara, micrófono o biometría, y declarados en `<permissions>`.
-- GPS iniciado antes de leer la colección, con browse y verificación de `STATUS` y `LONGITUD`.
-- Firma con `type="DR"`; `type="IMG" readonly="false"` está obsoleto.
-- `biometricsManager` en código nuevo, no `fingerprintManager`.
-- Bluetooth y WebSocket cerrados al terminar.
-
-## Anti-patrones a buscar
-
-1. `load` para inicializar en lugar de `before-edit`.
-2. Múltiples `before-edit` en una coll.
-3. `self("campo")` en vez de `self.campo`.
-4. `self.lock()`/`self.unlock()` en vez de la colección.
-5. `coll.macro(...)` en vez de `setMacro`/`getMacro`, o `setMacro` sin declarar el nodo `<macro>`.
-6. Concatenar input del usuario en SQL.
-7. `ui.refresh()` global en vez de campos concretos.
-8. Acceso a `self` dentro de callbacks sin guardar referencia.
-9. Espera bloqueante en vez de `executeActionAfterDelay`.
-10. Unidades `px`/`em`/`rem` y atributos CSS web (`font-size`, `margin-top`, `background-color`, `box-shadow`).
-11. `visible` con bitmask incorrecto, o intento de cambiarlo por script.
-12. VBScript en includes.
-13. Template literals, `async`/`await`, spread/rest u optional chaining.
-14. `localStorage`/`document`/`window`/`XMLHttpRequest` (no existen). `setTimeout` y `fetch` sí existen: revísalos como preferencia de estilo, no como error.
-15. Nombres duplicados en la misma coll, o `id` de `group` repetido.
-16. Trabajar sobre los `.xml` generados en vez de los `.xne`.
+**No reportes como hallazgo nada que no puedas anclar al validador o a esas reglas.**
 
 ## Checklist de entrega
 
 - [ ] `validate` sin errores; warnings justificados o corregidos.
 - [ ] `smoke` con exit 0.
-- [ ] Pantallas nuevas con la jerarquía `coll > group > frame > prop`.
-- [ ] Colls de datos con `sql`, `objname` y `updateobj` (`progid` según la nota de conflicto).
-- [ ] Un solo `before-edit` por coll; sin `load` para inicializar.
+- [ ] Pantallas nuevas siguen la jerarquía de `xone-development`.
+- [ ] Colls de datos con `sql`, `objname` y `updateobj`; `progid` según la regla de `xone-development`.
 - [ ] `##PREF##` en toda SQL de colección.
 - [ ] Todo `unlock` con su `lock` en `finally`; todo `startBrowse` con su `endBrowse`.
-- [ ] Cursores y conexiones SQL cerrados en `finally`.
+- [ ] Cursores y conexiones SQL cerrados, patrón de `xone-development`.
 - [ ] Callbacks asíncronos preservando `self`.
 - [ ] Validación de entrada antes de `save()`.
 - [ ] SQL parametrizado.
-- [ ] CSS con unidades y colores correctos.
+- [ ] CSS con unidades (`p`/`%`) y colores (`#AARRGGBB`) correctos.
 - [ ] `allowUnsafeCertificates: false`; sin credenciales hardcodeadas.
-- [ ] Solo se han tocado ficheros `.xne` (y `app.xml`), no los `.xml` generados.
+- [ ] Solo se han tocado los `.xne` fuente (regla en `xone-development`).
 
 ## Severidad y reporte
 
@@ -201,6 +136,6 @@ Reporta cada hallazgo con `archivo:línea`, severidad, código del validador si 
 
 ## Fuente de las reglas
 
-Los códigos del validador vienen del paquete `xone-linter`; las reglas de cada capa, del corpus de XOne. Para confirmar la forma correcta de algo antes de marcarlo como hallazgo o de aplicar un arreglo, lee la referencia de la skill correspondiente: `xone-xml-ui` (nodos y atributos), `xone-javascript` (API del runtime), `xone-css` (estilos), `xone-data-integration` (SQL, `$http`, réplica), `xone-device` (hardware), `xone-development` (fundamentos y reglas transversales).
+Los códigos del validador vienen del paquete `xone-linter`; las reglas de cada capa, de la skill `xone-development`. Para confirmar la forma correcta de algo antes de marcarlo como hallazgo o de aplicar un arreglo, lee `xone-development/SKILL.md` y su índice de referencias.
 
 Para diagnosticar un fallo a partir de su síntoma, usa `xone-debugging`.
