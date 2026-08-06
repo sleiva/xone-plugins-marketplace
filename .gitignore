@@ -6,3 +6,6 @@
 
 # macOS
 .DS_Store
+
+# IDEs JetBrains (IntelliJ, WebStorm)
+.idea/
