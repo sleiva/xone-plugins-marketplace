@@ -6,6 +6,11 @@
 > referencias a `CLAUDE.md`, `ESTADO.md` y a los «patrones» numerados apuntan a la doctrina
 > de ese paquete, que es donde vive el detalle. El documento vive aquí porque las skills son
 > de este repositorio; el consumidor está allí.
+>
+> **Corrección posterior, mismo día.** La §3 daba por no documentado el desenfoque y **lo
+> está**, tanto en el corpus actual como en la doc original de `/xone` —hallado con `grep`,
+> no con `cli doc`, y ahí está el asunto—. Su primera entrada queda reabierta; el detalle,
+> en su sitio.
 
 Escrito el 2026-08-06, después de una jornada de pruebas en vivo. **Todo lo que se afirma aquí
 está medido con los comandos del paquete**, no razonado desde el catálogo — y el orden de las
@@ -113,8 +118,12 @@ description: >
 
 ### Por qué
 
-**Las piezas están; la composición no.** `floating` aparece en 21 ficheros, `before-edit` en
-25, `zorder` en 2. Lo que no existe en ningún sitio es qué piezas producen qué efecto.
+**Las piezas están; la composición, casi nunca.** `floating` aparece en 21 ficheros,
+`before-edit` en 25, `zorder` en 2. Lo que rara vez está escrito es qué piezas producen qué
+efecto —«casi» y «rara vez» porque la corrección de abajo encontró al menos un contraejemplo
+donde sí lo está, y este apartado decía «en ningún sitio». La medición que respalda la frase es
+un `grep` por NOMBRE DE PIEZA, y eso no distingue «documentado como pieza» de «documentado como
+técnica»: es una inferencia, no la evidencia directa de §2.
 
 Y esto **es una grieta nueva del 2026-08-06, y la causamos nosotros**. Ese día se arregló el
 defecto más caro medido del paquete: `DOC_TOOL_DESCRIPTION` decía «pregunta por el
@@ -125,20 +134,69 @@ devolver una alternativa. Se arregló enseñándoles **dos clases de pregunta** 
 OBJETIVO— y funcionó: el planner pasó a preguntar «¿cómo superpongo una imagen?» y el ejecutor
 descubrió `type="IMG"` por objetivo antes de confirmarlo por nombre.
 
+**Pero la moraleja de ese episodio hay que matizarla**, y la corrección de abajo obliga: de
+esas 76 consultas, `ui.setBlur` es literalmente el anti-patrón que documenta
+`xone-development/SKILL.md:271`, y `blur`/`BLUR` son subcadenas de `setBlur`. **Varias tenían
+que haber acertado.** Aquel turno no prueba solo que el ejecutor preguntara mal: prueba también
+que el índice no devolvía lo que sí tenía (consecuencia 1 de abajo).
+
 **Pero el corpus sigue indexado por artefacto.** La forma de la pregunta cambió y la del índice
-no, así que el planner ya pregunta lo correcto y no llega a `floating`/`zorder`. No es un
-problema de búsqueda: es que el conocimiento no está escrito como técnica.
+no, así que el planner ya pregunta lo correcto y no llega a `floating`/`zorder`.
 
-### Su primera entrada, y por qué solo la puede escribir el usuario
+Aquí este apartado afirmaba: «no es un problema de búsqueda, es que el conocimiento no está
+escrito como técnica». **La disyuntiva es falsa, y el ejemplo que se eligió para sostenerla —el
+desenfoque— demuestra que hay las dos cosas a la vez.** Están mezcladas y hay que separarlas
+antes de escribir nada, porque solo una de las dos se arregla con una skill.
 
-**Simular un desenfoque**: XOne no tiene ninguna API de blur —comprobado con tres consultas
-(`setBlur`, «cómo difumino una vista», «cómo aplico blur»), las tres «no está documentado»— y
-el efecto se logra generando una imagen difuminada y superponiéndola con una prop `IMG`
-flotante. Eso lo sabe el usuario; el corpus documenta las dos piezas por separado y nadie las
-junta.
+### Su primera entrada: reabierta
 
-Mientras no esté escrito, **ningún prompt lo va a sacar**: pedírselo al modelo es pedirle que
-lo invente, que es lo que el harness entero existe para impedir.
+Decía este apartado que el desenfoque solo lo podía escribir el usuario: que XOne no tiene
+ninguna API de blur —«comprobado con tres consultas (`setBlur`, "cómo difumino una vista",
+"cómo aplico blur"), las tres *no está documentado*»— y que el efecto se logra generando una
+imagen difuminada y superponiéndola con una prop `IMG` flotante.
+
+**No se sostiene. El desenfoque ya está documentado, y precisamente en el formato que esta
+sección propone inventar.** En la doc original,
+`xone/xone-project-generator/references/xone-javascript-patterns-b-ui.md:749` es la sección
+**«2.1.18 Efectos Visuales: Blur y Saturacion»**, escrita como TÉCNICA y con la estructura que
+la `description` de arriba reclama —qué no existe, con qué piezas se logra, y el ejemplo:
+
+> «XOne no expone blur y saturacion como funciones del framework directamente — se implementan
+> como funciones de proyecto que actuan sobre un frame llamando a métodos internos de la
+> ventana. El patron típico es un slider cuyo `onchange` llama a la función de efecto.»
+
+Y lo acompaña entero: el JS (`doBlurEffect`/`doSaturationEffect` sobre
+`window[sFrame].setBlur(nValue)`), los `<prop viewmode="slider" min="0" max="32">` y el
+`<onchange>` que los conecta.
+
+En el corpus actual sobrevive **la mitad**:
+`references/javascript/ui-navegacion-mensajes-y-vista.md:342-362` conserva las dos funciones y
+un comentario, sin la prosa que las enmarca ni el XML. `xone-development/SKILL.md:271` guarda
+el matiz que hace verdadera media afirmación original: `setBlur`/`setSaturation` **no** son API
+del framework, no están en `ui`; son funciones de proyecto sobre el control de frame.
+
+Tres consecuencias, y ninguna es la que este documento sacó:
+
+1. **`grep` lo encuentra; `cli doc` no.** El token literal `setBlur` está en 2 `.md` del corpus
+   y en 4 de la doc original (`grep -l` sobre `.md` en ambos casos), y la consulta por ese
+   mismo token devolvió «no está
+   documentado». Eso es un fallo de RECUPERACIÓN, no un hueco de conocimiento. Si es el índice,
+   arreglarlo sale mucho más barato que una skill —y se lleva por delante la justificación de
+   esta sección.
+2. **La consolidación adelgazó la técnica.** El paso a `xone-development` conservó el código y
+   perdió el encuadre. Si el problema es ése, la reparación es restituir prosa en el corpus, no
+   abrir una skill nueva al lado.
+3. **Falta comprobar si `setBlur` contesta la pregunta que se hizo.** Es un método del control
+   de FRAME. El caso de prueba de §5 pide difuminar la VISTA entera de `EntradaApp`, y puede
+   que el frame no llegue. Si no llega, la receta sigue haciendo falta —pero se escribe contra
+   lo que existe, citando `setBlur` y diciendo dónde se queda corto, no como si no hubiera nada.
+
+Hasta que 1 y 3 estén contestadas, esta entrada no se escribe.
+
+**Y una advertencia que se paga cara si se ignora:** este apartado afirmaba que «ningún prompt
+lo va a sacar, pedírselo al modelo es pedirle que lo invente». El corpus lo tenía escrito. La
+lección no es sobre el modelo: es que **una consulta a cero no prueba una ausencia** —el mismo
+error que el patrón 23 ya midió, aquí cometido sobre el propio corpus.
 
 ### Lo que ya está listo esperándola
 
@@ -186,7 +244,7 @@ No por que existan. Con los instrumentos que ya hay:
 | Skill | Cómo medirla | Contra qué |
 |---|---|---|
 | `xone-repair` | un turno que provoque un hallazgo real y entre a reparación (`test_verify_lazo_real.py`) | intentos de reparación gastados, y si el ejecutor cita la regla o la adivina |
-| `xone-recipes` | `cli planificar --project AppDemo "que la vista de EntradaApp se difumine al entrar en modo edición"` | hoy: `NO SE PUEDE HACER`, código 4, ~13 s. Con la receta debería salir un plan con `alternativa` |
+| `xone-recipes` | `cli planificar --project AppDemo "que la vista de EntradaApp se difumine al entrar en modo edición"` | hoy: `NO SE PUEDE HACER`, código 4, ~13 s. **Antes de atribuirlo a la falta de receta**, separar las dos causas: (a) si `cli doc` no devuelve `setBlur` teniéndolo el corpus, esto mide el índice, no el corpus; (b) la consulta pide difuminar una VISTA y lo documentado es de FRAME, que es la explicación más probable del `NO SE PUEDE HACER` |
 
 Y el **control** que no puede faltar, porque este paquete ya pagó por olvidarlo: comprobar que
 una tarea que **sí** tiene API directa sigue resolviéndose igual de rápido. Una skill nueva que
