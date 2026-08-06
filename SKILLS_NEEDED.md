@@ -15,6 +15,9 @@
 > - **§2:** la tabla medía solo el corpus del ejecutor. Contra el `SKILL.md` del juez, cinco
 >   de los seis códigos **sí** aparecen —como glosa, no como corrección—, lo que refuerza el
 >   caso en vez de debilitarlo: hay un puntero colgado entre las dos skills.
+> - **Rutas:** las «Raíz» que daba el documento eran puntos de montaje de `nappai`, que no
+>   existen en este repositorio. Ahora cada propuesta da el fichero que se escribe **aquí** y
+>   el nodo donde se monta **allí**. Ver la nota de §1.
 
 Escrito el 2026-08-06, después de una jornada de pruebas en vivo. **Todo lo que se afirma aquí
 está medido con los comandos del paquete**, no razonado desde el catálogo — y el orden de las
@@ -26,12 +29,27 @@ dos propuestas es el de la evidencia que las respalda, no el de lo interesantes 
 
 `cli doc --corpus` y un recuento del árbol:
 
-| Skill | `.md` | Raíz | La consumen |
+| Skill | `.md` | Montaje en el consumidor | La consumen |
 |---|---:|---|---|
 | `xone-development` | 55 | `skills/documentacion/` | doc · ejecutor · planner |
 | `xone-project-generator` | 15 | `skills/documentacion/` | doc · ejecutor · planner |
 | `xone-debugging` | 3 | `skills/documentacion/` | doc · ejecutor · planner |
 | `xone-review` | 1 | `skills/verificacion/` | **solo el juez** |
+
+> **Dos vocabularios, y este documento mezclaba uno solo.** `skills/documentacion/` y
+> `skills/verificacion/` son **puntos de montaje del agente**, en `nappai`. No existen en este
+> repositorio ni se describen en ninguna parte de él —ni en `docs/ARCHITECTURE.md`—, así que
+> tal cual no son accionables aquí, que es donde vive este documento y donde se escribirían las
+> skills.
+>
+> Aquí las cuatro viven, sin excepción, en
+> `plugins/xone-development/skills/<nombre>/SKILL.md`. Crear una nueva es crear ese directorio
+> con su `SKILL.md`: **se descubren por convención**, no hay que darlas de alta en
+> `.claude-plugin/marketplace.json` ni en `plugin.json` —solo subir la `version` en ambos, hoy
+> `1.2.0`, y anotarlo en el `CHANGELOG.md`.
+>
+> De aquí en adelante, donde este documento decía «Raíz» dice **«Dónde va»**, y da las dos
+> cosas: el fichero que se escribe y el nodo en que se monta.
 
 Y `xone-development` por materia: `xml-ui` 18 · `javascript` 16 · `css` 6 · `fundamentos` 5 ·
 `datos` 5 · `device` 4.
@@ -54,7 +72,8 @@ description: >
   por qué salta, cuál es la corrección mínima y qué NO hay que tocar.
 ```
 
-**Raíz:** `skills/documentacion/` — la del ejecutor, que es quien repara.
+**Dónde va.** Fichero: `plugins/xone-development/skills/xone-repair/SKILL.md`.
+Montaje: `skills/documentacion/` — la del ejecutor, que es quien repara.
 
 ### Por qué
 
@@ -150,7 +169,8 @@ description: >
   se logra y su ejemplo.
 ```
 
-**Raíz:** `skills/documentacion/`.
+**Dónde va.** Fichero: `plugins/xone-development/skills/xone-recipes/SKILL.md`.
+Montaje: `skills/documentacion/`.
 
 ### Por qué
 
@@ -261,7 +281,9 @@ correcto para no duplicar el corpus.
 ### Skills de proceso (brainstorming / write-plan / execute-plan)
 
 Analizado y descartado el 2026-08-06
-(`docs/proposals/2026-08-06-xone-v2-skills-de-proceso.md`): **dos de las tres no se
+(`docs/proposals/2026-08-06-xone-v2-skills-de-proceso.md` — **ruta de `nappai`, no de aquí**:
+el `docs/` de este repositorio solo tiene `ANALISIS.md`, `ARCHITECTURE.md` y `TODO.md`):
+**dos de las tres no se
 construyen** porque ya existen en forma FUERTE —el nodo `planner` con salida tipada, y la
 topología sin arista `executor`→`END`—, y un `.md` no puede igualar una garantía estructural.
 
