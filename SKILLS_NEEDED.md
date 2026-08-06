@@ -7,10 +7,14 @@
 > de ese paquete, que es donde vive el detalle. El documento vive aquí porque las skills son
 > de este repositorio; el consumidor está allí.
 >
-> **Corrección posterior, mismo día.** La §3 daba por no documentado el desenfoque y **lo
-> está**, tanto en el corpus actual como en la doc original de `/xone` —hallado con `grep`,
-> no con `cli doc`, y ahí está el asunto—. Su primera entrada queda reabierta; el detalle,
-> en su sitio.
+> **Correcciones posteriores, mismo día**, medidas con `grep` sobre este repositorio y no con
+> `cli doc` —que en un caso es justamente el hallazgo—:
+>
+> - **§3:** daba por no documentado el desenfoque y **lo está**, en el corpus actual y en la
+>   doc original de `/xone`. Su primera entrada queda reabierta.
+> - **§2:** la tabla medía solo el corpus del ejecutor. Contra el `SKILL.md` del juez, cinco
+>   de los seis códigos **sí** aparecen —como glosa, no como corrección—, lo que refuerza el
+>   caso en vez de debilitarlo: hay un puntero colgado entre las dos skills.
 
 Escrito el 2026-08-06, después de una jornada de pruebas en vivo. **Todo lo que se afirma aquí
 está medido con los comandos del paquete**, no razonado desde el catálogo — y el orden de las
@@ -54,21 +58,21 @@ description: >
 
 ### Por qué
 
-De seis `rule_id` que el verificador emite **de verdad** (comprobado con `grep` sobre los 73
-ficheros del corpus):
+De seis `rule_id` que el verificador emite **de verdad**, con `grep` sobre los 73 ficheros del
+corpus del ejecutor y, por separado, sobre el `SKILL.md` del juez:
 
-| `rule_id` | ficheros que lo mencionan |
-|---|---:|
-| `COLL_MISSING_PROGID` | 1 |
-| `INVALID_PROP_TYPE` | **0** |
-| `REF_FUNC_MISSING` | **0** |
-| `MISSING_INCLUDED_FILE` | **0** |
-| `REF_MAPCOL_MISSING` | **0** |
-| `stub-method` | **0** |
+| `rule_id` | corpus del ejecutor (73) | `xone-review` (el juez) |
+|---|---:|---:|
+| `COLL_MISSING_PROGID` | 1 | 1 |
+| `INVALID_PROP_TYPE` | **0** | 1 |
+| `REF_FUNC_MISSING` | **0** | 1 |
+| `REF_MAPCOL_MISSING` | **0** | 1 |
+| `stub-method` | **0** | 1 |
+| `MISSING_INCLUDED_FILE` | **0** | **0** |
 
-**Cinco de seis, cero cobertura.** Y no es material de adorno: la reparación es un camino de
-primera clase del grafo, con presupuesto propio (`MAX_REPAIR = 3`) y su propia arista. El
-brief que recibe el ejecutor lleva la regla, el fichero y la línea
+**Cinco de seis, cero cobertura donde repara quien repara.** Y no es material de adorno: la
+reparación es un camino de primera clase del grafo, con presupuesto propio (`MAX_REPAIR = 3`) y
+su propia arista. El brief que recibe el ejecutor lleva la regla, el fichero y la línea
 (`harness/state.py::format_findings`) — o sea que **le damos un código y ninguna forma de
 buscarlo**. Hoy tiene que inferir la corrección de documentación genérica.
 
@@ -78,6 +82,30 @@ sobre `AppDemo`, y el smoke sobre `AITest` tras un cambio real): `JS_ASYNC_AWAIT
 `INVALID_PROP_TYPE`, `MISSING_INCLUDED_FILE`, `REF_CONTENTS_SRC_MISSING`,
 `REF_JS_COLL_MISSING`, `stub-method`. `CLAUDE.md` dice que el simulador tiene **28** códigos
 de validación, así que ésos diez son el suelo, no el techo.
+
+### La segunda columna hace el caso, no lo debilita
+
+Los códigos existen —en el sitio equivocado y en la forma equivocada. Cuatro están en las tablas
+de `xone-review/SKILL.md:55-92`, y solo como GLOSA DE SIGNIFICADO: «Tipo de prop no soportado»,
+«`mapcol` apunta a una coll inexistente». Qué hacer al respecto, en ninguna. El quinto,
+`stub-method`, ni siquiera es del validador: vive en la línea 47, en la prosa del smoke, como
+`kind` que absorbe el autostub —y ahí dice de él algo que **contradice** lo que afirma más abajo
+la sección «Forma» de este documento; sin resolver, ver la nota que la cierra.
+
+Y ese mismo fichero, en su línea 10, remite explícitamente:
+
+> «El linter dice qué está mal, no cuál es la forma correcta. **Para eso lee
+> `xone-development`**.»
+
+Ahí está el fallo, y es bastante más concreto que «falta documentación»: **es un puntero
+colgado.** El juez manda al corpus del ejecutor a buscar la forma correcta, y el corpus del
+ejecutor no está indexado por código —cero entradas por `rule_id`—. Las dos mitades existen, el
+código en un sitio y la doctrina en otro, y no hay nada que las una. Eso es exactamente el
+hueco que `xone-repair` viene a tapar, y es un argumento más fuerte que el de la tabla.
+
+**Aparte, y es el dato más limpio de esta sección: `MISSING_INCLUDED_FILE` no aparece en ningún
+sitio.** Ni en los 73 ficheros del ejecutor, ni en las tablas del juez, ni en el resto del
+repositorio. Es el único de los seis sin una sola mención en ninguna parte.
 
 ### Forma
 
@@ -89,6 +117,14 @@ Y **un caso que hay que documentar aunque incomode**: `REF_FUNC_MISSING` es un A
 bloquea, mientras `stub-method` sí, con la misma severidad. La asimetría es deliberada
 (`CLAUDE.md` patrón 27, `HARD_STATIC_RULE_IDS` vacía a propósito) y el ejecutor tiene que saber
 cuál le va a costar una reparación y cuál no.
+
+> **Nota pendiente de resolver, y bloquea escribir la entrada de `stub-method`.** El párrafo de
+> arriba dice que `stub-method` bloquea. `xone-review/SKILL.md:47` dice lo contrario: «no
+> bloquea, pero repórtalo». O es una contradicción real, o «bloquear» significa dos cosas —el
+> exit code del linter y la arista de reparación del harness—, que es lo más probable. No se
+> puede dirimir desde este repositorio: el lado del harness está en `nappai`. **Quien escriba
+> `xone-repair` tiene que resolverlo antes**, porque el objeto de esa entrada es precisamente
+> decirle al ejecutor qué le va a costar una reparación.
 
 ### Fronteras, que van declaradas en su `SKILL.md`
 
