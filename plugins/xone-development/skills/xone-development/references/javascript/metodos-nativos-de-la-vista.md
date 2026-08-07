@@ -1,6 +1,6 @@
 # XOne JavaScript — Métodos nativos de la vista (Android/iOS)
 
-Contenido: el mecanismo · qué garantías hay · regla de admisión · efectos y estilo · transformaciones · orden de capas · lecturas · visibilidad y comportamiento · cómo se envuelve · pendiente de confirmar
+Contenido: el mecanismo · qué garantías hay · regla de admisión · tabla de métodos · cómo se envuelve · pendiente de confirmar
 
 ---
 
@@ -44,7 +44,7 @@ esté a medias va en «pendiente de confirmar», al final, y no se usa.
 Esta página **no enumera la API de vistas de Android ni de iOS**. Esa lista no pertenece a este
 repositorio.
 
-## Efectos y estilo
+## Métodos
 
 | Método | Qué hace | Nativo (iOS) | Confirmado en |
 |---|---|---|---|
@@ -52,53 +52,25 @@ repositorio.
 | `setSaturation(value)` | Saturación. `0` = grises; `1` = normal; `>1` = saturado | `CIColorControls` en `layer.filters` | Android · **iOS 17+** |
 | `setOpacity(0-100)` | Opacidad. `0` = transparente; `100` = opaca | `view.layer.opacity` | iOS |
 | `setTintColor(color)` | Color de tinte. Color hex | `view.tintColor` | iOS |
-| `setShadow(opacity, radius, offsetX, offsetY, color)` | Sombra. Opacidad `0–1`, radio, desplazamiento y color hex | `view.layer.shadow*` | iOS |
-
-**`setShadow` exige que la capa no recorte la sombra.** Si el contenido lo permite, hay que
-dejar `setClipped(false)`; con recorte activo la sombra no se ve.
-
-## Transformaciones
-
-| Método | Qué hace | Nativo (iOS) | Confirmado en |
-|---|---|---|---|
-| `setScale(sx[, sy])` | Escala. `sy` opcional: si falta, se usa `sx` | `CGAffineTransformScale` | iOS |
-| `setRotation(grados)` | Rotación en **grados**, no radianes | `CGAffineTransformRotate` | iOS |
-| `setTranslate(dx, dy)` | Desplazamiento, en puntos | `CGAffineTransformTranslate` | iOS |
-| `resetTransform()` | Vuelve al estado original | `CGAffineTransformIdentity` | iOS |
-
-**Las transformaciones acumulan.** Se concatenan sobre la transformación actual, no la
-reemplazan: llamar dos veces a `setScale(2)` deja la vista a escala 4. Para volver al punto de
-partida, `resetTransform()` — no una transformación inversa.
-
-## Orden de capas
-
-| Método | Qué hace | Nativo (iOS) | Confirmado en |
-|---|---|---|---|
+| `setShadow(opacity, radius, offsetX, offsetY, color)` | Sombra. Opacidad `0–1`, radio, desplazamiento y color hex. **No se ve con recorte activo**: requiere `setClipped(false)` | `view.layer.shadow*` | iOS |
+| `setScale(sx[, sy])` | Escala. `sy` opcional: si falta, se usa `sx`. **Acumula** | `CGAffineTransformScale` | iOS |
+| `setRotation(grados)` | Rotación en **grados**, no radianes. **Acumula** | `CGAffineTransformRotate` | iOS |
+| `setTranslate(dx, dy)` | Desplazamiento, en puntos. **Acumula** | `CGAffineTransformTranslate` | iOS |
+| `resetTransform()` | Deshace todas las transformaciones acumuladas | `CGAffineTransformIdentity` | iOS |
 | `setZIndex(z)` | Posición en el eje Z | `view.layer.zPosition` | iOS |
-| `bringToFront()` | Trae al frente dentro de su contenedor | `superview.bringSubviewToFront:` | iOS |
-| `sendToBack()` | Manda al fondo dentro de su contenedor | `superview.sendSubviewToBack:` | iOS |
-
-`bringToFront`/`sendToBack` actúan **dentro del contenedor** de la vista, no sobre la pantalla
-entera.
-
-## Lecturas
-
-| Método | Devuelve | Confirmado en |
-|---|---|---|
-| `getFrame()` | `{ x, y, width, height }` | iOS |
-| `getPosition()` | `{ x, y }` | iOS |
-| `getSize()` | `{ width, height }` | iOS |
-
-## Visibilidad y comportamiento
-
-| Método | Qué hace | Nativo (iOS) | Confirmado en |
-|---|---|---|---|
+| `bringToFront()` | Trae al frente **dentro de su contenedor**, no de la pantalla | `superview.bringSubviewToFront:` | iOS |
+| `sendToBack()` | Manda al fondo **dentro de su contenedor**, no de la pantalla | `superview.sendSubviewToBack:` | iOS |
+| `getFrame()` | Devuelve `{ x, y, width, height }` | — | iOS |
+| `getPosition()` | Devuelve `{ x, y }` | — | iOS |
+| `getSize()` | Devuelve `{ width, height }` | — | iOS |
 | `setClipped(bool)` | Recorta el contenido al borde de la vista | `view.clipsToBounds` | iOS |
 | `setEnabled(bool)` | Habilita o bloquea la interacción | `view.userInteractionEnabled` | iOS |
-| `setContentMode(mode)` | Cómo se ajusta el contenido | `view.contentMode` | iOS |
+| `setContentMode(mode)` | Cómo se ajusta el contenido: `"scaleToFill"`, `"scaleAspectFit"`, `"scaleAspectFill"`, `"center"`, `"top"`, `"bottom"` | `view.contentMode` | iOS |
 
-Valores de `setContentMode`: `"scaleToFill"` · `"scaleAspectFit"` · `"scaleAspectFill"` ·
-`"center"` · `"top"` · `"bottom"`.
+**Las transformaciones acumulan.** `setScale`, `setRotation` y `setTranslate` se concatenan
+sobre la transformación actual en vez de reemplazarla: llamar dos veces a `setScale(2)` deja la
+vista a escala 4. Para volver al punto de partida se usa `resetTransform()`, no una
+transformación inversa.
 
 ## Cómo se envuelve
 
