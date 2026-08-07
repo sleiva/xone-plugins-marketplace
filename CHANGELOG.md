@@ -2,6 +2,17 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.3.0] - 2026-08-07
+
+### Añadido
+
+- `references/javascript/metodos-nativos-de-la-vista.md`: el sitio donde el corpus dice que bajo el frame y el control hay una **vista nativa** de Android/iOS con métodos propios, que no son API de XOne y no tienen contrato de compatibilidad. Arranca con `setBlur` y `setSaturation`, confirmados en ambas plataformas, con el envoltorio y el patrón de slider. Lleva escrita su regla de admisión: una entrada entra solo si se ha confirmado funcionando, anotando la plataforma. No enumera la API de vistas de Android ni de iOS — esa lista no pertenece a este repositorio. Diseño en `docs/superpowers/specs/2026-08-07-metodos-nativos-de-la-vista-design.md`.
+
+### Cambiado
+
+- La frontera de capa queda marcada en los tres sitios por donde se llega: el índice de `xone-development`, la fila de anti-patrones de `setBlur` y el §8 (Frames) de `metodos-de-los-controles.md`, que ahora declara que todo lo suyo es API de XOne.
+- `ui-navegacion-mensajes-y-vista.md` deja de duplicar los envoltorios `doBlurEffect`/`doSaturationEffect` y remite al fichero nuevo, según el invariante de que una regla se escribe una sola vez.
+
 ## [1.2.2] - 2026-08-07
 
 ### Corregido

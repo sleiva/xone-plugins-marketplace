@@ -268,7 +268,7 @@ Los métodos de los controles de cámara, vídeo, dibujo y escáner están en [m
 | `self.X` dentro de un callback asíncrono | Guardar `var miSelf = self;` antes |
 | `startBrowse()` sin `endBrowse()` en `finally` | `try { … } finally { coll.endBrowse(); }` |
 | `appData.executeSql("… WHERE ID=" + id)` | `sqlManager.doRawQuery("… WHERE ID=?", id)` |
-| `ui.setBlur(...)` / `ui.setSaturation(...)` | No son de `ui` ni de XOne: los expone la **vista nativa** de Android/iOS que hay debajo, y se llaman sobre el objeto que devuelve la ventana: `ui.getView(self)["mi_frame"].setBlur(8)`. El proyecto escribe el envoltorio (`doBlurEffect`), no el método |
+| `ui.setBlur(...)` / `ui.setSaturation(...)` | No son de `ui` ni de XOne: los expone la **vista nativa** que hay debajo. Se llaman sobre el frame o el control — `ui.getView(self)["mi_frame"].setBlur(8)`. Ver [métodos nativos de la vista](references/javascript/metodos-nativos-de-la-vista.md) |
 | `GpsCollection` como colección built-in | La declara el proyecto con connector GPS |
 | Variantes de `setCircularReveal` (Show/Hide, setXY, growAndShrink) | Solo existe `setCircularReveal(cx, cy, bReveal)` |
 
@@ -366,6 +366,7 @@ Lee el fichero que corresponda antes de responder sobre atributos concretos, val
 - [javascript/plantillas-y-funciones-utilitarias.md](references/javascript/plantillas-y-funciones-utilitarias.md) — Plantillas completas: CRUD, filtrado, maestro-detalle, GPS, fotos, chat, QR, login; y utilidades para `functions.js`
 - [javascript/debugging-y-best-practices.md](references/javascript/debugging-y-best-practices.md) — Debugging de JavaScript y top 20 de buenas prácticas
 - [javascript/metodos-de-los-controles.md](references/javascript/metodos-de-los-controles.md) — Métodos que expone cada control por tipo: campos, numéricos, multimedia, listas, mapas, gráficas, AR, frames
+- [javascript/metodos-nativos-de-la-vista.md](references/javascript/metodos-nativos-de-la-vista.md) — Métodos que expone la vista nativa de Android/iOS bajo el frame o el control, no XOne: `setBlur`, `setSaturation`, sin contrato de compatibilidad
 - [javascript/patrones-de-navegacion-datos-y-codigo.md](references/javascript/patrones-de-navegacion-datos-y-codigo.md) — Patrones de navegación, de datos y patrones críticos de código
 - [javascript/patrones-de-ui-voz-integracion-y-seguridad.md](references/javascript/patrones-de-ui-voz-integracion-y-seguridad.md) — Patrones de UI, control por voz, integración y seguridad
 - [javascript/objeto-ai-llm-en-dispositivo.md](references/javascript/objeto-ai-llm-en-dispositivo.md) — Objeto `ai`: LLM en el dispositivo, descarga de modelos, `generate`, `chat` con streaming, function calling, skills y formatos

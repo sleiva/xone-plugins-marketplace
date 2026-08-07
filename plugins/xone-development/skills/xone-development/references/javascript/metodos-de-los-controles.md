@@ -517,3 +517,8 @@ frame.scrollToBottom(true);
 
 Más utilidades de frames/grupos (`refreshAll`, `showGroup`, drawers, bottom-sheet) en §3.3.
 
+> **Frontera de capa.** Todo lo de este fichero es API de XOne. Además de esto, la **vista
+> nativa** de Android/iOS que hay bajo el frame o el control expone métodos propios —`setBlur`,
+> `setSaturation`—, que no son de XOne y no tienen contrato de compatibilidad. Viven en
+> [métodos nativos de la vista](metodos-nativos-de-la-vista.md).
+

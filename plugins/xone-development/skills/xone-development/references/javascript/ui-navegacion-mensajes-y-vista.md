@@ -339,29 +339,10 @@ control.setIndeterminate(false);   // Desactivar, mostrar valor actual
 control.toggleIndeterminate();     // Alternar estado
 let bIndet = control.isIndeterminate();
 
-// === Efectos visuales en frame ===
-// setBlur y setSaturation NO son API de XOne: los expone la VISTA NATIVA de Android/iOS
-// que hay por debajo, y llegan al JS a traves del objeto que devuelve la ventana.
-// Por eso no hay ui.setBlur: se llaman sobre el frame o el control, nunca sobre ui.
-// Lo que escribe el proyecto es el envoltorio (doBlurEffect), no el metodo.
-
-// Blur: 0 = sin desenfoque, valores mayores = mas desenfoque
-function doBlurEffect(sFrame, nValue) {
-    let window = ui.getView(self);
-    if (!window) return;
-    window[sFrame].setBlur(nValue);
-}
-
-// Saturacion: 0 = escala de grises, valores mayores = mas saturacion
-function doSaturationEffect(sFrame, nValue) {
-    let window = ui.getView(self);
-    if (!window) return;
-    window[sFrame].setSaturation(nValue);
-}
-// Patron tipico: vincular a slider con onchange en la coll
-// <field name="MAP_BLUR_SLIDER"><action name="runscript"><script>
-//     doBlurEffect("frame_imagen", self.MAP_BLUR_SLIDER);
-// </script></action></field>
+// === Efectos visuales en frame: setBlur / setSaturation ===
+// NO son API de XOne: los expone la vista nativa de Android/iOS que hay por debajo.
+// Se llaman sobre el frame o el control, nunca sobre ui, y no hay ui.setBlur.
+// Documentados en metodos-nativos-de-la-vista.md, con el envoltorio y el patron de slider.
 
 // === Color de la barra de estado ===
 window.setStatusBarColor("#1565C0");  // Color RRGGBB

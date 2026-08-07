@@ -1,6 +1,6 @@
 # Métodos nativos de la vista — diseño
 
-**Fecha:** 2026-08-07 · **Estado:** aprobado, pendiente de implementar · **Versión objetivo:** `1.3.0`
+**Fecha:** 2026-08-07 · **Estado:** implementado (v1.3.0) · **Versión objetivo:** `1.3.0`
 
 ## De dónde sale
 
@@ -91,11 +91,11 @@ el patrón de slider (`<prop viewmode="slider" min="0" max="32">` más el `<onch
 
 ## Criterios de aceptación
 
-- [ ] Existe `references/javascript/metodos-nativos-de-la-vista.md` con las cinco partes.
-- [ ] La regla de admisión está escrita dentro del fichero.
-- [ ] Las dos entradas constan como confirmadas en Android e iOS.
-- [ ] `grep -r setBlur` sobre el corpus devuelve el fichero nuevo, y lo que devuelve explica qué
+- [x] Existe `references/javascript/metodos-nativos-de-la-vista.md` con las cinco partes.
+- [x] La regla de admisión está escrita dentro del fichero.
+- [x] Las dos entradas constan como confirmadas en Android e iOS.
+- [x] `grep -r setBlur` sobre el corpus devuelve el fichero nuevo, y lo que devuelve explica qué
       es y cómo se llama, no solo qué no es.
-- [ ] Los tres enganches están puestos.
-- [ ] `CHANGELOG.md` tiene entrada `1.3.0` en «Añadido», y la versión sube en
+- [x] Los tres enganches están puestos.
+- [x] `CHANGELOG.md` tiene entrada `1.3.0` en «Añadido», y la versión sube en
       `.claude-plugin/marketplace.json` y `plugins/xone-development/.claude-plugin/plugin.json`.
