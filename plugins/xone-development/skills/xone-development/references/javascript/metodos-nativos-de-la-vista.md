@@ -46,26 +46,20 @@ repositorio.
 
 ## Métodos
 
-| Método | Qué hace | Nativo (iOS) | Confirmado en |
-|---|---|---|---|
-| `setBlur(radius)` | Desenfoque. `0` = sin efecto; mayor, más desenfoque | `CIGaussianBlur` en `layer.filters` | Android · **iOS 17+** |
-| `setSaturation(value)` | Saturación. `0` = grises; `1` = normal; `>1` = saturado | `CIColorControls` en `layer.filters` | Android · **iOS 17+** |
-| `setOpacity(0-100)` | Opacidad. `0` = transparente; `100` = opaca | `view.layer.opacity` | iOS |
-| `setTintColor(color)` | Color de tinte. Color hex | `view.tintColor` | iOS |
-| `setShadow(opacity, radius, offsetX, offsetY, color)` | Sombra. Opacidad `0–1`, radio, desplazamiento y color hex. **No se ve con recorte activo**: requiere `setClipped(false)` | `view.layer.shadow*` | iOS |
-| `setScale(sx[, sy])` | Escala. `sy` opcional: si falta, se usa `sx`. **Acumula** | `CGAffineTransformScale` | iOS |
-| `setRotation(grados)` | Rotación en **grados**, no radianes. **Acumula** | `CGAffineTransformRotate` | iOS |
-| `setTranslate(dx, dy)` | Desplazamiento, en puntos. **Acumula** | `CGAffineTransformTranslate` | iOS |
-| `resetTransform()` | Deshace todas las transformaciones acumuladas | `CGAffineTransformIdentity` | iOS |
-| `setZIndex(z)` | Posición en el eje Z | `view.layer.zPosition` | iOS |
-| `bringToFront()` | Trae al frente **dentro de su contenedor**, no de la pantalla | `superview.bringSubviewToFront:` | iOS |
-| `sendToBack()` | Manda al fondo **dentro de su contenedor**, no de la pantalla | `superview.sendSubviewToBack:` | iOS |
-| `getFrame()` | Devuelve `{ x, y, width, height }` | — | iOS |
-| `getPosition()` | Devuelve `{ x, y }` | — | iOS |
-| `getSize()` | Devuelve `{ width, height }` | — | iOS |
-| `setClipped(bool)` | Recorta el contenido al borde de la vista | `view.clipsToBounds` | iOS |
-| `setEnabled(bool)` | Habilita o bloquea la interacción | `view.userInteractionEnabled` | iOS |
-| `setContentMode(mode)` | Cómo se ajusta el contenido: `"scaleToFill"`, `"scaleAspectFit"`, `"scaleAspectFill"`, `"center"`, `"top"`, `"bottom"` | `view.contentMode` | iOS |
+| Método | Qué hace | Confirmado en |
+|---|---|---|
+| `setBlur(radius)` | Desenfoque. `0` = sin efecto; mayor, más desenfoque | Android · **iOS 17+** |
+| `setSaturation(value)` | Saturación. `0` = grises; `1` = normal; `>1` = saturado | Android · **iOS 17+** |
+| `setOpacity(0-100)` | Opacidad. `0` = transparente; `100` = opaca | Android · iOS |
+| `setTintColor(color)` | Color de tinte. Color hex | Android · iOS |
+| `setShadow(opacity, radius, offsetX, offsetY, color)` | Sombra. Opacidad `0–1`, radio, desplazamiento y color hex. **No se ve si la vista recorta su contenido**, porque la sombra cae fuera del borde | Android · iOS |
+| `setScale(sx[, sy])` | Escala. `sy` opcional: si falta, se usa `sx`. **Acumula** | Android · iOS |
+| `setRotation(grados)` | Rotación en **grados**, no radianes. **Acumula** | Android · iOS |
+| `setTranslate(dx, dy)` | Desplazamiento, en puntos. **Acumula** | Android · iOS |
+| `resetTransform()` | Deshace todas las transformaciones acumuladas | Android · iOS |
+| `setZIndex(z)` | Posición en el eje Z | Android · iOS |
+| `bringToFront()` | Trae al frente **dentro de su contenedor**, no de la pantalla | Android · iOS |
+| `sendToBack()` | Manda al fondo **dentro de su contenedor**, no de la pantalla | Android · iOS |
 
 **Las transformaciones acumulan.** `setScale`, `setRotation` y `setTranslate` se concatenan
 sobre la transformación actual en vez de reemplazarla: llamar dos veces a `setScale(2)` deja la
@@ -129,6 +123,3 @@ investigar desde cero, y sale cuando se confirme.
 |---|---|
 | `setCornerRadius(radius)` | Solapa con `setBorder(obj)`, que ya lleva `cornerRadius` dentro y es la API documentada. Falta saber si `setCornerRadius` sigue existiendo aparte o quedó sustituida |
 | `setVisible(bool)`, `hide()`, `show()` | Existen, pero el corpus solo los documenta sobre marcadores de mapa y sobre el shimmer, nunca sobre una vista genérica. Si existen a nivel de vista son API de XOne y su sitio es `metodos-de-los-controles.md`, no esta página |
-
-**Android está sin confirmar** en todo lo que no sea `setBlur` y `setSaturation`. Las columnas
-«Confirmado en» que hoy dicen solo `iOS` se completan cuando se compruebe el otro lado.
