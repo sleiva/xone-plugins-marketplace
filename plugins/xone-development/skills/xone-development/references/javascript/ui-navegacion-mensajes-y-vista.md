@@ -340,8 +340,10 @@ control.toggleIndeterminate();     // Alternar estado
 let bIndet = control.isIndeterminate();
 
 // === Efectos visuales en frame ===
-// setBlur y setSaturation son metodos del control de frame en la ventana.
-// Se implementan como funciones de proyecto, no son API global del framework.
+// setBlur y setSaturation NO son API de XOne: los expone la VISTA NATIVA de Android/iOS
+// que hay por debajo, y llegan al JS a traves del objeto que devuelve la ventana.
+// Por eso no hay ui.setBlur: se llaman sobre el frame o el control, nunca sobre ui.
+// Lo que escribe el proyecto es el envoltorio (doBlurEffect), no el metodo.
 
 // Blur: 0 = sin desenfoque, valores mayores = mas desenfoque
 function doBlurEffect(sFrame, nValue) {

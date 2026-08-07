@@ -18,6 +18,11 @@
 > - **Rutas:** las «Raíz» que daba el documento eran puntos de montaje de `nappai`, que no
 >   existen en este repositorio. Ahora cada propuesta da el fichero que se escribe **aquí** y
 >   el nodo donde se monta **allí**. Ver la nota de §1.
+>
+> **2026-08-07 — la causa del caso del desenfoque, encontrada.** No era el índice ni la falta
+> de técnica escrita: **el anti-patrón de `setBlur` en el corpus era falso** y hacía que una
+> búsqueda por ese nombre se leyera como «no existe». Corregido en v1.2.1. La consecuencia 1
+> de §3 queda cerrada, y la línea base de §5 hay que volver a tomarla.
 
 Escrito el 2026-08-06, después de una jornada de pruebas en vivo. **Todo lo que se afirma aquí
 está medido con los comandos del paquete**, no razonado desde el catálogo — y el orden de las
@@ -227,27 +232,39 @@ Y lo acompaña entero: el JS (`doBlurEffect`/`doSaturationEffect` sobre
 
 En el corpus actual sobrevive **la mitad**:
 `references/javascript/ui-navegacion-mensajes-y-vista.md:342-362` conserva las dos funciones y
-un comentario, sin la prosa que las enmarca ni el XML. `xone-development/SKILL.md:271` guarda
-el matiz que hace verdadera media afirmación original: `setBlur`/`setSaturation` **no** son API
-del framework, no están en `ui`; son funciones de proyecto sobre el control de frame.
+un comentario, sin la prosa que las enmarca ni el XML.
 
 Tres consecuencias, y ninguna es la que este documento sacó:
 
-1. **`grep` lo encuentra; `cli doc` no.** El token literal `setBlur` está en 2 `.md` del corpus
-   y en 4 de la doc original (`grep -l` sobre `.md` en ambos casos), y la consulta por ese
-   mismo token devolvió «no está
-   documentado». Eso es un fallo de RECUPERACIÓN, no un hueco de conocimiento. Si es el índice,
-   arreglarlo sale mucho más barato que una skill —y se lleva por delante la justificación de
-   esta sección.
+1. **La causa era el propio corpus: decía que no existe.** `xone-development/SKILL.md:271`
+   tenía este anti-patrón —«`setBlur(...)`/`setSaturation(...)` como API del framework | Son
+   funciones que implementa el proyecto, no están en `ui`»—, y era **falso**. Ni son de XOne
+   ni las implementa el proyecto: **las expone la vista nativa de Android/iOS** que hay por
+   debajo, y llegan al JS por el objeto que devuelve la ventana. El proyecto solo escribe el
+   envoltorio (`doBlurEffect`). La fila nombraba la cosa equivocada, se enunciaba solo en
+   negativo y no daba la forma correcta, así que quien buscaba `setBlur` topaba primero con
+   ella, leía «no está en `ui`, lo implementa el proyecto» y respondía «no existe». **El
+   anti-patrón producía el falso negativo.** Corregido el 2026-08-07 (v1.2.1), junto con el
+   comentario de `ui-navegacion-mensajes-y-vista.md`, que se contradecía a sí mismo en dos
+   líneas seguidas.
+
+   Y con eso el diagnóstico deja de ser binario: no era «el índice» ni «no está escrito», sino
+   una **tercera cosa que nadie contempló** —contenido erróneo que fabrica ausencias—. El
+   `grep` que lo encontró y la consulta que no lo encontró miraban el mismo fichero; lo que
+   falló fue lo que ese fichero decía. Queda por saber si, ya corregido, `cli doc` lo devuelve.
 2. **La consolidación adelgazó la técnica.** El paso a `xone-development` conservó el código y
    perdió el encuadre. Si el problema es ése, la reparación es restituir prosa en el corpus, no
    abrir una skill nueva al lado.
-3. **Falta comprobar si `setBlur` contesta la pregunta que se hizo.** Es un método del control
-   de FRAME. El caso de prueba de §5 pide difuminar la VISTA entera de `EntradaApp`, y puede
-   que el frame no llegue. Si no llega, la receta sigue haciendo falta —pero se escribe contra
-   lo que existe, citando `setBlur` y diciendo dónde se queda corto, no como si no hubiera nada.
+3. **Falta comprobar si `setBlur` contesta la pregunta que se hizo**, y saber que viene de la
+   vista nativa la vuelve más concreta. El ejemplo documentado indexa un frame
+   (`window["mi_frame"].setBlur(8)`), pero el caso de prueba de §5 pide difuminar la VISTA
+   entera de `EntradaApp`. **La pregunta exacta es si el objeto que devuelve `ui.getView(self)`
+   expone también `setBlur`** —si la vista raíz es una vista nativa como lo es el frame, debería.
+   Si lo expone, no hace falta receta ninguna: hace falta documentarlo. Si no, la receta se
+   escribe contra lo que existe, citando `setBlur` y diciendo dónde se queda corto.
 
-Hasta que 1 y 3 estén contestadas, esta entrada no se escribe.
+**1 está contestada y era la que más pesaba** —el corpus mentía—. Queda 3, y hasta que se
+conteste esta entrada no se escribe.
 
 **Y una advertencia que se paga cara si se ignora:** este apartado afirmaba que «ningún prompt
 lo va a sacar, pedírselo al modelo es pedirle que lo invente». El corpus lo tenía escrito. La
@@ -302,7 +319,7 @@ No por que existan. Con los instrumentos que ya hay:
 | Skill | Cómo medirla | Contra qué |
 |---|---|---|
 | `xone-repair` | un turno que provoque un hallazgo real y entre a reparación (`test_verify_lazo_real.py`) | intentos de reparación gastados, y si el ejecutor cita la regla o la adivina |
-| `xone-recipes` | `cli planificar --project AppDemo "que la vista de EntradaApp se difumine al entrar en modo edición"` | hoy: `NO SE PUEDE HACER`, código 4, ~13 s. **Antes de atribuirlo a la falta de receta**, separar las dos causas: (a) si `cli doc` no devuelve `setBlur` teniéndolo el corpus, esto mide el índice, no el corpus; (b) la consulta pide difuminar una VISTA y lo documentado es de FRAME, que es la explicación más probable del `NO SE PUEDE HACER` |
+| `xone-recipes` | `cli planificar --project AppDemo "que la vista de EntradaApp se difumine al entrar en modo edición"` | línea base del 2026-08-06: `NO SE PUEDE HACER`, código 4, ~13 s — **pero se tomó con el anti-patrón erróneo aún en el corpus, así que no vale como línea base**. Repetirla sobre v1.2.1 antes de atribuir nada a la falta de receta. Si sigue fallando, la causa viva es (b): la consulta pide difuminar una VISTA y lo documentado es de FRAME o CONTROL |
 
 Y el **control** que no puede faltar, porque este paquete ya pagó por olvidarlo: comprobar que
 una tarea que **sí** tiene API directa sigue resolviéndose igual de rápido. Una skill nueva que

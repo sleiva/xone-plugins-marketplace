@@ -268,7 +268,7 @@ Los métodos de los controles de cámara, vídeo, dibujo y escáner están en [m
 | `self.X` dentro de un callback asíncrono | Guardar `var miSelf = self;` antes |
 | `startBrowse()` sin `endBrowse()` en `finally` | `try { … } finally { coll.endBrowse(); }` |
 | `appData.executeSql("… WHERE ID=" + id)` | `sqlManager.doRawQuery("… WHERE ID=?", id)` |
-| `setBlur(...)` / `setSaturation(...)` como API del framework | Son funciones que implementa el proyecto, no están en `ui` |
+| `ui.setBlur(...)` / `ui.setSaturation(...)` | No son de `ui` ni de XOne: los expone la **vista nativa** de Android/iOS que hay debajo, y se llaman sobre el objeto que devuelve la ventana: `ui.getView(self)["mi_frame"].setBlur(8)`. El proyecto escribe el envoltorio (`doBlurEffect`), no el método |
 | `GpsCollection` como colección built-in | La declara el proyecto con connector GPS |
 | Variantes de `setCircularReveal` (Show/Hide, setXY, growAndShrink) | Solo existe `setCircularReveal(cx, cy, bReveal)` |
 

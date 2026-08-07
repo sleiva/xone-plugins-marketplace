@@ -2,6 +2,13 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.2.1] - 2026-08-07
+
+### Corregido
+
+- El anti-patrón de `setBlur`/`setSaturation` en `xone-development` decía que son «funciones que implementa el proyecto» y no daba la forma correcta. No son de XOne ni las implementa el proyecto: **las expone la vista nativa de Android/iOS** que hay por debajo, y llegan al JS a través del objeto que devuelve la ventana —`ui.getView(self)["mi_frame"].setBlur(8)`—. El proyecto solo escribe el envoltorio (`doBlurEffect`). La fila nombraba la cosa equivocada y, al enunciarse solo en negativo, hacía que una búsqueda por `setBlur` se leyera como «no existe».
+- El comentario de `references/javascript/ui-navegacion-mensajes-y-vista.md` se contradecía en dos líneas seguidas: primero decía que eran métodos del control y después que eran funciones de proyecto. Queda una sola versión.
+
 ## [1.2.0] - 2026-08-04
 
 ### Añadido
