@@ -1,6 +1,6 @@
 # XOne JavaScript — Métodos nativos de la vista (Android/iOS)
 
-Contenido: el mecanismo · qué garantías hay · regla de admisión · tabla de métodos · cómo se envuelve · pendiente de confirmar
+Contenido: el mecanismo · qué garantías hay · regla de admisión · tabla de métodos · cómo se envuelve
 
 ---
 
@@ -25,21 +25,20 @@ cosa, y vive en [métodos de los controles](metodos-de-los-controles.md).
 ## Qué garantías hay
 
 Cada método se implementa sobre la vista nativa de cada plataforma, así que **la disponibilidad
-y el comportamiento se confirman por plataforma, no en general**. La columna «Confirmado en» de
-cada tabla es la que manda, y hay casos que además exigen una versión mínima del sistema —
-`setBlur` y `setSaturation` necesitan **iOS 17+**.
+y el comportamiento se confirman por plataforma, no en general**. La columna «Confirmado en» es
+la que manda, y hay casos que además exigen una versión mínima del sistema — `setBlur` y
+`setSaturation` necesitan **iOS 17+**.
 
 Que un método funcione en una plataforma no implica que exista en la otra. Lo que no aparece en
-estas tablas no está confirmado en ninguna.
+la tabla no está confirmado en ninguna.
 
 ## Regla de admisión
 
-> **Una entrada entra en las tablas solo si se ha confirmado funcionando, anotando en qué
+> **Una entrada entra en la tabla solo si se ha confirmado funcionando, anotando en qué
 > plataforma. Lo no confirmado no se escribe.**
 
 No es burocracia: si esta página se llena de métodos plausibles pero no comprobados, deja de
-valer para nada. Una lista corta y cierta es útil; una larga y verosímil es un pasivo. Lo que
-esté a medias va en «pendiente de confirmar», al final, y no se usa.
+valer para nada. Una lista corta y cierta es útil; una larga y verosímil es un pasivo.
 
 Esta página **no enumera la API de vistas de Android ni de iOS**. Esa lista no pertenece a este
 repositorio.
@@ -113,13 +112,3 @@ El patrón típico es un slider que llama al envoltorio desde su `onchange`. El 
 
 **No existe `ui.setBlur` ni `ui.setSaturation`.** Se llaman sobre el frame o el control, nunca
 sobre `ui`.
-
-## Pendiente de confirmar
-
-**Nada de esta sección está documentado: no lo uses.** Está aquí para que no se vuelva a
-investigar desde cero, y sale cuando se confirme.
-
-| Método | Qué falta por decidir |
-|---|---|
-| `setCornerRadius(radius)` | Solapa con `setBorder(obj)`, que ya lleva `cornerRadius` dentro y es la API documentada. Falta saber si `setCornerRadius` sigue existiendo aparte o quedó sustituida |
-| `setVisible(bool)`, `hide()`, `show()` | Existen, pero el corpus solo los documenta sobre marcadores de mapa y sobre el shimmer, nunca sobre una vista genérica. Si existen a nivel de vista son API de XOne y su sitio es `metodos-de-los-controles.md`, no esta página |
