@@ -13,7 +13,7 @@
       "name": "xone-development",
       "source": "./plugins/xone-development",
       "description": "Asistente experto para crear, verificar, revisar y depurar aplicaciones XOne",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "author": {
         "name": "Sergio Leiva Ortega",
         "url": "https://github.com/sleiva"

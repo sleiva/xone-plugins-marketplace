@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.2.2] - 2026-08-07
+
+### Corregido
+
+- La `description` de `xone-development` tenía 1197 caracteres y el límite del formato son 1024, así que la skill no validaba. Recortada a 998. Se eliminaron términos cubiertos por otros más amplios (`geolocalización` ⊂ `GPS`; `WifiManager`/`FileManager` ⊂ `creables`), genéricos (`errores estructurales`, `estilos dinámicos`) o que ya dispara otra skill (`pantallas vacías`, en `xone-debugging`). Las otras tres skills estaban dentro de límite: 321, 436 y 465.
+
 ## [1.2.1] - 2026-08-07
 
 ### Corregido
