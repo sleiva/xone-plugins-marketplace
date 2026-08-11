@@ -2,6 +2,18 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.5.0] - 2026-08-11
+
+### Añadido
+
+- `xone-review` documenta los dos comandos de `xone-db-tools` que **devuelven datos**, y que hasta ahora estaban sin cubrir: **`execute-sql`**, ausente por completo del corpus, y **`describe-table`**, del que solo había una mención de pasada en el troubleshooting de `xone-debugging`. Son la forma de contestar «¿qué hay realmente en la base?» sin abrir SQLite a mano.
+- `describe-table` devuelve por columna `position`, `name`, `type`, `nullable`, `default` y `primaryKey` —con `--json` estructurado, sin él como tabla legible—. `execute-sql` acepta SQL en línea o `--file`, y devuelve un array de filas en un `SELECT` o `{changes, lastInsertRowid}` en una escritura.
+- **Aviso comprobado ejecutándolo: `execute-sql` no es de solo lectura.** Ejecuta lo que se le pase —`INSERT`, `UPDATE`, `DELETE` y DDL— y muta el fichero. Se documenta que hay que trabajar sobre una copia de `gestion.db`, igual que con el `--db-path` del simulador. El troubleshooting de `xone-debugging` gana el puntero a ambos, con la misma advertencia.
+
+### Cambiado
+
+- El suelo pasa a **`xone-linter >= 1.2.0`** y se añade **`xone-db-tools >= 0.2.0`**, en `README.md`, `INSTALL.md` y `xone-review`. Se corrige de paso la justificación que acompañaba al requisito: `validate-coll`, `login` y `render --session` aparecieron en **1.1.0**, no en 1.2.0 —el `help` de 1.1.0 y el de 1.2.0 son idénticos, así que 1.2.0 cambia internos, no la superficie—. Ninguno de los dos CLI expone comando de versión, de ahí que la comprobación sea `npm list -g`.
+
 ## [1.4.0] - 2026-08-11
 
 ### Añadido

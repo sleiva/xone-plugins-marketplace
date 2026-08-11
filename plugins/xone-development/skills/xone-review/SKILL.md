@@ -36,7 +36,7 @@ No des por cerrado el trabajo hasta que `validate` pase sin `errors` y `smoke` d
 
 ## Comandos
 
-Requieren `xone-linter >= 1.1.0` (`validate-coll`, `login` y `render --session` no existen antes).
+Requieren `xone-linter >= 1.2.0` — `validate-coll`, `login` y `render --session` aparecieron en 1.1.0, y 1.2.0 es el suelo soportado. `describe-table` y `execute-sql` necesitan `xone-db-tools >= 0.2.0`.
 
 ```bash
 xone-simulator validate      ./proyecto --json                 # verificación estática
@@ -46,14 +46,31 @@ xone-simulator run           ./proyecto --coll X --event before-edit --json
 xone-simulator render        ./proyecto --coll X               # coll a HTML
 xone-simulator login         ./proyecto --user u --pass p --session ./sesion.json
 xone-simulator render        ./proyecto --coll X --session ./sesion.json   # pantalla tras el login
-xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto --json
+xone-db-tools validate-db     ./proyecto/bd/gestion.db --project ./proyecto --json
+xone-db-tools describe-table  ./proyecto/bd/gestion.db gen_clientes --json    # esquema de una tabla
+xone-db-tools execute-sql     ./proyecto/bd/gestion.db "SELECT …" --json      # datos (¡también escribe!)
+xone-db-tools execute-sql     ./proyecto/bd/gestion.db --file ./consulta.sql --json
 ```
 
 **`validate`** comprueba XML bien formado y encoding, atributos obligatorios, unicidad de nombres, tipos de propiedad, `progid`, ficheros y estilos incluidos, sintaxis JS y referencias cruzadas (`mapcol`, `inherits`, `contents`, `openEditView`), más los anti-patrones documentados. Con `--json` devuelve `success`, `summary` e `issues` con severidad, fichero y mensaje.
 
 **`validate-coll`** valida **una coll suelta**, sin `app.xml` ni el resto del proyecto. Es para cuando solo tienes el `.xne` —una coll recién escrita, un fichero recibido aparte—, no un sustituto de `validate`.
 
-> **`"success": true` aquí NO significa que la coll esté bien.** Significa que no se encontró nada entre los chequeos que **sí** se ejecutaron. La respuesta trae un array **`skipped`** que enumera lo que no se ha comprobado y por qué, y **hay que leerlo y reportarlo junto al veredicto**. Sin el proyecto quedan fuera, entre otros: la sintaxis JS de los `<script>` de la coll (`JS_ASYNC_AWAIT` y compañía), las referencias a nodos de la propia coll (`REF_NODE_MISSING`), los handlers en `.js` (`REF_FUNC_MISSING`), las referencias entre colls (`mapcol`/`mapfld`/`linkedto`, `<contents src>`), los `<include>`, el `entry-point`, y la composición de `<include-layout>` —así que la coll se valida **sin el layout inyectado**: props, frames y eventos del fichero incluido no existen para el validador—. De los anti-patrones se ejecutan cinco de seis; solo se cae `ANTIPATTERN_VBSCRIPT`, que necesita `app.xml`.
+> **`"success": true` aquí NO significa que la coll esté bien.** Significa que no se halló nada
+> entre los chequeos que **sí** se ejecutaron.
+
+La respuesta trae un array **`skipped`** con lo que no se ha comprobado y por qué. **Léelo y
+repórtalo junto al veredicto.** Sin el proyecto quedan fuera, entre otros:
+
+- La sintaxis JS de los `<script>` de la coll (`JS_ASYNC_AWAIT` y compañía).
+- Las referencias a nodos de la propia coll (`REF_NODE_MISSING`).
+- Los handlers en ficheros `.js` (`REF_FUNC_MISSING`).
+- Las referencias entre colls: `mapcol`, `mapfld`, `linkedto`, `<contents src>`.
+- Los `<include>` y el `entry-point`.
+- La composición del layout: la coll se valida **sin el layout inyectado**, así que los props, frames y eventos que aportaría `<include-layout>` quedan invisibles para el validador.
+
+De los anti-patrones se ejecutan cinco de seis; solo se cae `ANTIPATTERN_VBSCRIPT`, que necesita
+`app.xml`.
 
 **`smoke`** dispara `create`/`before-edit`/`after-edit` más render con flow de todas las colls (o de `--coll X`). Con `--interact` además tapea los props con `onclick`/`method=ExecuteNode(...)` (máx. `--max-taps`, default 20). Exit code 1 si hay `failures`. Una coll rota no aborta el resto y cada fallo incluye su fase y el stack truncado. El entorno es siempre seguro: `network:'mock'` e in-memory, sin tocar red ni SQLite reales. Si `totals.stubWarnings > 0` en una coll que pasó, algún método fue absorbido por autostub (`kind: 'stub-method'`): no bloquea, pero repórtalo.
 
@@ -68,6 +85,18 @@ xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto --json
 - **Los defaults casi nunca encajan.** Son `--coll Login`, `--user-prop MAP_EMAIL`, `--pass-prop MAP_PASS`, `--login-prop MAP_LOGIN_BTN`, `--boot EntradaApp` y `--timeout 30`. Un proyecto que llame a las cosas de otra manera necesita los cuatro overrides —por ejemplo `--coll LoginColl --user-prop MAP_USUARIO --pass-prop MAP_PASSWORD --login-prop MAP_LOGIN`—. Antes de dar por roto el login, comprueba que apuntas a la coll y los props que el proyecto realmente tiene.
 
 `--db-path` debe apuntar a una **copia** de la base de datos: el simulador puede mutarla. `--db-prefix` fija el prefijo de tablas, y está disponible en `run` y en `render`.
+
+### Leer datos de la BD
+
+Además de `validate-db`, `xone-db-tools` tiene dos comandos que **devuelven datos**, y son la forma de responder «¿qué hay realmente en la base?» sin abrir SQLite a mano.
+
+**`describe-table <gestion.db> <tabla>`** devuelve el esquema: por cada columna, `position`, `name`, `type`, `nullable`, `default` y `primaryKey`. Con `--json` sale estructurado; sin `--json`, como tabla legible. Es lo que confirma si una columna existe y con qué tipo, antes de culpar al XML.
+
+**`execute-sql <gestion.db> "<sql>"`**, o `--file <consulta.sql>` para una consulta larga, ejecuta SQL arbitrario. Un `SELECT` devuelve un array de objetos fila; una escritura devuelve `{changes, lastInsertRowid}`.
+
+> **`execute-sql` NO es de solo lectura: ejecuta lo que le pases, incluidos `INSERT`, `UPDATE`, `DELETE` y DDL, y muta el fichero.** Comprobado. Trabaja siempre sobre una **copia** de `gestion.db`, igual que con `--db-path` del simulador, y no lo apuntes a la BD del repositorio. Para inspeccionar, limítate a `SELECT`.
+
+Recuerda el contrato del generador: tablas en minúsculas con prefijo `gen_`, campos en mayúsculas — por eso las consultas son de la forma `SELECT NOMBRE FROM gen_clientes`.
 
 ## Códigos del validador
 

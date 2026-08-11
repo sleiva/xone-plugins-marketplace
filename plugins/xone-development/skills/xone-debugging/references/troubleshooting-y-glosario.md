@@ -290,7 +290,7 @@ try {
 }
 ```
 
-3. **La tabla no existe** en la base de datos. Regenerar con `xone-db-tools create-db` o inspeccionarla con `xone-db-tools describe-table`.
+3. **La tabla no existe** en la base de datos. Regenerar con `xone-db-tools create-db`, o inspeccionarla con `xone-db-tools describe-table <db> <tabla> --json` —que devuelve las columnas con su tipo— y consultar el contenido con `xone-db-tools execute-sql <db> "SELECT …" --json`. **Sobre una copia**: `execute-sql` ejecuta lo que le pases y muta el fichero. Detalle de ambos en `xone-review`.
 
 ### 19.14 lock/unlock no funciona
 
