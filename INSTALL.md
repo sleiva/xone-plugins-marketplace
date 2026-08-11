@@ -160,6 +160,10 @@ xone-db-tools --help
 xone-simulator --help
 ```
 
+Hace falta **`xone-linter >= 1.1.0`**: `validate-coll`, `login` y `render --session` no existen
+antes. El CLI no tiene comando de versión, así que se comprueba con `npm list -g xone-linter`, o
+mirando si `xone-simulator help` lista `login` — si no lo lista, es una versión anterior.
+
 `xone-db-tools` se necesita para generar, validar y describir la BD. Las skills de
 conocimiento no necesitan herramientas externas.
 

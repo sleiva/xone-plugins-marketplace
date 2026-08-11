@@ -68,12 +68,14 @@ Desde Claude Code:
 /plugin install xone-development@xone-plugins
 ```
 
-`xone-review` y `xone-debugging` requieren el CLI en el entorno:
+`xone-review` y `xone-debugging` requieren el CLI en el entorno, con **`xone-linter >= 1.1.0`** —de esa versión salen `validate-coll`, `login` y `render --session`:
 
 ```bash
 npm install -g xone-linter
 npm install -g xone-db-tools
 ```
+
+El CLI no expone un comando de versión, así que para confirmar cuál tienes: `npm list -g xone-linter`. Un `xone-simulator help` que no liste `login` es de una versión anterior.
 
 Después Claude usará la skill automáticamente cuando la tarea esté relacionada con XOne. Para probar el plugin durante el desarrollo:
 

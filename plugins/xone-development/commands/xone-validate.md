@@ -8,7 +8,7 @@ Valida el proyecto XOne que está en `$1` (si no se indica ruta, usa el director
 
 Procedimiento:
 
-1. Comprueba que el CLI esté disponible con `xone-simulator --version`. Si no lo está, indica al usuario que lo instale con `npm install -g xone-linter` y detente.
+1. Comprueba que el CLI esté disponible con `command -v xone-simulator`. Si no lo está, indica al usuario que lo instale con `npm install -g xone-linter` y detente. **No uses `xone-simulator --version`: ese comando no existe** y el CLI responde «Comando desconocido».
 2. Ejecuta `xone-simulator validate <ruta>`.
 3. Si hay errores, agrúpalos por fichero y por código. Antes de tocar nada, lee el fichero afectado y consulta la referencia correspondiente del índice de `xone-development` (XML `.xne`, JavaScript, CSS, datos e integración, dispositivo) para confirmar la forma correcta. **No corrijas por intuición**: si un atributo o API no aparece en las referencias, dilo en vez de inventar un arreglo.
 4. Aplica el cambio mínimo que resuelva cada error, sin refactorizar de paso.

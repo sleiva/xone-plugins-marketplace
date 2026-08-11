@@ -26,31 +26,48 @@ En Claude Code, `/xone-validate [ruta]` ejecuta el flujo de validación y correc
 3. Si existe `bd/gestion.db`, ejecuta `xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto --json`.
 4. Corrige **un tipo de error a la vez** y revalida tras cada tanda, para no introducir regresiones.
 5. `smoke` sobre la app completa cuando `validate` pase.
-6. Si `smoke` falla, aísla con `run` (evento concreto) y `render` (UI).
+6. Si `smoke` falla, aísla con `run` (evento concreto) y `render` (UI). Para una pantalla que está **detrás del login**, saca antes la sesión con `login --session` y pásasela a `render --session`.
 7. Revisión manual contra las reglas de `xone-development` (ver «Qué revisar en cada capa»).
 8. Prioriza los hallazgos y reporta con severidad, `archivo:línea` y causa raíz.
 
 No des por cerrado el trabajo hasta que `validate` pase sin `errors` y `smoke` devuelva exit 0, o hasta que los `failures` restantes estén justificados.
 
+**`validate-coll` queda fuera de este flujo, a propósito.** El flujo asume un proyecto completo; `validate-coll` es la entrada para cuando solo tienes un `.xne` suelto. Su veredicto es parcial por construcción, así que no cierra nada: en cuanto haya proyecto, se pasa `validate`.
+
 ## Comandos
 
+Requieren `xone-linter >= 1.1.0` (`validate-coll`, `login` y `render --session` no existen antes).
+
 ```bash
-xone-simulator validate ./proyecto --json                      # verificación estática
-xone-simulator smoke    ./proyecto --json                      # ciclo de vida completo
-xone-simulator run      ./proyecto --coll X --event before-edit --json
-xone-simulator render   ./proyecto --coll X                    # coll a HTML
+xone-simulator validate      ./proyecto --json                 # verificación estática
+xone-simulator validate-coll ./Clientes.xne --json             # UNA coll suelta, sin app.xml
+xone-simulator smoke         ./proyecto --json                 # ciclo de vida completo
+xone-simulator run           ./proyecto --coll X --event before-edit --json
+xone-simulator render        ./proyecto --coll X               # coll a HTML
+xone-simulator login         ./proyecto --user u --pass p --session ./sesion.json
+xone-simulator render        ./proyecto --coll X --session ./sesion.json   # pantalla tras el login
 xone-db-tools validate-db ./proyecto/bd/gestion.db --project ./proyecto --json
 ```
 
 **`validate`** comprueba XML bien formado y encoding, atributos obligatorios, unicidad de nombres, tipos de propiedad, `progid`, ficheros y estilos incluidos, sintaxis JS y referencias cruzadas (`mapcol`, `inherits`, `contents`, `openEditView`), más los anti-patrones documentados. Con `--json` devuelve `success`, `summary` e `issues` con severidad, fichero y mensaje.
 
+**`validate-coll`** valida **una coll suelta**, sin `app.xml` ni el resto del proyecto. Es para cuando solo tienes el `.xne` —una coll recién escrita, un fichero recibido aparte—, no un sustituto de `validate`.
+
+> **`"success": true` aquí NO significa que la coll esté bien.** Significa que no se encontró nada entre los chequeos que **sí** se ejecutaron. La respuesta trae un array **`skipped`** que enumera lo que no se ha comprobado y por qué, y **hay que leerlo y reportarlo junto al veredicto**. Sin el proyecto quedan fuera, entre otros: la sintaxis JS de los `<script>` de la coll (`JS_ASYNC_AWAIT` y compañía), las referencias a nodos de la propia coll (`REF_NODE_MISSING`), los handlers en `.js` (`REF_FUNC_MISSING`), las referencias entre colls (`mapcol`/`mapfld`/`linkedto`, `<contents src>`), los `<include>`, el `entry-point`, y la composición de `<include-layout>` —así que la coll se valida **sin el layout inyectado**: props, frames y eventos del fichero incluido no existen para el validador—. De los anti-patrones se ejecutan cinco de seis; solo se cae `ANTIPATTERN_VBSCRIPT`, que necesita `app.xml`.
+
 **`smoke`** dispara `create`/`before-edit`/`after-edit` más render con flow de todas las colls (o de `--coll X`). Con `--interact` además tapea los props con `onclick`/`method=ExecuteNode(...)` (máx. `--max-taps`, default 20). Exit code 1 si hay `failures`. Una coll rota no aborta el resto y cada fallo incluye su fase y el stack truncado. El entorno es siempre seguro: `network:'mock'` e in-memory, sin tocar red ni SQLite reales. Si `totals.stubWarnings > 0` en una coll que pasó, algún método fue absorbido por autostub (`kind: 'stub-method'`): no bloquea, pero repórtalo.
 
 **`run`** ejecuta un evento a nivel de coll (`before-edit`, `create`, `onback`) o inline de prop (`onclick`, `onchange`, con `--prop` y `--data`). Devuelve estado y `log` de side-effects: navegación, mensajes, refrescos, HTTP, cambios de datos y errores.
 
-**`render`** renderiza una coll a HTML con ciclo de vida (`--no-flow` para renderizar en frío).
+**`render`** renderiza una coll a HTML con ciclo de vida (`--no-flow` para renderizar en frío). `--group N` renderiza una página concreta de un swipe, por su `id`. `--active-color <hex>` sustituye el valor de `MAP_COLORACTIVO`.
 
-`--db-path` debe apuntar a una **copia** de la base de datos: el simulador puede mutarla.
+**`login` + `render --session` van juntos**, y ninguno sirve por separado: `login` ejecuta el `login()` **de la propia app** y vuelca la sesión a un fichero, que luego consume `render --session` para pintar pantallas que están detrás del login.
+
+- **Completar significa salir de la coll de login.** Si al terminar se sigue en ella, el comando lo dice (`El login no completó: se sigue en "X"`), **no escribe el fichero de sesión** y devuelve **exit 1**. Que el script haya corrido no basta: en una prueba real se vio `appData.login(...)` ejecutarse y disparar su `onLoginSuccessful` con su toast, y aun así el login se consideró no completado por no haber navegado.
+- **En el fallo imprime el log de side-effects** (`executeNode`, `appData.login`, mensajes), que es por dónde se empieza a diagnosticar.
+- **Los defaults casi nunca encajan.** Son `--coll Login`, `--user-prop MAP_EMAIL`, `--pass-prop MAP_PASS`, `--login-prop MAP_LOGIN_BTN`, `--boot EntradaApp` y `--timeout 30`. Un proyecto que llame a las cosas de otra manera necesita los cuatro overrides —por ejemplo `--coll LoginColl --user-prop MAP_USUARIO --pass-prop MAP_PASSWORD --login-prop MAP_LOGIN`—. Antes de dar por roto el login, comprueba que apuntas a la coll y los props que el proyecto realmente tiene.
+
+`--db-path` debe apuntar a una **copia** de la base de datos: el simulador puede mutarla. `--db-prefix` fija el prefijo de tablas, y está disponible en `run` y en `render`.
 
 ## Códigos del validador
 

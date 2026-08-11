@@ -2,6 +2,19 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.4.0] - 2026-08-11
+
+### Añadido
+
+- `xone-review` documenta los tres comandos que trae **`xone-linter 1.1.0`** (versión del CLI, no de este plugin): `validate-coll`, `login` y el flag `render --session`. El requisito `>= 1.1.0` queda anotado en `README.md` e `INSTALL.md`, junto a cómo comprobar la versión —el CLI no expone comando de versión, así que se mira con `npm list -g xone-linter` o viendo si `help` lista `login`.
+- **`validate-coll`** valida una coll suelta, sin `app.xml`. Se documenta con la advertencia que hace falta para no malinterpretarlo: **`"success": true` no significa que la coll esté bien**, sino que no se halló nada entre los chequeos que se ejecutaron. La respuesta trae un array `skipped` con lo que no se ha comprobado —sintaxis JS de la coll, `REF_NODE_MISSING`, `REF_FUNC_MISSING`, referencias entre colls, `<include>`, `entry-point` y la composición de `<include-layout>`— y hay que reportarlo junto al veredicto. Queda fuera del flujo de validación a propósito: su veredicto es parcial por construcción.
+- **`login` + `render --session`** se documentan como un solo flujo, porque ninguno sirve por separado, y con lo que se comprobó ejecutándolos: completar significa **salir de la coll de login**, y si se sigue en ella no escribe sesión y devuelve exit 1 —aunque el `login()` de la app haya corrido y disparado su `onLoginSuccessful`—. Se avisa de que los defaults (`--coll Login`, `--user-prop MAP_EMAIL`, `--pass-prop MAP_PASS`, `--login-prop MAP_LOGIN_BTN`) casi nunca encajan y hay que pasar los overrides del proyecto. El paso 6 del flujo enruta a ellos para las pantallas que están detrás del login.
+
+### Corregido
+
+- `commands/xone-validate.md` comprobaba la disponibilidad del CLI con `xone-simulator --version`, **un comando que no existe**: el CLI responde «Comando desconocido» y el paso 1 de `/xone-validate` fallaba siempre, pidiendo instalar algo ya instalado. Pasa a `command -v xone-simulator`, que es lo que ya usaba `xone-review`.
+- Se documentan `--db-prefix`, `--group` y `--active-color`, que **ya existían y no estaban en ninguna parte** del corpus. No son de 1.1.0: son deuda anterior, confirmada comparando el `help` de las dos versiones.
+
 ## [1.3.0] - 2026-08-07
 
 ### Añadido
