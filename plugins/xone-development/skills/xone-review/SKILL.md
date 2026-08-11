@@ -1,6 +1,6 @@
 ---
 name: xone-review
-description: "Validar, verificar y revisar proyectos XOne con el linter xone-simulator. Usar al validar un proyecto, hacer smoke de una app, ejecutar un evento concreto, renderizar una coll, corregir iterativamente los errores del validador, o auditar un proyecto o un cambio antes de entregarlo: códigos del validador, checklist de entrega y priorización de hallazgos por severidad. Las reglas y anti-patrones de cada capa viven en xone-development."
+description: "Validar, verificar y revisar proyectos XOne con el linter xone-simulator. Usar al validar un proyecto, validar una coll suelta, hacer smoke de una app, ejecutar un evento concreto, renderizar una coll o una pantalla tras el login, corregir iterativamente los errores del validador, o auditar un proyecto o un cambio antes de entregarlo: códigos del validador, checklist de entrega y priorización de hallazgos por severidad. También para inspeccionar la base de datos del proyecto con xone-db-tools: esquema de una tabla y consultas SQL sobre gestion.db. Las reglas y anti-patrones de cada capa viven en xone-development."
 ---
 
 # XOne Review

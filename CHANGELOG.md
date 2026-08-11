@@ -2,6 +2,12 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.5.1] - 2026-08-11
+
+### Corregido
+
+- La `description` de `xone-review` no mencionaba datos, BD, SQL ni `xone-db-tools`, pese a que desde 1.5.0 esa skill es la dueña de `describe-table` y `execute-sql`. Como la descripción es el mecanismo por el que se selecciona una skill, una pregunta del tipo «¿qué hay en la tabla `gen_clientes`?» no la habría activado. Añadidos la inspección de BD y los dos comandos de 1.4.0 que tampoco figuraban —`validate-coll` y el render tras el login—. Queda en 620 de 1024 caracteres.
+
 ## [1.5.0] - 2026-08-11
 
 ### Añadido
