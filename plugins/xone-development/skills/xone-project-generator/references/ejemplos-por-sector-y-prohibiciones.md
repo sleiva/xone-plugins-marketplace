@@ -127,7 +127,7 @@ INCORRECTO:
 #### En Estructura de Proyecto
 - **NO** usar un prefijo diferente a "gen" sin autorización del usuario
 - Los formatos validos para `icons/` son PNG, JPG y SVG
-- **NO** omitir la generación de la base de datos con `xone-db-tools create-db`
+- **NO** omitir la generación de la base de datos con `xone_db_generator`
 - **NO** omitir la insercion de datos iniciales (Empresa + Usuario admin)
 - **NO** omitir los READMEs en las carpetas
 

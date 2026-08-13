@@ -128,7 +128,7 @@ Lectura y escritura de tags NFC (NDEF, Mifare Classic/Ultralight), emulación HC
 | `writeMifareUltralightAsync(data, callbackName)` | 2 args (array, String) | Escribe páginas Mifare Ultralight. |
 | `startNdefTagEmulation({ndefType, ndefData, oneShot?, password?, readAllowed?, writeAllowed?, size?})` | 1 NativeObject | Inicia emulación HCE como tag NDEF. `ndefType` ∈ `"text"`/`"uri"`. |
 | `stopNdefTagEmulation()` | ninguno | Detiene la emulación HCE. |
-| `enableDnieReader({onDnieRead, onDnieReadError, onProgressUpdated, authMode?, canNumber? \| mrz? \| (documentNumber+dateOfBirth+dateOfExpiry), readEfcom?, readProfileData?, readUserImage?, readSignatureImage?, readAuthenticationCertificate?, readSignatureCertificate?, password?, timeout?})` | 1 NativeObject | Activa el lector de DNI electrónico. **Obligatorios**: `onDnieRead`, `onDnieReadError` y la clave de acceso (CAN o MRZ). `authMode` por defecto `"PACE"`. |
+| `enableDnieReader({onDnieRead, onDnieReadError, onProgressUpdated, authMode?, canNumber? \| mrz? \| (documentNumber+dateOfBirth+dateOfExpiry), readEfcom?, readProfileData?, readUserImage?, readSignatureImage?, readAuthenticationCertificate?, readSignatureCertificate?, enablePassiveAuthentication?, trustedCountries?, minimumSessionKeySize?, password?, timeout?})` | 1 NativeObject | Activa el lector de DNI electrónico. **Obligatorios**: `onDnieRead`, `onDnieReadError` y la clave de acceso (CAN o MRZ). `authMode` por defecto `"PACE"`. `minimumSessionKeySize` exige que la clave de sesión negociada tenga al menos esos bits (`112`, `128`, `192` o `256`); sin especificar se acepta la variante más fuerte que ofrezca el documento. `enablePassiveAuthentication` (por defecto `true`) comprueba que los datos del documento están firmados por el país emisor y, si algo no cuadra, aborta la lectura por `onDnieReadError` sin entregar ningún dato; se reconocen los emisores de más de cien países, y para leer un documento de un emisor que no esté hay que desactivarla. `trustedCountries` acota los emisores que se admiten a una lista de códigos de país separados por comas, por ejemplo `"ES"` para no dar por bueno más que el documento español. |
 | `disableDnieReader()` | ninguno | Desactiva el lector de DNIe. |
 | `installMdm({method, ...})` | 1 NativeObject | Provisiona MDM via NFC. `method` ∈ `"any"` (default), `"android_beam"`, `"emulate_tag"`. |
 | `generateMdmQrCode({targetFile, ...})` | 1 NativeObject | Genera QR de enrolamiento MDM en `targetFile` (640×480 px). |
@@ -166,7 +166,10 @@ nfc.enableDnieReader({
     onDnieReadError : function(err) { ui.showToast("Error DNIe: " + err); },
     onProgressUpdated: function(progress, message) { /* progreso 0-100 */ },
     readUserImage   : true,
-    readProfileData : true
+    readProfileData : true,
+    // Se comprueba que el documento lo firmó el país emisor salvo que se desactive; acotar los
+    // emisores admitidos es lo que impide dar por bueno un pasaporte extranjero auténtico
+    trustedCountries : "ES"
 });
 ```
 

@@ -404,6 +404,7 @@ La siguiente tabla lista **todos los métodos** expuestos por el objeto global `
 | **printPDF** | Imprimir PDF. |
 | **quitApp** | Salir de la aplicación. |
 | **recognizeSpeech** | Reconocimiento de voz. Ver sección 3.10. |
+| **recognizeText** | OCR de una imagen del dispositivo (alfabeto latino). Ver sección 3.5. |
 | **refresh** | Refrescar (se le pueden pasar nombres de props a refrescar). |
 | **refreshContentRow** | Refrescar la línea de un content. |
 | **refreshContentSelectedRow** | Refrescar el content en la fila seleccionada. |
@@ -413,6 +414,7 @@ La siguiente tabla lista **todos los métodos** expuestos por el objeto global `
 | **returnToForeground** | Volver al primer plano. |
 | **returnToMainMenu** | Volver al menú principal. |
 | **saveDrawing** | Guardar dibujo/firma. |
+| **scanDocument** | Escanear un documento en papel con la cámara (recorte y enderezado automáticos, JPG y/o PDF). Ver sección 3.5. |
 | **sendMail** | Enviar un email. |
 | **sendSMS** | Enviar SMS. |
 | **setFeedMode** | Ajustar modo de alimentación (impresión). |
@@ -436,7 +438,7 @@ La siguiente tabla lista **todos los métodos** expuestos por el objeto global `
 | **sleep** | Dormir (pausa). |
 | **speak** | Síntesis de voz (text-to-speech). Ver sección 3.10. |
 | **startAudioRecord** | Comenzar grabación de audio. Ver sección 3.10. |
-| **startCamera** | Abrir la cámara. |
+| **startCamera** | Abrir la cámara y guardar la foto o el vídeo en un campo, con opción de foto en movimiento. Ver sección 3.5. |
 | **startGps** | Iniciar GPS. |
 | **startGpsV1** | Iniciar Gpsv1. |
 | **startGpsV2** | Iniciar Gpsv2. |

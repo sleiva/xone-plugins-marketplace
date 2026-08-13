@@ -2,7 +2,7 @@
 
 > Fuente: `xone/xone-help-docs/topics/03b-js-ui.md` §3.5–§3.9. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
-Contenido: §3.5 GPS (startGps completo, GpsCollection, GpsTools) y cámara/archivos · §3.6 firma digital · §3.7 escáner QR/barcode · §3.8 sleep y timers · §3.9 otros
+Contenido: §3.5 GPS (startGps completo, GpsCollection, GpsTools) y cámara/archivos (startCamera, scanDocument, recognizeText) · §3.6 firma digital · §3.7 escáner QR/barcode · §3.8 sleep y timers · §3.9 otros
 
 ---
 
@@ -235,6 +235,150 @@ fm.saveFile("archivo.txt", "contenido", false);  // false = sobreescribir
 fm.delete("temporal.txt");
 let nSize = fm.getSize("archivo.txt");
 ```
+
+#### startCamera(params) - Capturar una foto o un vídeo sobre un campo
+
+Abre la cámara y guarda el resultado en el campo indicado. A diferencia de `control.takePicture()`, que necesita un control de cámara en la pantalla, aquí no hace falta pintar nada: la captura ocurre en su propia pantalla y al terminar el fichero queda en el campo.
+
+```javascript
+// Foto en movimiento, con la cámara del framework
+ui.startCamera({
+    propName         : "MAP_FOTO",
+    type             : "photo",
+    useInternalCamera: true,
+    motionPhoto      : true,
+    onSuccess        : function(sFileName) {
+        ui.showToast("Foto guardada: " + sFileName);
+    },
+    onCancelled      : function() {
+        ui.showToast("Captura cancelada");
+    }
+});
+
+// Vídeo de 30 segundos como máximo
+ui.startCamera({
+    propName   : "MAP_VIDEO",
+    type       : "video",
+    maxDuration: 30
+});
+
+// Forma corta: nombre del campo y tipo
+ui.startCamera("MAP_FOTO", "photo");
+```
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `propName` | string | — | Campo donde se guarda el nombre del fichero capturado |
+| `type` | string | `"photo"` | `"photo"`, `"video"` o `"attach"` (este último abre el selector de ficheros en vez de la cámara) |
+| `useInternalCamera` | boolean | `false` | Captura con la cámara que trae el framework en vez de abrir la app de cámara del dispositivo |
+| `motionPhoto` | boolean | `false` | Captura una **foto en movimiento**: un JPG con un clip de vídeo corto embebido detrás. Solo aplica a `type: "photo"` |
+| `size` | number | `0` | Tamaño máximo del fichero en KB. `0` = sin límite |
+| `width` | number | `-1` | Ancho máximo de la foto en píxeles |
+| `height` | number | `-1` | Alto máximo de la foto en píxeles |
+| `quality` | number | `90` | Calidad JPEG de la foto (0-100) |
+| `maxDuration` | number | `-1` | Duración máxima del vídeo en segundos |
+| `onSuccess` | function | — | Recibe el nombre del fichero capturado |
+| `onCancelled` | function | — | Se invoca si el usuario cancela la captura |
+
+> **Las fotos en movimiento necesitan `useInternalCamera: true`.** Así funcionan en cualquier versión de Android, porque la captura y el montaje del fichero los hace el propio framework. Sin ese parámetro se delega en la app de cámara del dispositivo, que solo puede atender la petición a partir de **Android 16** y únicamente si la implementa: a día de hoy no lo hace ninguna, ni siquiera la de los Pixel, con lo que se obtiene una foto normal sin más aviso.
+
+Al capturar una foto en movimiento se **ignoran** `size`, `width`, `height` y `quality`, porque redimensionar o recomprimir la imagen se llevaría por delante el vídeo embebido. El fichero pesa lo que la foto más el clip, del orden de varios megas.
+
+#### scanDocument(params) - Escáner de documentos en papel
+
+Abre el escáner de documentos del sistema: guía al usuario para encuadrar el papel, detecta los bordes, recorta y endereza la imagen automáticamente, y permite reencuadrar, aplicar filtros y añadir más páginas antes de aceptar. Es asíncrono: devuelve el control de inmediato y el resultado llega por callback.
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `mode` | string | `"base"` | `"base"` (recorte, rotación y reencuadre), `"baseWithFilters"` (añade filtros de imagen), `"full"` (añade limpieza automática de la imagen: dedos, manchas). Cualquier otro valor da error |
+| `pageLimit` | number | `1` | Máximo de páginas que se pueden escanear en una sesión |
+| `allowGallery` | boolean | `false` | Permite importar la imagen desde la galería en lugar de capturarla con la cámara |
+| `outputJpg` | boolean | `true` | Genera un JPG por página |
+| `outputPdf` | boolean | `false` | Genera además un PDF con todas las páginas |
+| `onSuccess` | function | — | Recibe un array con los nombres de los ficheros generados |
+| `onError` | function | — | **Obligatorio**. Recibe el mensaje de error |
+| `onCancelled` | function | — | **Obligatorio**. Se invoca si el usuario cancela el escaneo |
+
+Hay que dejar activo al menos un formato de salida: si se ponen `outputJpg` y `outputPdf` a `false`, la llamada falla.
+
+Los ficheros se escriben en la carpeta de ficheros de la aplicación (`appData.getFilesPath()`) con el prefijo `scan_`, y el array de `onSuccess` trae **solo el nombre del fichero**, no la ruta completa: primero los JPG (uno por página, en orden) y al final el PDF, si se pidió.
+
+```javascript
+ui.scanDocument({
+    mode        : "baseWithFilters",
+    pageLimit   : 3,
+    allowGallery: true,
+    outputJpg   : true,
+    outputPdf   : true,
+    onSuccess   : function(aFiles) {
+        for (let i = 0; i < aFiles.length; i++) {
+            console.log("Escaneado: " + aFiles[i]);
+        }
+        // Guardar la primera página en un campo de imagen
+        self.MAP_DOCUMENTO = aFiles[0];
+        self.save();
+    },
+    onError     : function(sMessage) {
+        ui.showToast("Error al escanear: " + sMessage);
+    },
+    onCancelled : function() {
+        ui.showToast("Escaneo cancelado");
+    }
+});
+```
+
+El escáner lo aporta Google Play Services y su módulo se descarga bajo demanda la primera vez que se usa; en dispositivos sin servicios de Google la llamada termina en `onError`.
+
+#### recognizeText(params) - OCR de una imagen
+
+Reconoce el texto (alfabeto latino) de una imagen del dispositivo. Asíncrono, el resultado llega por callback. Encaja detrás de `scanDocument` para digitalizar un papel y leer su contenido.
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `path` | string | — | **Obligatorio**. Imagen a reconocer |
+| `onSuccess` | function | — | **Obligatorio**. Recibe el texto (o el objeto con las líneas, si `detail`) |
+| `onError` | function | — | **Obligatorio**. Recibe el mensaje de error |
+| `roi` | objeto | toda la imagen | Región a reconocer: `{left, top, width, height}`. Valores ≤ 1 se interpretan como fracción del tamaño de la imagen; mayores, como píxeles |
+| `scale` | number | `1` | Amplía el recorte antes de reconocer |
+| `grayscale` | boolean | `false` | Desatura la imagen antes de reconocer |
+| `detail` | boolean | `false` | Devuelve un objeto con las líneas y su geometría en lugar de una cadena |
+
+Sin `roi`, `scale` ni `grayscale` la imagen se reconoce tal cual, resolviendo su rotación EXIF. En cuanto se pide cualquiera de los tres, la imagen se decodifica, se rota según EXIF y se preprocesa antes de reconocerla.
+
+**Recortar es la palanca principal cuando el texto es pequeño** (una matrícula, la banda de caracteres del reverso de un DNI): el reconocedor reescala la imagen internamente, así que cuanto menos sobre en el encuadre, más resolución le queda a cada carácter.
+
+Con `detail: true`, `onSuccess` recibe:
+
+```javascript
+{
+    text : "…",        // el texto completo, igual que sin detail
+    lines: [           // ordenadas por posición vertical
+        { text: "…", confidence: 0.87, angle: 0.4,
+          left: 24, top: 512, width: 640, height: 28 }
+    ]
+}
+```
+
+Las líneas vienen **ordenadas por su coordenada vertical**, no en el orden de los bloques reconocidos: `text` sigue el orden de los bloques, que no tiene por qué coincidir con el orden de lectura de la página.
+
+```javascript
+// Reconocer sólo la banda inferior, ampliada al doble y en escala de grises
+ui.recognizeText({
+    path     : "scan_a1b2c3.jpg",
+    roi      : { left: 0, top: 0.62, width: 1, height: 0.38 },
+    scale    : 2,
+    grayscale: true,
+    detail   : true,
+    onSuccess: function(result) {
+        for (let i = 0; i < result.lines.length; i++) {
+            console.log(result.lines[i].confidence + " -> " + result.lines[i].text);
+        }
+    },
+    onError  : function(sMessage) { ui.showToast(sMessage); }
+});
+```
+
+No se puede restringir el alfabeto reconocido: el modelo es de texto latino general y aplica su propio criterio, así que sobre secuencias que no son palabras (códigos, matrículas, caracteres de control) hay que validar el resultado por otra vía — un dígito de control, una expresión regular o un formato conocido.
 
 ### 3.6 Firma Digital
 

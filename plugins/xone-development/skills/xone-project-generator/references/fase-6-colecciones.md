@@ -439,6 +439,11 @@ Para mostrar una relación 1-N dentro de una coleccion, se usa un `prop type="Z"
 | `img` | Imagen para botones (`type="B"`) |
 | `imgsel` | Imagen al pulsar el botón |
 | `keep-aspect-ratio` | `true` mantiene proporcion al redimensionar imágenes |
+| `error-image` | Imagen alternativa si la principal falla. Ej: `error-image="avatar_error.png"` |
+| `repeat-mode` | **Solo animaciones Lottie en `type="IMG"`**: `restart` (defecto, vuelve a empezar) o `reverse` (ida y vuelta). La animación arranca sola en bucle infinito |
+| `clip-text-to-bounds` | **Solo animaciones Lottie en `type="IMG"`**: recorta el texto de párrafo a la caja definida en el diseño (defecto `false`) |
+| `use-internal-camera` | `true` captura con la cámara que trae el framework en vez de abrir la app de cámara del dispositivo |
+| `motion-photo` | `true` captura una foto en movimiento: JPG con un clip de vídeo corto embebido. Requiere `use-internal-camera="true"` e ignora los atributos `file-*` |
 | `contents` | Nombre del contents asociado (para `type="Z"`) |
 | `viewmode` | Modo de visualizacion del contents (ver sección 7.13) |
 | `group` | ID del grupo al que pertenece este prop (forma alternativa de asignacion) |
@@ -500,6 +505,39 @@ Para mostrar una relación 1-N dentro de una coleccion, se usa un `prop type="Z"
 
 <!-- Ejecutar nodo custom -->
 <prop name="IMPORTE" type="N2" visible="1" onchange="ExecuteNode(calcularTotal)" />
+```
+
+**Animación Lottie (type="IMG"):**
+
+Un `IMG` cuyo fichero sea `.json`, `.lottie` o `.tgs` se renderiza como animación Lottie y **arranca sola en bucle infinito**, sin llamar a nada. El atributo `path` (igual que `img`) acepta además PNG, JPG, SVG (renderizado nativo, sin `type="WEB"`) y GIF animado; el formato se decide por la extensión del fichero.
+
+```xml
+<!-- Animación de carga, ida y vuelta -->
+<prop name="MAP_LOADER" type="IMG" visible="1"
+      path="loader.json"
+      labelwidth="0"
+      width="120p" height="120p"
+      repeat-mode="reverse" />
+```
+
+| Extensión | Qué es |
+|-----------|--------|
+| `.json` | La animación en texto plano; sus imágenes pueden ir embebidas dentro o aparte |
+| `.lottie` | Paquete comprimido con la animación y sus imágenes |
+| `.tgs` | Sticker de Telegram: un `.json` comprimido con gzip |
+
+- **Fuentes:** si la animación lleva texto, la fuente se busca **solo** en `fonts/` con el nombre de familia que declara el fichero (una que pida `Roboto` necesita `fonts/Roboto.ttf` o `.otf`); si falta, se usa la del dispositivo.
+- **Imágenes:** embebidas en el fichero, dentro del `.lottie`, o sueltas junto a él respetando la subcarpeta que declare el diseño (normalmente `images/`).
+- **Control desde JavaScript:** `playAnimation(obj)`, `pauseAnimation()`, `resumeAnimation()`, `stopAnimation()` (además rebobina al primer frame), `setAnimationFrame(frame)`, `getMaxFrameCount()` sobre el control obtenido con `getControl(...)`.
+
+`playAnimation(obj)` admite `{reverse, speed, repeatCount, repeatMode, fromFrame, toFrame}`. Ojo: como la animación ya se reproduce sola en bucle infinito, llamar a `playAnimation({...})` con `repeatCount: 0` (defecto) la corta tras **una sola pasada** — para mantener el bucle infinito usar `repeatCount: -1`. `speed` debe ser positivo; `repeatMode` es `"restart"` (defecto) o `"reverse"`; `toFrame: 0` significa "hasta el final".
+
+```javascript
+// Reproducir una vez, al doble de velocidad
+getControl("MAP_LOADER").playAnimation({ speed: 2 });
+
+// Volver a dejarla en bucle infinito, ida y vuelta
+getControl("MAP_LOADER").playAnimation({ repeatCount: -1, repeatMode: "reverse" });
 ```
 
 ### 6.9 Relaciones entre Colecciones

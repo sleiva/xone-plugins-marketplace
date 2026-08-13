@@ -314,7 +314,7 @@ Los siguientes valores funcionan correctamente en proyectos reales diseñados pa
 
 **Sistema de fuentes**
 
-El tamaño de fuente se controla con `fontsize` en el prop, o idealmente via clases CSS para reutilizarlo en todo el proyecto. El nombre de la fuente puede ser cualquier tipografía incluida en el proyecto (`Roboto`, `OpenSans`, etc.) — el fichero `.ttf` o `.otf` debe estar en la carpeta `files/` del proyecto.
+El tamaño de fuente se controla con `fontsize` en el prop, o idealmente via clases CSS para reutilizarlo en todo el proyecto. El nombre de la fuente puede ser cualquier tipografía incluida en el proyecto (`Roboto`, `OpenSans`, etc.) — el fichero `.ttf` o `.otf` debe estar en la carpeta `fonts/` del proyecto.
 
 ```css
 /* Definición en CSS — lo mas recomendable */

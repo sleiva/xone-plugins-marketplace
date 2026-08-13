@@ -153,7 +153,7 @@ frame {
 }
 
 prop {
-    fontname: Roboto-Regular.ttf; /* Puede ser cualquier fuente .ttf/.otf incluida en files/ */
+    fontname: Roboto-Regular.ttf; /* Puede ser cualquier fuente .ttf/.otf incluida en fonts/ */
     fontsize: 10;
     labelbox: false;
     label-wrap: true;

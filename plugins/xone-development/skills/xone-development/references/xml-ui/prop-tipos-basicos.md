@@ -380,7 +380,46 @@ function getCurrentDate() {
 | `error-image` | Imagen a mostrar si la principal falla |
 | `abort-on-error` | Si es `true`, no intenta cargar si hay error |
 
-> **Formatos:** `path` (igual que los atributos `img`/`imgbk`) acepta **PNG, JPG y SVG indistintamente**. El SVG se renderiza de forma nativa y escala sin perder calidad — **no** envuelvas un SVG en un `type="WEB"` ni lo conviertas previamente; basta con apuntar `path="dibujo.svg"`.
+> **Formatos:** `path` (igual que los atributos `img`/`imgbk`) acepta **PNG, JPG y SVG indistintamente**. El SVG se renderiza de forma nativa y escala sin perder calidad — **no** envuelvas un SVG en un `type="WEB"` ni lo conviertas previamente; basta con apuntar `path="dibujo.svg"`. Además acepta **GIF animado** y **animaciones Lottie** (ver abajo), decidiendo por la extensión del fichero.
+
+##### Animaciones Lottie en un `IMG`
+
+Un `IMG` cuyo fichero sea `.json`, `.lottie` o `.tgs` se renderiza como animación Lottie (las exportadas de After Effects con Bodymovin, o las descargadas de LottieFiles) y **arranca sola en bucle infinito**, sin necesidad de llamar a nada:
+
+```xml
+<!-- Animación en bucle, ida y vuelta -->
+<prop name="MAP_LOADER" type="IMG" visible="1"
+      path="loader.json"
+      labelwidth="0"
+      width="120p" height="120p"
+      repeat-mode="reverse" />
+
+<!-- Animación con texto de párrafo recortado a su caja -->
+<prop name="MAP_CARTEL" type="IMG" visible="1"
+      path="cartel.lottie"
+      labelwidth="0"
+      width="100%" height="200p"
+      clip-text-to-bounds="true" />
+```
+
+| Atributo | Descripción |
+|----------|-------------|
+| `repeat-mode` | `restart` (vuelve a empezar) o `reverse` (va y vuelve). Sin declararlo, se repite desde el inicio |
+| `clip-text-to-bounds` | Solo para animaciones con texto de párrafo: recorta el texto a la caja definida en el diseño en vez de dejar que las líneas que no caben se salgan. Apagado por omisión, y con motivo: una línea que desborde la altura **no se dibuja en absoluto**, así que si la fuente no es la del diseño y el texto se reparte en más líneas, desaparece contenido |
+
+**Formatos y qué lleva cada uno:**
+
+| Extensión | Qué es |
+|---|---|
+| `.json` | La animación exportada, en texto plano. Las imágenes pueden ir embebidas en el propio fichero (base64) o aparte |
+| `.lottie` | Paquete comprimido con la animación y sus imágenes dentro. Un `.json` renombrado a `.lottie` también se acepta |
+| `.tgs` | Sticker de Telegram: un `.json` comprimido con gzip. Se reconoce y reproduce igual |
+
+**Fuentes de la animación.** Si la animación lleva texto, la fuente se busca **solo** en la carpeta `fonts/` del proyecto, con el nombre de la familia que declara el propio fichero: si la animación pide `Roboto`, hace falta `fonts/Roboto.ttf` (o `.otf`). Si no está, el texto se pinta con la fuente por defecto del dispositivo, de modo que se ve pero con otras medidas — que es justo lo que puede descolocar el reparto de líneas. Nunca se toman fuentes del sistema por nombre, para que la animación se vea igual en todos los terminales.
+
+**Imágenes de la animación.** Se resuelven de tres maneras, por este orden: embebidas en el propio fichero, dentro del `.lottie`, o como ficheros sueltos junto al fichero de animación, respetando la subcarpeta que declare el diseño (lo habitual es `images/`, de modo que un `loader.json` que pida `images/img_0.png` lo busca en `images/img_0.png` junto a él y, si no está, al lado del propio `loader.json`). Una imagen que no se encuentre deja su capa sin pintar: no rompe la animación ni la app.
+
+> **Los atributos `img` e `imgbk` de cualquier control usan el mismo cargador**, así que también aceptan estas extensiones. Lo que solo existe en el `type="IMG"` es el control de la reproducción: los atributos de arriba y los métodos de animación desde JavaScript (`playAnimation`, `stopAnimation`, `setAnimationFrame`…, ver [métodos de los controles](../javascript/metodos-de-los-controles.md)).
 
 #### 5.9.9 Foto (PH)
 
@@ -399,7 +438,29 @@ Captura de foto con la camara del dispositivo:
       locked="true"
       height="40%"
       title="Foto capturada" />
+
+<!-- Foto en movimiento, con la cámara del propio framework -->
+<prop name="MAP_FOTOMOV" type="PH" visible="1"
+      title="Foto"
+      height="40%"
+      use-internal-camera="true"
+      motion-photo="true" />
 ```
+
+| Atributo | Descripción |
+|----------|-------------|
+| `use-internal-camera` | Captura con la cámara que trae el framework en vez de abrir la app de cámara del dispositivo. Da una pantalla de captura igual en todos los terminales (disparador, temporizador, flash, zoom, brillo y previsualización antes de aceptar) |
+| `motion-photo` | Captura una **foto en movimiento**: un JPG que lleva embebido detrás un clip de vídeo corto con el instante del disparo. Para cualquier visor sigue siendo una foto normal, y las galerías que entienden el formato (Google Fotos) reproducen el movimiento al abrirla |
+| `file-maxsize`, `file-maxwidth`, `file-maxheight`, `file-quality` | Límites de tamaño y calidad de la foto guardada |
+| `analyze-exif-metadata` | Gira el fichero según la orientación con la que se hizo la foto, de modo que se vea derecho en cualquier visor |
+
+##### Fotos en movimiento (`motion-photo`)
+
+> **Úsalo junto a `use-internal-camera="true"`.** Así funciona en cualquier versión de Android, porque la captura y el montaje del fichero los hace el propio framework. Sin `use-internal-camera` se delega en la app de cámara del dispositivo, que solo puede atender la petición a partir de **Android 16** y únicamente si la implementa: a día de hoy no lo hace ninguna, ni siquiera la de los Pixel, con lo que se obtiene una foto normal sin más aviso.
+
+Al capturar una foto en movimiento se **ignoran** `file-maxsize`, `file-maxwidth`, `file-maxheight` y `file-quality`: redimensionar o recomprimir la imagen se llevaría por delante el vídeo embebido. Si necesitas fotos ligeras, no uses `motion-photo`. El fichero resultante pesa lo que la foto más el clip, del orden de varios megas.
+
+`analyze-exif-metadata="true"` sí es compatible: al girar la foto se conserva el vídeo.
 
 #### 5.9.10 Video/Camara (VD) y escaner QR
 

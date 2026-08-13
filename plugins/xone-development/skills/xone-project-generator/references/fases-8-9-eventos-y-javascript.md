@@ -817,6 +817,8 @@ function formatearFechaHora(dFecha) {
 | `ui.startGps(options)` | Iniciar GPS |
 | `ui.showDatePicker(options)` | Selector de fecha |
 | `ui.showTimePicker(options)` | Selector de hora |
+| `ui.scanDocument(params)` | Escáner de documentos del sistema (encuadre guiado, recorte, filtros, varias páginas). Params: `mode` (`"base"`/`"baseWithFilters"`/`"full"`), `pageLimit`, `allowGallery`, `outputJpg`/`outputPdf` (al menos uno activo), callbacks `onSuccess` (array de nombres de fichero en `appData.getFilesPath()` con prefijo `scan_`), `onError` y `onCancelled` (ambos obligatorios). Requiere Google Play Services |
+| `ui.recognizeText(params)` | OCR (alfabeto latino) de una imagen del dispositivo. Params: `path` (obligatorio), `onSuccess`/`onError` (obligatorios), `roi` (`{left, top, width, height}`), `scale`, `grayscale`, `detail` (devuelve líneas con `confidence` y posición). Encaja detrás de `scanDocument` para leer lo escaneado |
 
 #### Objeto `appData` (Datos de Aplicación)
 

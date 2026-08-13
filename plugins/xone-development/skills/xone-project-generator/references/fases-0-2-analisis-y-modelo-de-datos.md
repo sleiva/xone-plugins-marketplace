@@ -76,7 +76,7 @@ INICIO: Usuario solicita nuevo proyecto
          |
          v
 [FASE 11] Tareas Finales (en este orden exacto)
-         |-- 1. Generar base de datos con xone-db-tools create-db
+         |-- 1. Generar base de datos con xone_db_generator
          |-- 2. Insertar datos iniciales (Empresa + Usuario admin)
          |-- 3. Descargar iconos (Iconify API — PNG, JPG o SVG validos)
          |

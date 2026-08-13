@@ -152,6 +152,16 @@ La coleccion que alimenta el contents de mapa debe tener campos con atributos es
 | `mapview-embedded="true"` | Embebe el mapa dentro de la coleccion. Sin este atributo abre la app de mapas del dispositivo |
 | `map-type` | Tipo de mapa: `normal`, `satellite`, `terrain`, `hybrid` |
 | `map-features="roads"` | Activa visualizacion de carreteras |
+| `map-style` | Estilo JSON de Google (en línea o nombre de fichero); recolorea el mapa. Prioritario sobre `map-features` |
+| `traffic-enabled="false"` | Muestra la capa de tráfico |
+| `map-padding="0,0,0,0"` | Padding del mapa en píxeles (`left,top,right,bottom`) |
+| `tilt-gestures-enabled="true"` | Permite inclinar el mapa con gestos |
+| `scroll-gestures-enabled="true"` | Permite desplazar el mapa con gestos |
+| `zoom-gestures-enabled="true"` | Permite hacer zoom con gestos |
+| `rotate-gestures-enabled="true"` | Permite rotar el mapa con gestos |
+| `show-compass="false"` | Muestra la brújula (mapview y openstreetmap) |
+| `indoor-maps-enabled="true"` | Activa los planos de interiores |
+| `show-my-location-button="true"` | Botón para centrar en la ubicación del usuario |
 | `show-user-location="true"` | Muestra la posición del usuario en el mapa |
 | `show-zoom-buttons="true"` | Muestra botones de zoom |
 | `show-google-buttons="true"` | Muestra controles nativos de Google Maps |
@@ -206,6 +216,15 @@ mapControl.clearAllLines();
 // Cambiar tipo de mapa
 mapControl.setMapType("satellite"); // normal, satellite, terrain, hybrid
 
+// Estilo JSON de Google (en línea o nombre de fichero de la app; vacío/nulo restablece el defecto)
+mapControl.setMapStyle("estilo_mapa.json");
+
+// Capa de tráfico
+mapControl.setTrafficEnabled(true);
+
+// Padding del mapa en píxeles (reserva espacio para controles superpuestos)
+mapControl.setMapPadding(0, 200, 0, 0);
+
 // Activar seguimiento del usuario
 mapControl.setFollowUserLocation(true);
 
@@ -236,7 +255,6 @@ var nMetros = new GpsTools().distanceTo([
 
 | Atributo exclusivo OSM | Descripción |
 |------------------------|-------------|
-| `show-compass="true"` | Muestra la brujula en el mapa |
 | `show-minimap="true"` | Muestra un minimapa de referencia |
 | `show-scale="true"` | Muestra la escala del mapa |
 | `follow-location-on-background="true"` | Sigue la localización aunque la app este en segundo plano |

@@ -110,9 +110,32 @@ Todos devuelven el propio botón (encadenables):
 | `setImage(ruta)` | Carga y muestra una imagen (busca en los directorios de la app). |
 | `clearImage()` | Limpia la imagen/fondo. |
 | `playAnimation([obj])` | Reproduce una animación Lottie. `obj`: `{reverse, speed, repeatCount, repeatMode, fromFrame, toFrame}`. |
-| `pauseAnimation()` / `resumeAnimation()` / `stopAnimation()` | Control de la animación Lottie. |
+| `pauseAnimation()` / `resumeAnimation()` / `stopAnimation()` | Control de la animación Lottie. `stopAnimation()` además rebobina al primer frame. |
 | `setAnimationFrame(frame)` | Posiciona la animación en un frame. |
 | `getMaxFrameCount()` | Frame final de la composición Lottie (0 si no hay). |
+
+Detalles de `playAnimation(obj)`, que conviene tener claros porque la animación **ya se está reproduciendo sola en bucle infinito** desde que se pinta el control:
+
+| Clave | Default | Notas |
+|---|---|---|
+| `reverse` | `false` | Reproduce hacia atrás. |
+| `speed` | `1` | Multiplicador. Debe ser **positivo**: `0` o negativo lanzan error. |
+| `repeatCount` | `0` | `0` = **una sola pasada**, así que llamar a `playAnimation({...})` corta el bucle infinito con el que arrancó. Para mantenerlo, `repeatCount: -1`. |
+| `repeatMode` | `"restart"` | `"restart"` o `"reverse"` (ida y vuelta). |
+| `fromFrame` / `toFrame` | `0` | `0` en `toFrame` significa "hasta el final". |
+
+```javascript
+// Reproducir una vez, al doble de velocidad
+getControl("MAP_LOADER").playAnimation({ speed: 2 });
+
+// Volver a dejarla en bucle infinito, ida y vuelta
+getControl("MAP_LOADER").playAnimation({ repeatCount: -1, repeatMode: "reverse" });
+
+// Reproducir solo un tramo (por ejemplo el "tick" final de un check animado)
+getControl("MAP_CHECK").playAnimation({ fromFrame: 30, toFrame: 60 });
+```
+
+Sin argumentos, `playAnimation()` reproduce una pasada con la velocidad que ya tenga la animación.
 
 **Imagen con zoom** (`zoom="true"`): `setImage(ruta)`, `clearImage()`.
 
@@ -408,9 +431,9 @@ Muchos métodos aceptan un **objeto JS** con campos (`{campo: valor}`) o, en alg
 |---|---|
 | `drawLine({[line], strokeColor, [strokeWidth=5], [mode="normal"], data \| locations})` | Polilínea desde polyline codificado (`data`) o array `locations`; `mode`: `normal`/`dashed`/`dotted`/`mixed`. Variante posicional: `drawLine(line, strokeColor, mode, lat1, lng1, ...)`. |
 | `drawCircle({location:{latitude,longitude}, [radius=0], [fillColor], [strokeColor], [strokeWidth=1], [pattern], [visible=true]})` | Círculo (radio en metros); devuelve el círculo. |
-| `drawArea({data, [id], [color], [fillcolor="#339966"], [pattern], [width=2], [onClick]})` | Polígono desde coordenadas (`data`); devuelve el id del área. |
+| `drawArea({data, [id], [color], [fillColor="#339966"], [pattern], [width=2], [onClick]})` | Polígono desde coordenadas (`data`); devuelve el id del área. `fillColor` es la clave preferida (`fillcolor` en minúsculas sigue aceptándose, obsoleta). |
 | `drawEncode({data, [id], [color="#000000"], [pattern]})` | Polilínea desde polyline codificado; devuelve el id. |
-| `drawEncodeArea({data, [id], [color], [fillcolor="#339966"], [pattern], [width=2], [onClick]})` | Polígono desde polyline codificado; devuelve el id. |
+| `drawEncodeArea({data, [id], [color], [fillColor="#339966"], [pattern], [width=2], [onClick]})` | Polígono desde polyline codificado; devuelve el id. |
 | `clearLine(...ids)` / `clearAllLines()` | Borra líneas por id / todas. |
 | `removePolylines(id)` / `clearAllPolylines()` | Borra polilíneas de `drawEncode`. |
 | `removeArea(id)` / `clearAllAreas()` | Borra áreas. |
@@ -428,7 +451,7 @@ Muchos métodos aceptan un **objeto JS** con campos (`{campo: valor}`) o, en alg
 
 | Firma | Qué hace |
 |---|---|
-| `addGeoJson({id, data \| dataFile, [strokeColor], [fillColor]}, ...)` | Añade capa(s) GeoJSON (`data`=objeto/JSON/string, `dataFile`=fichero). |
+| `addGeoJson({id, data \| dataFile, [strokeColor], [strokeWidth], [fillColor]}, ...)` | Añade capa(s) GeoJSON (`data`=objeto/JSON/string, `dataFile`=fichero); estiliza sus polígonos/líneas. Los atributos no declarados conservan el estilo por defecto del motor. |
 | `removeGeoJson(id \| [ids])` / `removeAllGeoJson()` / `getGeoJsonLayerIds()` | Gestión de capas GeoJSON. |
 | `addKml({id, data \| dataFile}, ...)` | Añade capa(s) KML (`data`=string KML, `dataFile`=fichero). |
 | `removeKml(id \| [ids])` / `removeAllKml()` / `getKmlLayerIds()` | Gestión de capas KML. |
@@ -453,6 +476,15 @@ Muchos métodos aceptan un **objeto JS** con campos (`{campo: valor}`) o, en alg
 | `encodePolyline()` | Codifica como polyline las posiciones de todos los POIs. |
 | `showStreetView(location, [radius=0])` / `removeStreetView()` | Muestra / cierra Street View. |
 | `showMap()` | (Re)inicializa y muestra el mapa. |
+| `setMapStyle(styleJsonOrFile)` | Aplica un estilo JSON de Google (en línea o nombre de fichero de la app); vacío/nulo restablece el estilo por defecto. |
+| `setTrafficEnabled(bool)` | Activa/desactiva la capa de tráfico. |
+| `setMapPadding(left, top, right, bottom)` | Padding del mapa en píxeles (reserva espacio para controles superpuestos). |
+
+> En Google Maps, `addGeoJson` estiliza **polígonos, líneas y puntos** (no solo polígonos):
+> - **Genéricos** (todas las geometrías): `strokeColor`, `strokeWidth`, `strokePattern` (`dashed`/`dotted`/`mixed`), `zIndex`, `visible`, `clickable`.
+> - **Override por tipo** (prevalece sobre el genérico): `polygon*` y `line*` — p. ej. `polygonStrokeWidth`, `lineStrokeWidth`, `lineStrokeColor` — más `pointZIndex`/`pointVisible`.
+> - **Solo polígono**: `fillColor`, `strokeJointType`, `geodesic`.
+> - **Solo punto**: `icon` (+`iconWidth`/`iconHeight`), `alpha`, `rotation`, `draggable`, `title`, `snippet`, `anchorU`/`anchorV`.
 
 ### Solo MapLibre (`maplibre`)
 

@@ -369,7 +369,8 @@ El índice se acota a `[0, nº de pills − 1]`; un valor negativo cae a `0` y u
 | `animation-in` | string | `""` | Macro de animación de entrada (ej. `##RIGHT_IN##`, `##BOTTOM_IN##`). |
 | `animation-in-delay` | int (ms) | `0` | Retardo antes de ejecutar la animación de entrada. |
 | `animation-out` | string | `""` | Macro de animación de salida. |
-| `repeat-mode` | enum | `none` | `none`, `repeat`, `reverse`. |
+| `repeat-mode` | enum | `restart` | **Solo animaciones Lottie en `type="IMG"`.** `restart` (vuelve a empezar) o `reverse` (va y vuelve). La animación arranca sola en bucle infinito, así que sin declararlo se repite desde el inicio. |
+| `clip-text-to-bounds` | bool | `false` | **Solo animaciones Lottie en `type="IMG"`.** Recorta el texto de párrafo a la caja definida en el diseño. Una línea que desborde la altura no se dibuja en absoluto, de ahí que venga apagado: si la fuente no es la del diseño, el texto se reparte en más líneas y desaparece contenido. |
 | `ripple-effect` | bool | `true` | Efecto ripple Material Design al pulsar. |
 | `onclick` | script | `""` | Script JavaScript inline al pulsar el control. **Solo como atributo**, nunca como nodo hijo `<onclick>`. **El valor es SIEMPRE JS ejecutable, NO el nombre de un nodo.** `onclick="abrirTareas"` (sin paréntesis) evalúa `abrirTareas` como variable JS global undefined y el botón no hace nada silenciosamente. **Modo estricto:** cada sentencia debe terminar en `;` (incluida la última, también si el script acaba con un bloque `{...}`). Para invocar un nodo XML custom de la coll usar `method="executenode(nombreNodo)"` o, desde JS, `self.ExecuteNode('nombreNodo');` (nombre como string literal entre comillas, **no** `ExecuteNode(nombreNodo)` ni `ExecuteNode(función())`). |
 | `onchange` | script | `""` | Script al cambiar el valor. Misma regla que `onclick` (script inline, `;` al final de cada sentencia). |
@@ -391,13 +392,15 @@ El índice se acota a `[0, nº de pills − 1]`; un valor negativo cae a `0` y u
 | `file-maxheight` | int | `0` | Alto máximo para imágenes capturadas. |
 | `file-quality` | int (%) | `90` | Calidad JPEG para imágenes. |
 | `max-duration` | int (s) | `0` | Duración máxima para video/audio. `0` = sin limite. |
+| `use-internal-camera` | bool | `false` | Captura con la cámara que trae el framework en vez de abrir la app de cámara del dispositivo. |
+| `motion-photo` | bool | `false` | Captura una foto en movimiento: un JPG con un clip de vídeo corto embebido detrás, que las galerías compatibles reproducen. Requiere `use-internal-camera="true"` para funcionar en cualquier versión de Android; sin él lo tiene que implementar la app de cámara del dispositivo (Android 16 o superior). Ignora los atributos `file-*`, porque recomprimir la imagen tiraría el vídeo. |
 | `apply-format-to-file` | bool | `false` | Aplica el formato al fichero resultante (para `type="DR"`). |
 
 ### 4.14 Machine Learning y camara avanzada
 
 | Atributo | Tipo | Default | Descripción |
 |---|---|---|---|
-| `analyze-exif-metadata` | bool | `false` | Analiza y extrae metadatos EXIF de la imagen. |
+| `analyze-exif-metadata` | bool | `false` | Gira el fichero de imagen según la orientación con la que se hizo la foto, para que se vea derecho en cualquier visor. Girar obliga a recomprimir la imagen; si la foto es una foto en movimiento, el clip de vídeo se conserva. |
 | `ml-model` | string | `""` | Ruta del modelo TensorFlow Lite (`.tflite`). |
 | `ml-model-quantized` | bool | `false` | Indica que el modelo esta cuantizado. |
 | `ml-classes` | string | `""` | Ruta del fichero de clases/etiquetas del modelo. |

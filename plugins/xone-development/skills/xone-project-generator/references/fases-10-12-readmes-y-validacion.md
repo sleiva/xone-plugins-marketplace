@@ -16,7 +16,7 @@ Crear un README.md en cada carpeta del proyecto y un README.md principal con el 
 
 Cada carpeta obligatoria debe tener un README.md que describa:
 
-- **bd/README.md**: Proposito de la carpeta, como se genera gestion.db con `xone-db-tools create-db`
+- **bd/README.md**: Proposito de la carpeta, como se genera gestion.db, comando `xone_db_generator`
 - **icons/README.md**: Fuente de iconos (Google Material Icons), formato PNG, tamanios estándar, nomenclatura
 - **files/README.md**: Proposito (archivos dinámicos), como acceder desde código (appData.getFilesPath())
 - **fonts/README.md**: Fuentes incluidas, formatos soportados (TTF, OTF), uso en CSS y XML
@@ -46,17 +46,16 @@ Ejecutar las tareas finales de generación en el orden exacto especificado. Esta
 
 ### 11.2 Orden de Ejecución (OBLIGATORIO)
 
-1. Generar base de datos (`xone-db-tools create-db`)
+1. Generar base de datos (`xone_db_generator`)
 2. Insertar datos iniciales (Empresa + Usuario admin)
 3. Descargar iconos (Iconify API — PNG, JPG o SVG validos)
 
 ### 11.3 Tarea 1: Generar Base de Datos
 
-Comandos:
+Comando:
 
 ```bash
-npm install -g xone-db-tools
-xone-db-tools create-db NombreProyecto --overwrite
+python3 -m xone_db_generator NombreProyecto --overwrite
 ```
 
 Verificación: sqlite3 .../bd/gestion.db ".tables"
@@ -181,7 +180,7 @@ Ejecutar el checklist completo de validación para asegurar que el proyecto esta
 - [ ] `fonts/` existe (recomendado)
 
 #### Base de Datos
-- [ ] `gestion.db` generado con `xone-db-tools create-db`
+- [ ] `gestion.db` generado con `xone_db_generator`
 - [ ] Tablas tienen prefijo `gen_` (o el especificado)
 - [ ] Empresa inicial: `CODIGO=1`, `NOMBRE="EMPRESA DE PRUEBA"`
 - [ ] Usuario admin: `CODIGO=1`, `LOGIN="admin"`, `IDEMPRESA=1`
