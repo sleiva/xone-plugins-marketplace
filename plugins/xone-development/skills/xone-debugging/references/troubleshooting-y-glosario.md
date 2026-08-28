@@ -415,7 +415,7 @@ appData.exit();
 | **runscript** | Tipo de acción dentro de un evento que ejecuta código JavaScript. |
 | **self** | Objeto global JavaScript que referencia al DataObject actual en el contexto del script. |
 | **setval** | Tipo de acción dentro de un evento que asigna un valor a un campo sin JavaScript. |
-| **special** | Atributo de `<coll>` que marca una coleccion como pantalla de entrada de la aplicación. |
+| **special** | Atributo de `<coll>`: el framework NO gestiona automáticamente los datos de esa coleccion — no ejecuta su `sql=` contra la BD ni contra su conexión. De ahí sus dos usos: una pantalla de puro UI (menú, buscador, coll base para `inherits`) y una coleccion que se llena desde script (por ejemplo con `addItem` tras llamar a una API) para pintarla en un `<contents>` o buscar sobre ella. **No confundir con `<entry-point>`**, que es el nodo de `app.xml` que dice qué coleccion se abre al entrar; esa coll suele ser `special`, pero son cosas distintas. Síntoma típico: `special` junto a `sql` da pantalla vacía, porque el `sql` no se ejecuta. |
 | **sql** | Atributo de `<coll>` con la consulta SQL para cargar datos de la tabla. |
 | **type** | Atributo de `<prop>` que define el tipo de dato/control (T, N, B, D, IMG, PH, Z, etc.). |
 | **ui** | Objeto global JavaScript para interfaz de usuario: dialogos, navegación, GPS, camara. |
