@@ -150,7 +150,6 @@ Para cada integración que aplique, anótala en `PLAN.md` §Integraciones con el
 Solo si el desarrollo toca la UI visual:
 
 - Paleta de colores (primario, secundario, fondo, texto, estados). **El formato de color de XOne y su orden de canales, en `xone-development`**: cópialo de ahí antes de escribir un valor.
-- Tema light/dark, variantes por plataforma (`default_night.css`/`default.night.css` — comprueba la convención del proyecto).
 - Tamaños canónicos: consulta [`canonical-sizes.md` de `xone-project-generator`](../xone-project-generator/references/canonical-sizes.md) antes de proponer `width`/`height`/`fontsize`. Recuerda: `p ≠ dp`, Material 56dp = ~168p en 1080×1920.
 - `fontsize` **no está en puntos**: es una escala pequeña y el factor de plataforma se suma. La escala, los factores de `app.xml` y el cálculo, en `xone-development`.
 - **¿El proyecto está en `compatibility-mode`?** Míralo ANTES de proponer estilos: cambia si el CSS se aplica o no (el porqué, en `xone-development`).

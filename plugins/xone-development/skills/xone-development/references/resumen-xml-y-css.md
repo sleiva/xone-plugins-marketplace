@@ -37,7 +37,15 @@ Sistema de estilos propietario, con sintaxis parecida a CSS web pero atributos p
 
 Si el atributo `compatibility-mode` del nodo `<app>` vale `true`, **el CSS se ignora por completo** — compruébalo antes de diagnosticar cualquier estilo que «no se aplica».
 
-> El corpus documenta los nombres de variante de dos formas: con guion bajo (`default_night.css`, `default_ios.css`) y con punto (`default.night.css`, `default.ios.css`). Comprueba en el proyecto qué convención está en uso; no asumas una.
+> **El TEMA OSCURO está sin definir, y hasta que se defina no se genera.** El corpus escribe el
+> nombre del fichero de variante de dos formas incompatibles —con guion bajo
+> (`default_night.css`) y con punto (`default.night.css`)—, y en los proyectos reales de
+> referencia no existe ninguno de los dos: lo que hay son variantes con guion normal
+> (`default-ios.css`, `default-colors.css`). Como el framework carga estas variantes **por
+> convención de nombre**, un nombre equivocado no da error: el fichero no se carga y la app
+> se ve en claro sin que nada lo diga. **Decisión del proyecto (2026-08-29): no proponer ni
+> generar el fichero de tema oscuro hasta fijar su nombre.** Los ejemplos de tema que quedan
+> en las referencias de CSS ilustran la CASCADA, no el nombre — no los copies como ruta.
 
 **Cascada.** De menor a mayor prioridad: `default.css` → plataforma → orientación → tema → condiciones combinadas → **atributos inline en XML** (máxima prioridad). Lo más específico gana atributo por atributo, no bloque por bloque.
 

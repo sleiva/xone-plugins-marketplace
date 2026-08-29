@@ -74,7 +74,6 @@ Permisos Android a declarar en <permissions>: location-foreground, camera.
 ## Estilo  ← solo si el desarrollo toca la UI visual
 
 - Paleta: primario #1565C0, secundario #FFC107, fondo #FFFFFF, texto #212121. Estados: error #D32F2F, éxito #388E3C.
-- Tema light por defecto, variante dark en default_night.css (convención a confirmar en el proyecto).
 - Tamaños (1080×1920): header 164p, body -2 con scroll, footer 216p, botones 124p, inputs 144p, fontsize texto 5 / título 7 / topbar 10.
 - Clases base: .frameHeader, .frameBody, .frameFooter, .btnPrimario, .btnSecundario, .inputText, .card.
 
