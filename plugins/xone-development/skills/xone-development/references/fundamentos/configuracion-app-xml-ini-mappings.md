@@ -252,6 +252,77 @@ XOne expone la agenda de contactos del dispositivo como una **fuente de datos co
 - El SELECT debe incluir al menos uno de los campos anteriores; en caso contrario no devuelve resultados.
 - **Alta y modificación:** un `INSERT`/`UPDATE` sobre `Contacts` crea o actualiza un contacto en la agenda del dispositivo. Además de `name`, `phone` y `email`, al escribir se aceptan `landlinephone` (teléfono fijo), `workphone` (teléfono de trabajo), `company` (empresa) y `job` (puesto). El **borrado de contactos no está soportado**.
 
+#### Conexiones remotas: los `ProgID` que el framework trae de fábrica
+
+Una `<connection>` con `Provider=Xone Remote Provider` y un `ProgID` conecta la app a una
+fuente que **no es una base de datos local**, y las colls la consultan **con SQL normal**: basta
+`connection="<nombre>"` en la coll. La lista completa la decide el runtime
+(`CXoneApplication::CreateRemoteDataConnector`), y son éstos:
+
+| `ProgID` | Qué conecta |
+|---|---|
+| `com.xone.db.json.JSONConnection` | una **API JSON** por HTTP |
+| `com.xone.db.soa.SOAConnection` | un servicio **SOAP** |
+| `com.xone.db.impl.xmlrpc.XMLRPCConnection` | un servicio **XML-RPC** |
+| `com.xone.db.impl.contacts.ContactsConnection` | la **agenda de contactos** del dispositivo |
+| `com.xone.db.impl.replicafiles.RplFilesConnection` | **réplica de ficheros** (solo Android) |
+| `cgsproxy.cproxy` · `cgsrss.cproxy` | proxy HTTP genérico · proxy RSS (heredados) |
+
+Un `ProgID` que no esté en esa lista **no crea conexión**: el runtime devuelve `NULL` y la
+conexión no existe. No los inventes.
+
+##### La conexión JSON, entera
+
+Es la que se usa para hablar con una API propia sin escribir un `addItem` a mano por cada
+registro. La coll declara su `sql` como si la API fuera una tabla, y el proveedor la traduce.
+
+**Declarada en `app.xml`**, para toda la app:
+
+```xml
+<connection name="DatosOnline" datemask="ymd"
+  connstring="Provider=Xone Remote Provider;Data Source=https://api.ejemplo.com/endpoint;ProgID=com.xone.db.json.JSONConnection;Content-Type=application/json;Timeout=15;Security Level=2;Auth=true;LoginCall=true;JWTCall=true;Remote Broker=false;" />
+```
+
+**O dentro de la propia `.xne`**, si solo la usa esa coll — el nodo `<connection>` vale también
+ahí, y es lo que conviene cuando la fuente es de una pantalla y no del proyecto:
+
+```xml
+<coll name="Pedidos" objname="Pedidos" updateobj="Pedidos"
+      progid="ASData.CASBasicDataObj" connection="json" loadall="false">
+  <connection name="json" datemask="ymd"
+    connstring="Provider=Xone Remote Provider;Data Source=http://servidor/json/default.aspx;ProgID=com.xone.db.json.JSONConnection;Timeout=60;Security Level=0" />
+  <group name="General" id="1">
+    <prop name="CLIENTE" type="T" visible="7" />
+    <prop name="TOTAL" type="N" visible="7" />
+  </group>
+</coll>
+```
+
+**Los parámetros del `connstring`**, tal como los lee el runtime
+(`CXoneJsonConnectionData`). Los que no aparecen se quedan en su valor por defecto:
+
+| Parámetro | Qué hace |
+|---|---|
+| `Data Source` | la **URL** del endpoint |
+| `Timeout` | segundos de espera; entero |
+| `Security Level` | nivel de seguridad del canal; entero (`0` en los ejemplos abiertos, `2` con autenticación) |
+| `Content-Type` | cabecera de la petición, p. ej. `application/json` |
+| `HttpMethod` | método HTTP a usar |
+| `Auth` | `true`/`false` — la conexión autentica |
+| `LoginCall` | `true`/`false` — hace la llamada de login |
+| `JWTCall` | `true`/`false` — el token viaja como JWT |
+| `User Id` / `Password` | credenciales (alias equivalentes: `xoneuser` / `xonepass`) |
+| `Remote Broker` | `true`/`false` — habla contra el broker remoto |
+| `Remote Mapped` | URL alternativa del broker mapeado |
+| `postencode` | `true`/`false` — codifica el cuerpo del POST |
+| `sqlquery` | `false` desactiva el modo de consulta SQL |
+| `AllowUnsafeCertificates` | `true` acepta certificados no válidos. **En producción, `false`** |
+| `EnableCertificatePinning` | `true` activa pinning de certificado |
+| `LocalCertificatePath` | ruta del certificado local para el pinning |
+
+**Nunca dejes credenciales escritas en el `connstring` de un proyecto que se entrega**, ni
+`AllowUnsafeCertificates=true`: las dos cosas viajan en claro dentro del `.xne` o del `app.xml`.
+
 #### Sistema de Escalado, Resoluciones y Tamaños de UI
 
 **Como funciona `resolution-width` y `resolution-height`**
