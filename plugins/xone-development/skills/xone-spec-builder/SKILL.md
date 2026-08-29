@@ -121,7 +121,7 @@ Diseña el flujo de usuario afectado:
 - El `viewmode` de un `type="Z"` se **copia del catálogo de `xone-development`**, nunca se escribe de memoria: uno que no exista ahí no da error — se ignora, y sale una lista donde se esperaba otra cosa.
 - Navegación: `ui.openEditView("Coll")` para ir, `ui.getView(self).exit()` para volver.
 - Filtros dinámicos con `asfilter` y contents con `##FLD_…##`.
-- Inicialización: `<before-edit>` al abrir, `<create>` la primera vez. **Nunca `<load>`** (anti-patrón).
+- **¿Qué tiene que pasar al ABRIR la pantalla, y qué solo la PRIMERA vez?** Son eventos distintos, y hay uno que parece el bueno y no lo es: los tres, en `xone-development`.
 - ¿`inherits` o `<include-layout>` para factorizar estructura compartida?
 
 Escribe en `PLAN.md` §Pantallas: nombre, propósito, coll base (si hereda), contenido en prosa, eventos clave. **No generes el `.xne`** — eso es del siguiente paso.
@@ -130,14 +130,18 @@ Escribe en `PLAN.md` §Pantallas: nombre, propósito, coll base (si hereda), con
 
 Solo si el desarrollo las toca:
 
-- **GPS** — `ui.startGps()` antes de leer, `startBrowse`/`endBrowse`, comprobar `STATUS == 1`, pedir permisos.
-- **Cámara / fotos** — `<prop type="PH">`, callbacks con `self` guardado antes.
-- **Firma digital** — `<prop type="DR">` (no `IMG readonly="false"`, obsoleto).
-- **Escáner QR/barcode** — `<prop type="VD">`.
-- **Biometría** — `biometricsManager` (no `fingerprintManager` en código nuevo).
-- **Bluetooth / NFC / impresión** — solo si aplica.
-- **HTTP** — `$http` (idiomático) o `fetch` (con limitaciones). OAuth2 con `new OAuth2()`. Réplica con `replica.processReplicatorQueue`.
-- **Almacenamiento** — `appData.setGlobalMacro`/`getGlobalMacro` para clave-valor.
+- **¿GPS?** Dónde se lee la posición, con qué precisión, y qué pasa sin señal.
+- **¿Cámara o fotos?** Quién las toma, dónde se guardan, si se suben.
+- **¿Firma digital?** En qué pantalla y sobre qué documento.
+- **¿Escáner QR o de código de barras?** Qué se hace con lo leído.
+- **¿Biometría?** Para entrar, para confirmar una acción, o las dos.
+- **¿Bluetooth, NFC o impresión?** Contra qué dispositivo.
+- **¿Habla con un backend?** Por HTTP, con OAuth2, o replicando.
+- **¿Guarda ajustes o tokens** entre sesiones?
+
+**Los mecanismos de cada una —el tipo de `prop`, el objeto, la API y sus obsoletos— viven en
+`xone-development`.** Aquí se decide QUÉ lleva la app y qué permisos arrastra; el CÓMO se
+consulta allí y se cita, no se copia.
 
 Para cada integración que aplique, anótala en `PLAN.md` §Integraciones con el objeto canónico y los permisos Android a declarar en `<permissions>`. Si no aplica ninguna, dilo explícitamente: «sin integraciones de dispositivo» es una decisión válida.
 
@@ -145,11 +149,11 @@ Para cada integración que aplique, anótala en `PLAN.md` §Integraciones con el
 
 Solo si el desarrollo toca la UI visual:
 
-- Paleta de colores (primario, secundario, fondo, texto, estados). Formato `#RRGGBB` o ARGB `#AARRGGBB` (alpha **primero**).
+- Paleta de colores (primario, secundario, fondo, texto, estados). **El formato de color de XOne y su orden de canales, en `xone-development`**: cópialo de ahí antes de escribir un valor.
 - Tema light/dark, variantes por plataforma (`default_night.css`/`default.night.css` — comprueba la convención del proyecto).
 - Tamaños canónicos: consulta [`canonical-sizes.md` de `xone-project-generator`](../xone-project-generator/references/canonical-sizes.md) antes de proponer `width`/`height`/`fontsize`. Recuerda: `p ≠ dp`, Material 56dp = ~168p en 1080×1920.
-- `fontsize` en escala XOne 1-12 (texto `5`, título `7`, topbar `10-11`).
-- ¿`compatibility-mode="true"`? Si lo está, el CSS se ignora —diagnostícalo antes de proponer estilos.
+- `fontsize` **no está en puntos**: es una escala pequeña y el factor de plataforma se suma. La escala, los factores de `app.xml` y el cálculo, en `xone-development`.
+- **¿El proyecto está en `compatibility-mode`?** Míralo ANTES de proponer estilos: cambia si el CSS se aplica o no (el porqué, en `xone-development`).
 - Si es sobre existente, **lee el `default.css` actual** y respeta sus convenciones de nombres de clase.
 
 Escribe en `PLAN.md` §Estilo: paleta, clases base, variantes de tema y tamaños canónicos de los elementos principales.
@@ -158,7 +162,7 @@ Escribe en `PLAN.md` §Estilo: paleta, clases base, variantes de tema y tamaños
 
 Solo si el desarrollo las toca:
 
-- ¿La app trabaja offline contra SQLite local, replica contra backend, o ambas? El modelo local es `gestion.db` con prefijo `gen_` (usa siempre `##PREF##`).
+- ¿La app trabaja offline contra la base local, replica contra un backend, o las dos cosas? **El nombre de la base, el prefijo de tabla y la macro que hay que usar en toda SQL, en `xone-development`.**
 - ¿Login contra DB local, OAuth2, o ambos? Empresas y Usuarios viven en `mappings.xne`.
 - Seguridad: parametriza SQL con `?` (nunca concatenes), HTTPS siempre, pinning/mTLS si aplica, no hardcodees credenciales, cifra tokens antes de guardarlos.
 - ¿Eventos de sincronización? `maintenance` en `Empresas` para réplica programada.
@@ -218,7 +222,7 @@ Ejemplos típicos dignos de ADR en XOne:
 - **Estrategia offline.** «Opera siempre offline y replica en segundo plano» vs «requiere conexión».
 - **Persistencia de tokens.** Tokens cifrados en macros globales y limpiados al cerrar sesión.
 - **Elección de viewmode para un volumen grande.** `gridview` vs `mapview` cuando la elección no es obvia.
-- **`compatibility-mode="true"` activado a propósito.** El CSS se ignora; registrar el ADR evita que alguien pierda tiempo diagnosticando estilos que no aplican.
+- **`compatibility-mode="true"` activado a propósito.** Registrar por qué evita que alguien pierda el rato diagnosticando estilos que, por lo que ese modo implica, no iban a aplicarse.
 - **Migración de `load` a `before-edit`.** Si el proyecto usaba `load` y se decide migrar, registrar por qué —un futuro ingeniero asumirá que siempre se hizo así.
 - **`inherits` frente a `<include-layout>`.** Cuando se elige uno sobre el otro por razones no obvias y revertir implicaría reestructurar varias colls.
 - **Uso de `fetch` frente a `$http`.** Si se desvía del idiomático `$http` hacia `fetch` por una razón concreta —código compartido con web que ya está escrito así, por ejemplo—, vale la pena registrarlo. **Lo que NO vale como razón es la cancelación**: el `fetch` de XOne no tiene cancelación real en vuelo, `AbortController` existe como objeto pero abortar no corta la petición (limitaciones en `xone-development`).
