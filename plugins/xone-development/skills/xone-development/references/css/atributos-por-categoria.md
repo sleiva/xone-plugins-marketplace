@@ -11,7 +11,7 @@ Contenido: tablas compactas de atributos: tipografía, dimensiones, márgenes/pa
 | Atributo | Valores | Descripción |
 |----------|---------|-------------|
 | `fontname` | `NombreFuente.ttf` | Fuente personalizada (archivo .ttf en carpeta fonts/) |
-| `fontsize` | Número (1-50) | Tamaño fuente (sin unidad) |
+| `fontsize` | Número, **escala 1-12** (el parser acepta 1-50) | Tamaño fuente (sin unidad) |
 | `fontbold` | `true` / `false` | Negrita |
 | `fontitalic` | `true` / `false` | Cursiva |
 | `forecolor` | `#RRGGBB` / `#AARRGGBB` | Color texto y etiqueta |
@@ -25,6 +25,25 @@ Contenido: tablas compactas de atributos: tipografía, dimensiones, márgenes/pa
 | `textfont-bold` | `true` / `false` | Texto editable negrita |
 | `textfont-italic` | `true` / `false` | Texto editable cursiva |
 | `labelshadow` | `true` / `false` | Sombra en etiqueta |
+
+> **`fontsize` no está en puntos ni en `dp`: es una escala pequeña a la que el runtime SUMA el
+> factor de la plataforma.** El cálculo, leído en el runtime iOS
+> (`XoneApp::calculateSizeFont`): en iPhone `puntos = fontsize + factor` (y `fontsize + factor/2`
+> si `fontsize <= 2`); en iPad, `fontsize + 4 + factor`. El factor sale de `app.xml` —
+> `ios-font-factor` y `android-font-factor`, **uno por plataforma**. Los valores del proyecto:
+> **`android-font-factor="7"` e `ios-font-factor="8"`**.
+>
+> De ahí que los valores útiles vivan en **1-12** (texto `5`, título de sección `7`, topbar
+> `10`-`11`): con factor 8, un `fontsize="5"` son 13 pt. El `1-50` de la tabla es lo que el
+> parser ACEPTA, no lo que tiene sentido escribir — un `fontsize: 14` no da error, da 22 pt.
+> **Los ejemplos de este fichero anteriores a esta nota usan valores tipo Material (`14`, `16`)
+> heredados del corpus original: cópiales la forma, no el número.**
+>
+> Y el corolario que importa al portar entre proyectos: **los dos factores se afinan por
+> separado** y en un proyecto real pueden diferir mucho (`android-font-factor="13"` con
+> `ios-font-factor="5"`), así que un `fontsize` copiado de otro proyecto sin mirar su `app.xml`
+> no significa nada.
+
 
 ```css
 .tituloSeccion {

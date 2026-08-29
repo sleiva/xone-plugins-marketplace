@@ -139,7 +139,7 @@ XOneStudio genera automáticamente un `.xml` por cada `.xne` porque algunos moto
         resolution-height="1920"
         scale-fontsize="true"
         android-font-factor="7"
-        ios-font-factor="7"
+        ios-font-factor="8"
         default-language="javascript"
         companycolor="#2196F3"
         forecolor="#FFFFFF">
@@ -186,8 +186,8 @@ XOneStudio genera automáticamente un `.xml` por cada `.xne` porque algunos moto
 | `resolution-width` | Ancho en pixeles del dispositivo físico de referencia. Ver sección 5.1b | `"1080"` |
 | `resolution-height` | Alto en pixeles del dispositivo físico de referencia | `"1920"` |
 | `scale-fontsize` | Escala el tamaño de fuente proporcionalmente al cambiar la resolución | `"true"` |
-| `android-font-factor` | Factor de ajuste de fuentes para Android | `"7"` |
-| `ios-font-factor` | Factor de ajuste de fuentes para iOS | `"7"` |
+| `android-font-factor` | Factor de ajuste de fuentes para Android. **Se SUMA al `fontsize`** | `"7"` |
+| `ios-font-factor` | Factor de ajuste de fuentes para iOS. **Se SUMA al `fontsize`** | `"8"` |
 | `default-language` | Lenguaje por defecto para scripts | `"javascript"` |
 | `companycolor` | Color corporativo general (menús, pestañas, selecciones) | — |
 | `forecolor` | Color de texto general de la aplicación | `"#FFFFFF"` |

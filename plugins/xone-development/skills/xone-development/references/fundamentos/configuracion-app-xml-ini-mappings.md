@@ -27,7 +27,7 @@ El archivo `app.xml` es el **punto de partida** de toda la configuración. Defin
         resolution-height="1920"
         scale-fontsize="true"
         android-font-factor="7"
-        ios-font-factor="7"
+        ios-font-factor="8"
         default-language="javascript">
 
         <!-- Conexión a una base de datos alternativa. La base de datos principal NO necesita este nodo. -->
@@ -431,7 +431,7 @@ Este es el `app.xml` del proyecto de ejemplo UseCars (tipo Uber):
         resolution-height="1920"
         scale-fontsize="true"
         android-font-factor="7"
-        ios-font-factor="7"
+        ios-font-factor="8"
         default-language="javascript"
         application-notification-title="UseCars"
         application-max-priority="true">

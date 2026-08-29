@@ -155,7 +155,7 @@ Antes de poner un número, aplica estas reglas en orden:
 
 ## 8. Tipografía (`fontsize`) — escala XOne 1-12
 
-> **`fontsize` en XOne NO está en puntos tipográficos ni en `dp`.** Es una **escala propia 1-12**, modulada por `android-font-factor` / `ios-font-factor` en `app.xml` (default `"7"`). NO mapear directamente a Material `10sp`–`32sp`.
+> **`fontsize` en XOne NO está en puntos tipográficos ni en `dp`.** Es una **escala propia 1-12** a la que el runtime SUMA el factor de la plataforma (`puntos = fontsize + factor`; en iPad, `+4` más). El factor va en `app.xml`, **uno por plataforma**: `ios-font-factor` y `android-font-factor`. **Valores del proyecto: `android-font-factor="7"`, `ios-font-factor="8"`.** NO mapear directamente a Material `10sp`–`32sp`.
 
 | Rango | Uso típico |
 |---|---|
