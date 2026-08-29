@@ -1,6 +1,6 @@
 # Generación XOne — Fases 0-2: flujo, requisitos y modelo de datos
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §1–§3. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §1–§3. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §1 Fase 0 diagrama de flujo completo · §2 Fase 1 análisis de requisitos (datos mínimos, inferencias, regla de decisión técnica) · §3 Fase 2 diseño del modelo de datos (colecciones base obligatorias, tipos de propiedades, visibilidad, foreign keys)
 

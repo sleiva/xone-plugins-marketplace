@@ -1,6 +1,6 @@
 # XOne XML — asfilter, visibilidad, event handlers y macros del sistema
 
-> Fuente: `xone/xone-project-generator/references/xone-xml-ui-c-contents-eventos.md` §7b–§10. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-xml-ui-c-contents-eventos.md` §7b–§10. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §7b nodo asfilter (filtros de búsqueda) · §8 event handlers detallados · §9 sistema de visibilidad · §10 macros del sistema
 

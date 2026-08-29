@@ -1,6 +1,6 @@
 # XOne — Troubleshooting y glosario
 
-> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §19–§20. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/05-events-patterns-faq.md` §19–§20. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §19 troubleshooting completo por síntoma (incluye 19.14b: load no inicializa pantalla, usar before-edit) · §20 glosario de términos XOne
 

@@ -1,6 +1,6 @@
 # XOne — Eventos: interacción avanzada, login, sistema y personalizados
 
-> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §3A–§8. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/05-events-patterns-faq.md` §3A–§8. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §3A drawer y bottom sheet · §4 eventos de login · §5 eventos del sistema (onpushreceived, maintenance, sys-message) · §5A ciclo de aplicación · §5B inactividad · §5D códigos sys-message · §6 réplica · §7 eventos personalizados con ExecuteNode y param · §8 acciones runscript y setval
 

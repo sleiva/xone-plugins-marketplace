@@ -1,6 +1,6 @@
 # XOne — $http: peticiones, futures, TLS y WebSocket
 
-> Fuente: `xone/xone-help-docs/topics/03c-js-appdata-http.md` §5. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03c-js-appdata-http.md` §5. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5 $http: GET, POST, PUT, DELETE, PATCH, descarga de fichero, futures y llamadas en paralelo, seguridad SSL/TLS (mutual TLS, pinning, allowedRootCas), proxy y WebSocket
 

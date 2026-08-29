@@ -1,6 +1,6 @@
 # XOne JavaScript — ui: navegación, mensajes y vista
 
-> Fuente: `xone/xone-help-docs/topics/03b-js-ui.md` §3.1–§3.4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03b-js-ui.md` §3.1–§3.4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §3.1 navegación (openEditView, openMenu) · §3.2 mensajes y diálogos (msgBox, showToast, showSnackbar) · §3.3 refrescar y acceder a controles, showcase · §3.4 date/time pickers
 

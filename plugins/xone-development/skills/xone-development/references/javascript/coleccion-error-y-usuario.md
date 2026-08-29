@@ -1,6 +1,6 @@
 # XOne JavaScript — selfDataColl, err y user
 
-> Fuente: `xone/xone-help-docs/topics/06-javascript-runtime-objects.md` §1–§4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/06-javascript-runtime-objects.md` §1–§4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 objetos globales y sus alias · §2 API completa de la colección actual (información, acceso, crear/añadir/borrar, browse, filtros y orden, búsqueda full-text, macros y variables, metadatos, SQL directo y JSON) · §3 objeto de error global y excepciones del framework · §4 usuario logueado
 

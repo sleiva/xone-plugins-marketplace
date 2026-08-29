@@ -1,6 +1,6 @@
 # XOne JavaScript — Métodos que expone cada control
 
-> Fuente: `xone/xone-help-docs/topics/03f-js-controles-metodos.md` §Cómo se accede a un control–§8. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03f-js-controles-metodos.md` §Cómo se accede a un control–§8. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: cómo se accede a un control · §1 campos de entrada y visualización · §2 controles numéricos con viewmode · §3 multimedia y especiales (webview, vídeo, cámara, dibujo, pdf) · §4 listas y contenidos type=Z · §5 mapas · §6 gráficas · §7 realidad aumentada · §8 frames
 

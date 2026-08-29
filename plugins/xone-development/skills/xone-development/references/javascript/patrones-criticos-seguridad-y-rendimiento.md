@@ -1,6 +1,6 @@
 # XOne JavaScript — Patrones críticos, seguridad y rendimiento
 
-> Fuente: `xone/xone-help-docs/topics/03e-js-patrones-buenas-practicas.md` §9–§11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03e-js-patrones-buenas-practicas.md` §9–§11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §9 patrones críticos (lock/unlock, startBrowse/endBrowse, filter/restore, preservación de contexto en callbacks asíncronos) · §10 seguridad (prevención de SQL injection, validación de entrada, encriptación, manejo de credenciales) · §11 optimización y rendimiento
 

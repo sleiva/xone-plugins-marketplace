@@ -1,6 +1,6 @@
 # XOne XML — Props por tipo: mapas, listas y vistas de colección
 
-> Fuente: `xone/xone-help-docs/topics/02b-xml-prop-tipos.md` §5.9.11–§5.9.12d. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/02b-xml-prop-tipos.md` §5.9.11–§5.9.12d. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5.9.11 mapa type=Z viewmode=mapview · §5.9.12 grid/lista Z · §5.9.12e chips · §5.9.12c tablero kanban · §5.9.12d carrusel coverflow
 

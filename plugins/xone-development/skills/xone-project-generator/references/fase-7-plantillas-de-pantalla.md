@@ -1,6 +1,6 @@
 # Generación XOne — Fase 7: plantillas de pantalla base
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` L2269–2562. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` L2269–2562. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7.1-7.3 orden de generación y preguntas previas · §7.4 plantilla EntradaApp.xne (obligatoria) · §7.5 MenuPrincipal.xne · §7.6 Login.xne
 

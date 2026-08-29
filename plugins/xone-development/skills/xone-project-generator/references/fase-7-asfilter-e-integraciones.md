@@ -1,6 +1,6 @@
 # Generación XOne — Fase 7: asfilter e integraciones
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` L4652–4784. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` L4652–4784. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7.14 filtros de búsqueda con asfilter · §7.15 objetos complementarios como opciones de integración
 

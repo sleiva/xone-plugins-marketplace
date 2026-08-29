@@ -1,6 +1,6 @@
 # XOne — Biometría, ImageDrawing y otros objetos utilitarios
 
-> Fuente: `xone/xone-project-generator/references/xone-javascript-patterns-d-createobject.md` §2.11 · `xone/xone-project-generator/references/xone-javascript-patterns-d-createobject.md` §2.12.15–§2.12.17. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-javascript-patterns-d-createobject.md` §2.11 · `xone/v2/xone-project-generator/references/xone-javascript-patterns-d-createobject.md` §2.12.15–§2.12.17. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §2.11 biometricsManager · §2.12.15 ImageDrawing · §2.12.16 otros objetos utilitarios · §2.12.17 tabla resumen de objetos complementarios
 

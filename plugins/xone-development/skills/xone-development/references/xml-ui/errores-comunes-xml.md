@@ -1,6 +1,6 @@
 # XOne XML — Errores comunes a evitar
 
-> Fuente: `xone/xone-project-generator/references/xone-xml-ui-e-mapas-errores.md` §14. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-xml-ui-e-mapas-errores.md` §14. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §14 errores comunes de XML y su corrección
 

@@ -1,6 +1,6 @@
 # XOne XML — Layouts avanzados, herencia y buenas prácticas
 
-> Fuente: `xone/xone-help-docs/topics/02d-xml-layouts-herencia.md` §9–§11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/02d-xml-layouts-herencia.md` §9–§11. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §9 layouts: responsive con porcentajes, modales flotantes, FAB · §10 herencia entre colecciones con inherits y composición con include-layout · §11 best practices, checklist de validación XML y unicidad de nombres de nodos
 

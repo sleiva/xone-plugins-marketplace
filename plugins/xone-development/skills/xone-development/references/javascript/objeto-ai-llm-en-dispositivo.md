@@ -1,6 +1,6 @@
 # XOne JavaScript — Objeto ai: LLM generativo en el dispositivo
 
-> Fuente: `xone/xone-help-docs/topics/08-objeto-ai.md` §1–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/08-objeto-ai.md` §1–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 flujo típico · §2 downloadModel · §3 canLoadModel · §4 getModelInfo · §5 loadModel/unload · §6 generate · §7 chat con streaming · §8 cancelar y reiniciar · §9 herramientas y function calling · §10 loadSkills · §11 formatos de imagen y audio · §12 parámetros recomendados Gemma 4 y decodificación especulativa · §13 buenas prácticas y problemas comunes
 

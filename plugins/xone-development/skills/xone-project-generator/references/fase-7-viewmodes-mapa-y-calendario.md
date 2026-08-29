@@ -1,6 +1,6 @@
 # Generación XOne — Fase 7: viewmodes de mapa y calendario
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` L3522–3976. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` L3522–3976. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7.13 viewmodes disponibles · §7.13a mapview y openstreetmap · §7.13b calendarview
 

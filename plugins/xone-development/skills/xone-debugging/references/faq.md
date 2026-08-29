@@ -1,6 +1,6 @@
 # XOne — FAQ por área
 
-> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §14–§18. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/05-events-patterns-faq.md` §14–§18. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §14 FAQ general · §15 FAQ XML/UI · §16 FAQ JavaScript · §17 FAQ CSS · §18 FAQ estructura de proyecto
 

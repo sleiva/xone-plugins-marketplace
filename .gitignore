@@ -1,8 +1,13 @@
 # entorno de desarrollo de plugins OpenCode (node_modules, package.json)
 .opencode/
 
-# corpus antiguo de skills XOne, conservado solo como referencia local
-/xone/
+# El corpus de referencia de XOne. Se versiona SOLO `v2`, que es la versión viva y la que
+# citan las líneas `> Fuente:` de las skills; `v1` y los comparadores entre versiones se
+# quedan fuera, en la máquina de quien mantiene el corpus.
+# No vale con `/xone/` + una excepción: git no puede re-incluir algo dentro de un directorio
+# excluido, así que se excluyen las ENTRADAS (`/xone/*`) y se readmite `v2`.
+/xone/*
+!/xone/v2/
 
 # macOS
 .DS_Store

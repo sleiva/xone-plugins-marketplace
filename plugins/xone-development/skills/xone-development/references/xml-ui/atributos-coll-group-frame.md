@@ -1,6 +1,6 @@
 # XOne XML — Referencia de atributos: coll, group y frame
 
-> Fuente: `xone/xone-help-docs/topics/07-xml-attributes-reference.md` §1–§3. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/07-xml-attributes-reference.md` §1–§3. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 todos los atributos de coll · §2 atributos de group · §3 atributos de frame, con tipo, valores permitidos y valor por defecto
 

@@ -1,6 +1,6 @@
 # XOne JavaScript — Motor, contexto de ejecución y escape XML
 
-> Fuente: `xone/xone-help-docs/topics/03a-js-self.md` §1. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03a-js-self.md` §1. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 motor JS embebido, objetos globales disponibles, cómo se ejecuta el JS desde eventos XML, diferencias con JS web, archivos JS del proyecto, alcance y persistencia de variables, buenas prácticas y escape XML/CDATA dentro de .xne
 

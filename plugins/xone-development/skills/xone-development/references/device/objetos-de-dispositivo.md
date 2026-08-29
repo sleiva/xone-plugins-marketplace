@@ -1,6 +1,6 @@
 # XOne — Objetos de dispositivo y hardware
 
-> Fuente: `xone/xone-help-docs/topics/03d-js-createobject.md` §8.1–§8.11, §8.12–§8.15. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03d-js-createobject.md` §8.1–§8.11, §8.12–§8.15. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §8.1 FileManager · §8.2 XOnePDF · §8.3 XOnePrinter · §8.4 BarcodeGenerator · §8.5 Datawedge · §8.6 XOneNFC · §8.7 XOneOCR · §8.8 BluetoothSerialPort · §8.9 WifiManager · §8.10 Animation · §8.11 deviceInfo · §8.12 GpsTools · §8.13 OAuth2 · §8.14 WebSocket · §8.15 fingerprintManager
 

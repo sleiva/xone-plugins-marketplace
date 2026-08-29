@@ -1,6 +1,6 @@
 # Generación XOne — Fases 4-5: estructura de carpetas y configuración
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §5–§6. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §5–§6. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §5 Fase 4 estructura de carpetas, ficheros raíz obligatorios, splash y la regla .xne vs .xml generado · §6 Fase 5 app.xml completo, escalado y resoluciones, app.ini, license.ini y mappings.xne
 

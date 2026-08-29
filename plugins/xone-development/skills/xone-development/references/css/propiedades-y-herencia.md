@@ -1,6 +1,6 @@
 # XOne CSS — Propiedades disponibles y herencia extends
 
-> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §5–§6. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/04-css-styling-guide.md` §5–§6. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5 propiedades por categoría (dimensiones, márgenes, padding, fuentes, texto, fondo, bordes, sombras, visibilidad, Material) · §6 sistema de herencia extends con patrones y cadenas
 

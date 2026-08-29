@@ -1,6 +1,6 @@
 # XOne — Errores comunes de principiantes
 
-> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §10. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/01-xone-fundamentals.md` §10. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §10 errores comunes al empezar con XOne y su corrección
 

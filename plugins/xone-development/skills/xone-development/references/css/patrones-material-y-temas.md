@@ -1,6 +1,6 @@
 # XOne CSS — Patrones Material Design, temas y CSS de ejemplo
 
-> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §14–§16. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/04-css-styling-guide.md` §14–§16. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §14 patrones Material (header/body/footer, botones, inputs, tarjetas, FAB, toolbar, item de lista) · §15 temas light/dark y cambio dinámico · §16 default.css y colors.css completos y comentados
 

@@ -1,6 +1,6 @@
 # Generación XOne — Fase 3: estilos CSS
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §4. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §4. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §4 declaración de CSS en app.xml, prioridad de estilos, selectores, plantilla default.css, plantilla colors.css, tabla de transparencias alpha y referencia rápida de atributos
 

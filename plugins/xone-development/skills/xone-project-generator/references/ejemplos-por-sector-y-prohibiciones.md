@@ -1,6 +1,6 @@
 # Generación XOne — Ejemplos por sector y prohibiciones
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §14, §16. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §14, §16. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §14 ejemplos por sector (logística, energía, comercio, salud, servicios) · §16 prohibiciones explícitas: lo que no se debe hacer nunca y la regla de oro
 

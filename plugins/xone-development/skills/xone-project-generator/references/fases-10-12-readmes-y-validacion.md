@@ -1,6 +1,6 @@
 # Generación XOne — Fases 10-12: READMEs, tareas finales y validación
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §11–§13. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §11–§13. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §11 Fase 10 READMEs · §12 Fase 11 tareas finales (base de datos, datos iniciales, iconos) · §13 Fase 12 checklist completo de validación
 

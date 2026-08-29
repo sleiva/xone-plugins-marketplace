@@ -1,6 +1,6 @@
 # Generación XOne — Fase 7: pantallas de entidad y estructura
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` L3033–3521. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` L3033–3521. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7.8 lista de entidad · §7.9 detalle/formulario · §7.10 pantalla con mapa · §7.11 configuración · §7.12 estructura de pantalla estándar · §7.12b nodo group y pestañas · §7.12c nodo frame
 

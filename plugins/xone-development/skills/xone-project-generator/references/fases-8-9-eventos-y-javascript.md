@@ -1,6 +1,6 @@
 # Generación XOne — Fases 8-9: eventos, permisos y JavaScript
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §9–§10. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §9–§10. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §9 Fase 8 eventos de ciclo de vida, navegación, colección Empresas, aplicación, inactividad, bind en controles, permisos Android y referencia rápida por ubicación · §10 Fase 9 plantilla functions.js y referencia rápida de API
 

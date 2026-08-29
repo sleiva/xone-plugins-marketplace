@@ -1,6 +1,6 @@
 # XOne — systemSettings: permisos, estado del sistema y MDM
 
-> Fuente: `xone/xone-help-docs/topics/03d-js-createobject.md` §8.11b. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03d-js-createobject.md` §8.11b. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §8.11b systemSettings: permisos en runtime con futures, brillo, red, batería, memoria y espacio, hardware, rutas, MDM, XOneLive e Intune
 

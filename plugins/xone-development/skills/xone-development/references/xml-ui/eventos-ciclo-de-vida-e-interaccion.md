@@ -1,6 +1,6 @@
 # XOne — Eventos: sistema, ciclo de vida e interacción
 
-> Fuente: `xone/xone-help-docs/topics/05-events-patterns-faq.md` §1–§3. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/05-events-patterns-faq.md` §1–§3. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 cómo funciona el sistema de eventos · §2 eventos de ciclo de vida (create, before-edit, after-edit, load) · §3 eventos de interacción (onclick, onchange, selecteditem, onlongpressitem, onback)
 

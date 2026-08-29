@@ -1,6 +1,6 @@
 # XOne XML — Mapas: atributos, eventos y API JavaScript
 
-> Fuente: `xone/xone-project-generator/references/xone-xml-ui-e-mapas-errores.md` §15. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-xml-ui-e-mapas-errores.md` §15. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §15 mapas completos: atributos del prop type=Z viewmode=mapview, eventos y API JavaScript del control de mapa
 

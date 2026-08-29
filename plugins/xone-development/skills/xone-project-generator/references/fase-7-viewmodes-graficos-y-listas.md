@@ -1,6 +1,6 @@
 # Generación XOne — Fase 7: viewmodes de gráficos y listas
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` L3977–4651. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` L3977–4651. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7.13c gráficos (barchart, piechart, linechart) · §7.13d picturemap · §7.13e slideview · §7.13f expanview · §7.13g gridview · §7.13h patrón contentselitem
 

@@ -1,6 +1,6 @@
 # Generación XOne — Fase 7: plantilla Consola.xne
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` L2563–3032. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` L2563–3032. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7.7 plantilla Consola.xne completa (obligatoria)
 

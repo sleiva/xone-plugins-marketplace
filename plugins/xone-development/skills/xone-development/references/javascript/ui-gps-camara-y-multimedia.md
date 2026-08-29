@@ -1,6 +1,6 @@
 # XOne JavaScript — ui: GPS, cámara, firma, escáner y timers
 
-> Fuente: `xone/xone-help-docs/topics/03b-js-ui.md` §3.5–§3.9. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03b-js-ui.md` §3.5–§3.9. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §3.5 GPS (startGps completo, GpsCollection, GpsTools) y cámara/archivos (startCamera, scanDocument, recognizeText) · §3.6 firma digital · §3.7 escáner QR/barcode · §3.8 sleep y timers · §3.9 otros
 

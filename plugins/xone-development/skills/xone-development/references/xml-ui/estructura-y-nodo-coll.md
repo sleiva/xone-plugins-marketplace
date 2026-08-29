@@ -1,6 +1,6 @@
 # XOne XML — Estructura de los .xne y nodo coll
 
-> Fuente: `xone/xone-help-docs/topics/02a-xml-estructura.md` §1–§2. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/02a-xml-estructura.md` §1–§2. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §1 introducción al sistema de UI · §2 nodo coll: colecciones de datos vs especiales, valores de progid, atributos, sql y loadall
 

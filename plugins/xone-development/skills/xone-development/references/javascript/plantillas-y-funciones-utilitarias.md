@@ -1,6 +1,6 @@
 # XOne JavaScript — Plantillas de código y funciones utilitarias
 
-> Fuente: `xone/xone-help-docs/topics/03e-js-patrones-buenas-practicas.md` §12–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03e-js-patrones-buenas-practicas.md` §12–§13. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §12 plantillas completas: CRUD, filtrado, maestro-detalle, GPS, fotos, chat, QR, login personalizado · §13 funciones utilitarias recomendadas para functions.js
 

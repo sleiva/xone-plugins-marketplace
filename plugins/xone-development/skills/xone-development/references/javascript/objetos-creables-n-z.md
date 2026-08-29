@@ -1,6 +1,6 @@
 # XOne JavaScript — Objetos creables (Socket a XOneSigner) y lista canónica
 
-> Fuente: `xone/xone-help-docs/topics/06-javascript-runtime-objects.md` L822–1197. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/06-javascript-runtime-objects.md` L822–1197. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §5.13 Socket/WebSocket · §5.14 DebugTools · §5.15 IrManager · §5.16 SoundManager · §5.17 VibrationManager · §5.18 WearableConnection · §5.19 AccountManager · §5.20 XOneNFC · §5.21 ImageDrawing · §5.22 BarcodeGenerator · §5.23 XOnePrinter · §5.24 XOnePDF · §5.25 XOneOCR · §5.26 XOneSigner · §5.28 AccessibilityManager · §5.27 lista completa de creables
 

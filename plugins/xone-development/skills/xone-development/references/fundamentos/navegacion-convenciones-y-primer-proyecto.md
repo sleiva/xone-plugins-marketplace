@@ -1,6 +1,6 @@
 # XOne — Navegación, convenciones y primer proyecto
 
-> Fuente: `xone/xone-help-docs/topics/01-xone-fundamentals.md` §7–§9. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/01-xone-fundamentals.md` §7–§9. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §7 flujo de navegación · §8 convenciones de nomenclatura · §9 pasos para crear un proyecto básico
 

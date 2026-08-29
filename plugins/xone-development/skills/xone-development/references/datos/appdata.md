@@ -1,6 +1,6 @@
 # XOne — appData: colecciones, sesión, macros y SQL
 
-> Fuente: `xone/xone-help-docs/topics/03c-js-appdata-http.md` §4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/03c-js-appdata-http.md` §4. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §4 appData completo: getCollection y operaciones, login/logout, paso de datos entre pantallas, macros globales, SQL directo, detección de dispositivo, loadIncludeFile y loadCssFile
 

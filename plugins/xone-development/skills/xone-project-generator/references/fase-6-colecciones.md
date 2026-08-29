@@ -1,6 +1,6 @@
 # Generación XOne — Fase 6: generación de colecciones
 
-> Fuente: `xone/xone-project-generator/references/xone-project-generation-workflow.md` §7. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
+> Fuente: `xone/v2/xone-project-generator/references/xone-project-generation-workflow.md` §7. Referencia de la skill; el índice está en [../SKILL.md](../SKILL.md).
 
 Contenido: §7 nomenclatura, cuándo usar el prefijo MAP_, plantillas de colección, atributos de coll y prop, herencia inherits e include-layout, contents, campos por tipo de dato, relaciones y modos de edición
 

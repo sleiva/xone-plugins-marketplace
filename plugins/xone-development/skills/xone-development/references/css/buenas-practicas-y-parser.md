@@ -1,6 +1,6 @@
 # XOne CSS — Buenas prácticas y funciones del parser
 
-> Fuente: `xone/xone-help-docs/topics/04-css-styling-guide.md` §17–§18. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
+> Fuente: `xone/v2/xone-help-docs/topics/04-css-styling-guide.md` §17–§18. Referencia de la skill; el índice está en [../../SKILL.md](../../SKILL.md).
 
 Contenido: §17 top 15 buenas prácticas, anti-patrones y checklist · §18 funciones del parser: comentarios, @import, variables :root/var(), calc(), !important/!default, @extend, selectores múltiples, modo estricto
 
