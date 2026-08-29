@@ -60,7 +60,7 @@ Aun existiendo, lo idiomático en XOne es `$http` en vez de `fetch`, y `ui.execu
 - Dos `<coll>` distintas **sí** pueden tener contenido idéntico, siempre que su propio `name` sea distinto. Dos colls con el mismo `name` en el proyecto no son válidas.
 - El atributo `name` es **case-sensitive**, y eso aplica a todas las referencias cruzadas: `self.MiNombre`, `mapcol`, `linkedto`, `inherits`, `<field name="...">`, `getControl("...")`, `ui.openEditView("...")`, `appData.getCollection("...")`.
 - En cada `<group>`, `id` es obligatorio y único dentro de la coll. Convención habitual: `1`, `2`, `3`… para grupos normales, `999` para HEADER fijo y `0` para FOOTER fijo.
-- Prefijo `MAP_`: solo para campos **no persistidos** (UI temporal, JOIN, `linkedto`). El framework excluye `MAP_*` de INSERT y UPDATE. Los campos de BD van sin prefijo.
+- Prefijo `MAP_`: significa que el prop **no es columna de la tabla de `objname`**, así que el framework lo excluye de INSERT y UPDATE. Lo llevan los alias de JOIN (`c.NOMBRE AS MAP_NOMBRECLIENTE`), la descripción visible de un combo con `linkedto`, y los props puramente visuales (labels, botones, totales, estados de UI). **El fallo es simétrico**: ponérselo a una columna real pierde el dato al guardar; omitirlo en un alias o en la descripción de un combo da error SQL al actualizar una columna inexistente. Detalle en [convenciones](references/fundamentos/navegacion-convenciones-y-primer-proyecto.md).
 
 ## Visibilidad
 

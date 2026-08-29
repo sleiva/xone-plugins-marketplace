@@ -152,6 +152,47 @@ Seguir convenciones de nomenclatura consistentes es fundamental para mantener un
 | Labels informativos | `MAP_LBL_` + nombre | `MAP_LBL_TITULO`, `MAP_LBL_SUBTITULO` |
 | Propiedades con `title` | camelCase o descriptivo | `txtNombre`, `btnGuardar`, `lblTitulo` |
 
+#### Qué significa `MAP_`, exactamente
+
+El prefijo **no es cosmético ni una convención de estilo**: le dice al framework que ese prop
+**no es una columna de la tabla de `objname`**, y por eso lo excluye de los `INSERT` y `UPDATE`.
+El valor vive solo en memoria, dentro del DataObject.
+
+**Regla de oro:** si el valor no viene de una columna de `objname`, el `name` empieza por
+`MAP_`. Los tres casos:
+
+1. **Alias de JOIN** en el `sql` de la coll. La FK real va sin prefijo; la descripción traída
+   del JOIN, con él:
+
+   ```xml
+   <coll name="Pedidos" objname="pedidos" updateobj="pedidos"
+         sql="SELECT p.ID, p.IDCLIENTE, c.NOMBRE AS MAP_NOMBRECLIENTE
+              FROM ##PREF##pedidos p JOIN ##PREF##clientes c ON c.ID = p.IDCLIENTE">
+     <group name="General" id="1">
+       <prop name="IDCLIENTE" type="T" visible="0" />          <!-- columna: sin MAP_ -->
+       <prop name="MAP_NOMBRECLIENTE" type="T" title="Cliente" /><!-- alias: con MAP_ -->
+     </group>
+   </coll>
+   ```
+
+2. **Descripción de un combo con `linkedto`**: el prop oculto que guarda el ID **es** columna y
+   va sin prefijo; el visible que enseña la descripción lleva `MAP_`.
+
+3. **Props puramente visuales**: etiquetas `L`, botones `B`, totales calculados, estados de UI,
+   buscadores, imágenes decorativas, callbacks `O`. Nada de eso se persiste.
+
+**El fallo es SIMÉTRICO, y las dos mitades duelen distinto:**
+
+| Error | Qué pasa |
+|---|---|
+| `MAP_` a algo que **sí** es columna | **el dato se pierde al guardar** — la pantalla carga bien, así que no se nota hasta que falta |
+| **omitirlo** en un alias de JOIN o en la descripción de un combo | **error SQL** al actualizar: se intenta escribir en una columna que no existe |
+
+**No son de solo lectura.** Se leen y escriben con normalidad (`self.MAP_X`, `setval`,
+`linkedto`), valen en `disablevisible`, en macros `##FLD_MAP_X##` y como destino de
+`ui.refresh("MAP_X")`. El `locked="true"` que aparece en muchos ejemplos es una decisión de
+interfaz, no una consecuencia del prefijo.
+
 ### Clases CSS
 
 | Tipo de clase | Convencion | Ejemplos |
