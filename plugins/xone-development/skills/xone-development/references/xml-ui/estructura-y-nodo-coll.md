@@ -216,11 +216,21 @@ Los campos `ID` y `ROWID` existen siempre en toda tabla persistida (con `objname
 
 ### 2.5 Colecciones especiales vs colecciones de datos
 
-**Coleccion especial** (`special="true"`):
+**Coleccion especial** (`special="true"`): **el framework NO gestiona sus datos.**
+
 - No tiene tabla en la base de datos.
-- Se usa para pantallas de menú, login, bienvenida (`EntradaApp`) u otras sin datos persistentes.
-- Los campos `<prop>` son solo de memoria temporal.
-- No necesita `sql`, `objname` ni `updateobj`.
+- **`sql`, `objname` y `updateobj` no se requieren, y si se ponen el framework los IGNORA.**
+  Vacíos o ausentes, las dos formas valen. Esto no es lo mismo que «no hacen falta»: un `sql`
+  escrito aquí **no se ejecuta**, y ése es el síntoma clásico de pantalla vacía en una coll
+  especial — el `SELECT` está, parece correcto, y nadie lo corre.
+- Tiene **dos usos**, que son el mismo visto sin datos y con ellos:
+  1. **Pantalla de puro UI** — menú, login, bienvenida (`EntradaApp`), buscador, o una coll base
+     para heredar con `inherits`. Los `<prop>` son memoria temporal.
+  2. **Coleccion llenada desde script** — se rellena a mano con `addItem` (por ejemplo tras
+     llamar a una API) para pintarla en un `<contents>` o para buscar sobre ella. Los datos son
+     reales; lo que no hay es una tabla detrás que el framework cargue y guarde solo.
+- **No confundir con `<entry-point>`**, el nodo de `app.xml` que dice qué coleccion se abre al
+  entrar: esa coll suele ser `special`, pero son cosas distintas.
 
 ```xml
 <coll name="MenuPrincipal" title="Menu"
