@@ -8,7 +8,7 @@ También incluye una instalación nativa para [OpenCode](https://opencode.ai/), 
 
 ### xone-development
 
-Skills expertas para crear, verificar, revisar y depurar aplicaciones XOne con XML `.xne`, JavaScript y CSS XOne. Incluye 4 skills: una puerta de conocimiento y tres de procedimiento.
+Skills expertas para crear, verificar, revisar y depurar aplicaciones XOne con XML `.xne`, JavaScript y CSS XOne. Incluye 6 skills: una puerta de conocimiento y cinco de procedimiento.
 
 | Skill | Rol |
 | --- | --- |
@@ -85,7 +85,7 @@ claude --plugin-dir ./plugins/xone-development
 
 En OpenCode, abre este repositorio como proyecto. Las skills se descubren desde `plugins/xone-development/skills/`, configurado mediante `skills.paths` en `opencode.json`. Los comandos son específicos de Claude Code.
 
-En Codex, abre este repositorio como proyecto: `AGENTS.md` en la raíz apunta a `plugins/xone-development/skills/` y lista las cuatro skills. No se mantienen copias para Codex, igual que con OpenCode. Comprobado el 2026-08-03 con `codex-cli 0.146.0` (`codex exec "Lista las skills de XOne disponibles en este repositorio, por su nombre exacto."`), enumerando exactamente las cuatro skills.
+En Codex, abre este repositorio como proyecto: `AGENTS.md` en la raíz apunta a `plugins/xone-development/skills/` y lista las seis skills. No se mantienen copias para Codex, igual que con OpenCode. Comprobado el 2026-08-03 con `codex-cli 0.146.0` (`codex exec "Lista las skills de XOne disponibles en este repositorio, por su nombre exacto."`), enumerando exactamente las **cuatro que había entonces**; con `xone-spec-builder` y `xone-plan-builder` (2026-08-29) la comprobación **no se ha repetido**.
 
 ## Desarrollo
 
@@ -98,7 +98,7 @@ claude plugin validate ./plugins/xone-development
 scripts/validate-skills.sh
 ```
 
-`scripts/validate-skills.sh` descubre las skills desde el sistema de ficheros y comprueba: el frontmatter (`name`/`description` presentes, más un parseo YAML real que detecta un frontmatter sintácticamente inválido); el tamaño del `SKILL.md` (techo general de 500 líneas, y uno propio de 400 para la puerta de conocimiento `xone-development`); que todo enlace a `references/` resuelva, tanto desde el `SKILL.md` como los enlaces relativos dentro de los propios ficheros de referencia; que ninguna referencia quede huérfana; un guardián de duplicados que falla si dos líneas largas (>35 caracteres) de `SKILL.md` distintos superan el 65% de solape de tokens — una heurística con malla conocida, no una prueba exhaustiva: ver `docs/ARCHITECTURE.md` §10.1 — con una allowlist corta de excepciones documentadas; y que `opencode debug skill` enumere las cuatro por nombre con su `location` bajo `plugins/xone-development/skills/` (no solo por nombre: un `xone-help-docs` global homónimo no basta para pasar).
+`scripts/validate-skills.sh` descubre las skills desde el sistema de ficheros y comprueba: el frontmatter (`name`/`description` presentes, más un parseo YAML real que detecta un frontmatter sintácticamente inválido); el tamaño del `SKILL.md` (techo general de 500 líneas, y uno propio de 400 para la puerta de conocimiento `xone-development`); que todo enlace a `references/` resuelva, tanto desde el `SKILL.md` como los enlaces relativos dentro de los propios ficheros de referencia; que ninguna referencia quede huérfana; un guardián de duplicados que falla si dos líneas largas (>35 caracteres) de `SKILL.md` distintos superan el 65% de solape de tokens — una heurística con malla conocida, no una prueba exhaustiva: ver `docs/ARCHITECTURE.md` §10.1 — con una allowlist corta de excepciones documentadas; y que `opencode debug skill` enumere todas las que encuentra en el disco, por nombre con su `location` bajo `plugins/xone-development/skills/` (no solo por nombre: un `xone-help-docs` global homónimo no basta para pasar).
 
 ## Documentación
 

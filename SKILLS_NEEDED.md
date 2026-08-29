@@ -47,7 +47,7 @@ dos propuestas es el de la evidencia que las respalda, no el de lo interesantes 
 > tal cual no son accionables aquí, que es donde vive este documento y donde se escribirían las
 > skills.
 >
-> Aquí las cuatro viven, sin excepción, en
+> Aquí las seis viven, sin excepción, en
 > `plugins/xone-development/skills/<nombre>/SKILL.md`. Crear una nueva es crear ese directorio
 > con su `SKILL.md`: **se descubren por convención**, no hay que darlas de alta en
 > `.claude-plugin/marketplace.json` ni en `plugin.json` —solo subir la `version` en ambos, hoy

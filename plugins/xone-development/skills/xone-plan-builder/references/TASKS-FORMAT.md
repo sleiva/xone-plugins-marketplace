@@ -74,7 +74,7 @@
 - **Qué entrega, no cómo.** Describe el comportamiento logrado, no la lista de archivos a tocar. El ejecutor (`xone-project-generator` o `xone-development`) decide cómo.
 - **Bloqueada por, no "después de".** Las dependencias son gateadores: una tarea no puede empezar hasta que todas las que la bloquean están cerradas.
 - **Decisiones, no código.** Sin XML/JS/CSS pegado. Excepción: si un snippet codifica una decisión más preciso que prosa (esquema, state machine), inclúyelo y nota su origen.
-- **Nombres consistentes con el spec.** MAYÚSCULAS para campos persistidos, PascalCase para colls, MAP_ para UI temporal.
+- **Nombres consistentes con el spec**, y el `MAP_` según `xone-development`.
 - **Evita rutas de archivo específicas.** Envejecen rápido. El ejecutor las infiere del spec y del proyecto.
 - **Criterios de aceptación verificables.** Cada criterio debe poder comprobarse —con `xone-review`, con un smoke, o con un comportamiento observable.
 - **La validación es una tarea.** Cada hito cierra con una tarea `xone-review`, o al menos una al final del plan.

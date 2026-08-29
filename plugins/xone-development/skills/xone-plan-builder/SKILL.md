@@ -9,7 +9,7 @@ Lee el `PLAN.md` (el spec) producido por `xone-spec-builder` y lo descompone en 
 
 Esta skill es **análisis y descomposición**, no entrevista. No afina el dominio ni toma decisiones de diseño —eso ya está resuelto en el `PLAN.md`—. Si el spec tiene pendientes o decisiones sin resolver, **devuélvelo a `xone-spec-builder`** en vez de inventar las respuestas.
 
-> **Carga `xone-development` antes de descomponer.** Necesitas conocer las dependencias naturales entre colls, pantallas, eventos y estilo para secuencia bien las tareas. Toda afirmación sobre XOne debe venir de sus referencias.
+> **Carga `xone-development` antes de descomponer.** Necesitas conocer las dependencias naturales entre colls, pantallas, eventos y estilo para secuenciar bien las tareas. Toda afirmación sobre XOne debe venir de sus referencias.
 
 ## Flujo
 
@@ -158,7 +158,7 @@ Ver [TASKS-FORMAT.md](references/TASKS-FORMAT.md) para la plantilla completa. Re
 
 - **Una tarea = un context window.** Si no cabe, pártela.
 - **Decisiones, no código.** No pegues XML/JS/CSS en las tareas. Describe el comportamiento y qué se logra.
-- **Nombres en MAYÚSCULAS para campos persistidos**, PascalCase para colls, prefijo MAP_ para UI temporal — consistencia con el spec.
+- **Nombres consistentes con el spec**, y el `MAP_` según `xone-development`.
 - **No inventes lo que el spec no dice.** Si falta algo para descomponer, devuelve a `xone-spec-builder`.
 - **Evita rutas de archivo o snippets de código específicos** —envejecen rápido. Excepción: si un prototipo o el spec produjo un snippet que codifica una decisión más preciso que prosa (esquema, state machine), inclúyelo y nota su origen.
 - **La validación es una tarea.** Si el plan tiene hitos, cada hito cierra con una tarea `xone-review`. Si no, al menos una tarea de validación al final.

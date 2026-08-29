@@ -2,6 +2,30 @@
 
 Todos los cambios visibles de `xone-development` se registran aquí. Formato basado en [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [1.6.0] - 2026-08-29
+
+### Añadido
+
+- **`xone-spec-builder`** — especificar cualquier desarrollo XOne por entrevista antes de ejecutarlo (app nueva, feature, refactor, integración de dispositivo, cambio de modelo de datos, rediseño de pantalla). Deja un `PLAN.md`, con `PLAN-FORMAT.md`, `CONTEXT-FORMAT.md` y `ADR-FORMAT.md` como referencias.
+- **`xone-plan-builder`** — descompone ese `PLAN.md` en un `TASKS.md` de tareas tracer-bullet verticales con dependencias explícitas, con `TASKS-FORMAT.md`. Las dos traen su comando de barra y su `agents/openai.yaml`, y `/xone-validate` entra como comando del plugin.
+- **Las conexiones remotas del framework**, que el corpus no tenía: los **seis `ProgID`** que crean conexión —JSON, SOAP, XML-RPC, contactos, réplica de ficheros y los dos proxies heredados— y la **conexión JSON entera**, con los parámetros de su `connstring` uno a uno y su advertencia de entrega (ni credenciales en claro ni `AllowUnsafeCertificates=true`). Sale del runtime (`CXoneApplication::CreateRemoteDataConnector`, `CXoneJsonConnectionData`), no de una suposición: **un `ProgID` fuera de esa lista devuelve `NULL` y no falla en ningún sitio visible**. Y un hecho que cambia dónde se escribe: el nodo `<connection>` vale también DENTRO de una `.xne`, no solo en `app.xml`.
+
+### Corregido
+
+- **`special`**, en dos sitios y por dos motivos distintos. En el glosario de `xone-debugging` estaba **definido como otra cosa** —«marca la coleccion como pantalla de entrada»—, que es `<entry-point>`. Y en `xone-development` §2.5 decía «no necesita `sql`, `objname` ni `updateobj`», que invita a ponerlos igual: lo que pasa es que **el framework los IGNORA**, así que un `SELECT` escrito ahí no se ejecuta — el síntoma clásico de pantalla vacía, con el `sql` delante y aparentemente correcto. Se documentan además sus **dos** usos: pantalla de puro UI, y coleccion llenada desde script con `addItem` (que antes no figuraba).
+- **La convención `MAP_`** pasa de «campos no persistidos / UI temporal» —cierto y corto en las dos direcciones— a lo que significa: **el prop no es columna de la tabla de `objname`**, con sus tres casos legítimos (alias de JOIN, descripción visible de un combo con `linkedto`, props visuales) y el **fallo simétrico**: ponérselo a una columna real pierde el dato al guardar; omitirlo en un alias da error SQL al actualizar una columna que no existe.
+- **Tres errores factuales de `xone-spec-builder`**, cazados por una auditoría del contenido contra el corpus: `linkedto` estaba descrito como «para subobjetos» cuando es la **mitad visible del mismo combo** (el oculto lleva `mapcol`/`mapfld`); el viewmode `calendar` **no existe** —es `calendarview`, y XOne ignora en silencio un viewmode que no reconoce, así que daba una lista donde se esperaba un calendario—; y el ejemplo de ADR proponía desviarse a `fetch` **por `AbortController`**, que es justo lo único que `fetch` no da (no hay cancelación real en vuelo).
+- **Los dos comandos nuevos cargaban su skill por una ruta relativa al repositorio**, que no existe una vez el plugin está instalado y el directorio de trabajo es el proyecto del usuario. Pasan a invocarla por su nombre, como ya hacía `/xone-validate`.
+- **La regla del `MAP_`, regresada** en cinco sitios de las skills nuevas con la redacción corta que esta misma versión declara incompleta. Las cinco pasan a puntero a `xone-development`, que es donde vive: «una regla, un sitio».
+- Cuatro documentos seguían diciendo «las cuatro skills» (`README.md`, `INSTALL.md` ×2, `SKILLS_NEEDED.md`). La comprobación con `codex-cli` del 2026-08-03 se conserva **con su fecha y su número**: enumeró las cuatro que había entonces, y no se ha repetido.
+- `docs/ARCHITECTURE.md` §3.3 documenta `agents/`, que existía en el árbol sin que ningún documento dijera qué lo consume — anotado como pregunta abierta, no como convención.
+- Detalles: la etiqueta de un enlace entre skills prometía un fichero que la skill no tiene, `display_name: "XOne Planner"` convivía con `"XOne Plan Builder"`, una errata («para secuencia bien las tareas») y un fichero sin salto de línea final.
+
+### Sabido y sin resolver
+
+- **El corpus de `xone/` no está versionado.** El commit que retiró las copias planas afirmó que el material seguía en el repositorio bajo `xone/v1/` y `xone/v2/`: es falso — `/xone/` está en `.gitignore` desde 0.10.0 y esas dos carpetas **nunca han estado versionadas**, así que hoy `git ls-files xone/` devuelve 0 y quien clone no tiene ninguna copia. Queda por decidir si se versionan, si se restauran las planas o si se acepta que el corpus vive fuera y se retiran las 69 líneas `> Fuente:` que lo citan.
+- **`fontsize`: dos doctrinas incompatibles.** `xone-project-generator` usa escala 1-12 y marca `fontsize="14"` como anti-patrón explícito; `xone-development` documenta 1-50 y sus ejemplos usan 14 y 16 decenas de veces. Un agente que cargue las dos recibe la regla y su anti-patrón en la misma sesión. Pendiente de zanjar con el desarrollador de XOne.
+
 ## [1.5.1] - 2026-08-11
 
 ### Corregido

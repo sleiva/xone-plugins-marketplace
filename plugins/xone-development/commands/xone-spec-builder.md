@@ -8,7 +8,7 @@ Especifica un desarrollo XOne por entrevista y deja un `PLAN.md` que `xone-plan-
 
 Procedimiento:
 
-1. **Carga la skill `xone-spec-builder`** desde `plugins/xone-development/skills/xone-spec-builder/SKILL.md` y síguela estrictamente. Carga también `xone-development` para consultar reglas y referencias.
+1. **Carga la skill `xone-spec-builder`** por su nombre y síguela estrictamente. Carga también `xone-development` para consultar reglas y referencias.
 2. **Directorio de trabajo.** Usa `$1` si se indicó; si no, usa el directorio actual. Los artefactos (`PLAN.md`, `CONTEXT.md`, `docs/adr/`) se escriben ahí.
 3. **Triage de complejidad.** Antes de nada, clasifica la petición: **Trivial** (una acción mecánica, sin decisiones) → no produces `PLAN.md`; confirma en 1-2 preguntas, ejecuta con `xone-development`/`xone-project-generator` directamente y valida con `xone-review`. **Simple** (cambio acotado con decisión menor) → spec ligero, solo los rounds que apliquen, `PLAN.md` condensado. **Normal** (feature con varias colls/pantallas, refactor, integración multi-pantalla) → spec completo. **Grande** (app nueva, re-arquitectura) → spec completo + considerar dividir. Si dudas, empieza por el inferior; puedes subir si la entrevista saca más complejidad. El usuario puede subir o bajar el nivel.
 4. **Clasifica el desarrollo** con el usuario antes de la primera ronda: ¿app nueva, feature, refactor, integración de dispositivo, cambio de modelo de datos, rediseño de pantalla? El tipo fija qué rounds aplican. Si es trabajo sobre existente, **lee los `.xne`, `.js` y `.css` del proyecto** antes de seguir — el spec debe respetar convenciones que ya viven ahí.

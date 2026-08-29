@@ -28,7 +28,7 @@
 
 ### Colecciones nuevas
 
-Por cada coll nueva: nombre, progid (omitir salvo que aplique), campos persistidos (nombre + tipo XOne válido), campos MAP_ de UI, relaciones, y si lleva loadall o carga bajo demanda.
+Por cada coll nueva: nombre, progid (omitir salvo que aplique), campos persistidos (nombre + tipo XOne válido), campos `MAP_` (los que no son columna de `objname`), relaciones, y si lleva loadall o carga bajo demanda.
 
 - **Clientes** — NOMBRE (T), CIF (T), DIRECCION (T), TELEFONO (T), EMAIL (T), LATITUD (N6), LONGITUD (N6). Combo a Empresas vía IDEMPRESA. loadall=true (volumen bajo).
 
@@ -95,7 +95,7 @@ Preguntas aún no resueltas por el usuario. El siguiente paso no puede resolverl
 ## Reglas
 
 - **Decisiones, no código.** Nada de `<coll>`, `<prop>`, `self.X` ni CSS pegado. El siguiente paso lo produce a partir del plan.
-- **Nombres en MAYÚSCULAS para campos persistidos** (regla de `xone-development`), PascalCase para colls, prefijo MAP_ para UI temporal.
+- **Nombres en MAYÚSCULAS para campos persistidos**, PascalCase para colls; el `MAP_`, según `xone-development`.
 - **Tipos válidos.** Solo los de la tabla de tipos de `xone-development`: `T`, `TN`, `N`, `D`, `DT`, `TT`, `L`, `B`, `NC`, `X`, `IMG`, `PH`, `VD`, `DR`, `Z`, `WEB`, `AT`, `O`, `THTML`. Los combos no tienen tipo propio: `type="T"` + `mapcol` + `mapfld`.
 - **Empresas y Usuarios en mappings.xne** con sus campos obligatorios y progid propio. El resto de colls sin progid salvo excepción.
 - **Secciones condicionales.** Incluye solo las que el desarrollo toca. Si una sección no aplica, omítela —no la dejes vacía ni pongas "N/A". El propio tipo de desarrollo ya indica cuáles aplican.

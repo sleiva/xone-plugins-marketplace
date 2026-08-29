@@ -72,8 +72,16 @@ Responsables de un área concreta del trabajo XOne. Cada skill tiene un `SKILL.m
 ```text
 plugins/xone-development/skills/<skill-name>/
 ├── SKILL.md
-└── references/
+├── references/        # opcional
+└── agents/            # opcional — metadatos por plataforma
 ```
+
+**`agents/openai.yaml`**, cuando existe, lleva dos bloques: `interface` (`display_name`,
+`short_description`) y `policy` (`allow_implicit_invocation`). **Hoy solo lo tienen
+`xone-spec-builder` y `xone-plan-builder`**, las dos skills que entraron el 2026-08-29, y **no
+está decidido si las otras cuatro deben tenerlo**: el fichero se añadió con ellas y ningún
+documento del repositorio dice qué lo consume. Queda anotado como pregunta abierta en vez de
+como convención, que es lo que era hasta hoy — un artefacto sin dueño en el árbol.
 
 ### 3.4. Adaptador OpenCode
 

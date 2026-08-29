@@ -98,7 +98,7 @@ Ejecuta desde cualquier proyecto donde quieras usar las skills:
 opencode debug skill
 ```
 
-Deben aparecer estas cuatro skills con una ruta que termine en
+Deben aparecer estas seis skills con una ruta que termine en
 `plugins/xone-development/skills/`:
 
 - `xone-development`
@@ -137,7 +137,7 @@ Si una skill ya existe, elimina primero el enlace o carpeta anterior. Para una
 instalacion solo para un proyecto, usa la misma estructura bajo
 `<proyecto>/.agents/skills/`.
 
-Reinicia Antigravity o abre una conversacion nueva. Deberian aparecer las cuatro
+Reinicia Antigravity o abre una conversacion nueva. Deberian aparecer las seis
 skills por sus nombres exactos.
 
 Antigravity no soporta el comando `/xone-validate` de Claude Code. Ejecuta las

@@ -104,8 +104,8 @@ Mapea entidades a **colecciones XOne**. Para desarrollo sobre existente, esto es
 
 - Una entidad de negocio nueva = una `<coll>` con `sql`, `objname`, `updateobj`.
 - Una entidad modificada = qué `<prop>` se añaden, cambian de tipo, o se eliminan; qué relaciones nuevas.
-- Identifica relaciones (1:N, N:M) y cómo se expresan en XOne: `mapcol`/`mapfld` para combos, `linkedto` para subobjetos, `<contents>` para listas embebidas, `filter="IDPADRE=##FLD_IDPADRE##"` para maestro-detalle.
-- Campos persistidos: MAYÚSCULAS, sin guion bajo en `Usuarios.IDEMPRESA` (regla de `xone-development`). Campos de UI temporal: prefijo `MAP_`.
+- Identifica relaciones (1:N, N:M) y cómo se expresan en XOne: combos con `mapcol`/`mapfld` en el prop oculto del ID y `linkedto`/`linkedfield` en el visible de la descripción, `<contents>` para listas embebidas, `filter="IDPADRE=##FLD_IDPADRE##"` para maestro-detalle. La sintaxis exacta de cada uno, en `xone-development`.
+- Campos persistidos: MAYÚSCULAS, sin guion bajo en `Usuarios.IDEMPRESA`. Antes de poner o quitar un `MAP_`, lee su regla en `xone-development`: el fallo es simétrico y silencioso en una de las dos direcciones.
 - ¿`loadall="true"` o carga bajo demanda? Cuidado con tablas grandes.
 - ¿Herencia (`inherits`) o factorización (`<include-layout>`)? Aplica la regla de decisión rápida de `xone-project-generator`.
 - Si el cambio toca el esquema, anota si hace falta migración o `xone-db-tools create-db --overwrite`.
@@ -118,7 +118,7 @@ Diseña el flujo de usuario afectado:
 
 - **App nueva:** Splash (fichero raíz) → Login → EntradaApp → MenuPrincipal → entidades. Una coll por pantalla de entidad (lista, detalle, edición). `special="true"` para menús y pantallas sin datos (sin `sql`).
 - **Sobre existente:** qué pantallas se añaden, cuáles se modifican y cómo. Lee las que ya existen antes de proponer cambios.
-- Viewmodes: `mapview`, `calendar`, `slideview`, `gridview`… Un mapa es `type="Z" viewmode="mapview"`.
+- El `viewmode` de un `type="Z"` se **copia del catálogo de `xone-development`**, nunca se escribe de memoria: uno que no exista ahí no da error — se ignora, y sale una lista donde se esperaba otra cosa.
 - Navegación: `ui.openEditView("Coll")` para ir, `ui.getView(self).exit()` para volver.
 - Filtros dinámicos con `asfilter` y contents con `##FLD_…##`.
 - Inicialización: `<before-edit>` al abrir, `<create>` la primera vez. **Nunca `<load>`** (anti-patrón).
@@ -147,7 +147,7 @@ Solo si el desarrollo toca la UI visual:
 
 - Paleta de colores (primario, secundario, fondo, texto, estados). Formato `#RRGGBB` o ARGB `#AARRGGBB` (alpha **primero**).
 - Tema light/dark, variantes por plataforma (`default_night.css`/`default.night.css` — comprueba la convención del proyecto).
-- Tamaños canónicos: consulta [references/canonical-sizes.md](../xone-project-generator/references/canonical-sizes.md) del generador antes de proponer `width`/`height`/`fontsize`. Recuerda: `p ≠ dp`, Material 56dp = ~168p en 1080×1920.
+- Tamaños canónicos: consulta [`canonical-sizes.md` de `xone-project-generator`](../xone-project-generator/references/canonical-sizes.md) antes de proponer `width`/`height`/`fontsize`. Recuerda: `p ≠ dp`, Material 56dp = ~168p en 1080×1920.
 - `fontsize` en escala XOne 1-12 (texto `5`, título `7`, topbar `10-11`).
 - ¿`compatibility-mode="true"`? Si lo está, el CSS se ignora —diagnostícalo antes de proponer estilos.
 - Si es sobre existente, **lee el `default.css` actual** y respeta sus convenciones de nombres de clase.
@@ -221,7 +221,7 @@ Ejemplos típicos dignos de ADR en XOne:
 - **`compatibility-mode="true"` activado a propósito.** El CSS se ignora; registrar el ADR evita que alguien pierda tiempo diagnosticando estilos que no aplican.
 - **Migración de `load` a `before-edit`.** Si el proyecto usaba `load` y se decide migrar, registrar por qué —un futuro ingeniero asumirá que siempre se hizo así.
 - **`inherits` frente a `<include-layout>`.** Cuando se elige uno sobre el otro por razones no obvias y revertir implicaría reestructurar varias colls.
-- **Uso de `fetch` frente a `$http`.** Si se desvía del idiomático `$http` hacia `fetch` por una razón concreta (p. ej., `AbortController`), vale la pena registrarlo.
+- **Uso de `fetch` frente a `$http`.** Si se desvía del idiomático `$http` hacia `fetch` por una razón concreta —código compartido con web que ya está escrito así, por ejemplo—, vale la pena registrarlo. **Lo que NO vale como razón es la cancelación**: el `fetch` de XOne no tiene cancelación real en vuelo, `AbortController` existe como objeto pero abortar no corta la petición (limitaciones en `xone-development`).
 
 ## Referencias
 
