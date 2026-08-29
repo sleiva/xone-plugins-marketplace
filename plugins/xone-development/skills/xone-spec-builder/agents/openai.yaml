@@ -1,0 +1,5 @@
+interface:
+  display_name: "XOne Planner"
+  short_description: "Plan an XOne app by interview, output PLAN.md"
+policy:
+  allow_implicit_invocation: false
